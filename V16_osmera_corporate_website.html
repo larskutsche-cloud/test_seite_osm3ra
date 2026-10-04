@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth scroll-pt-24">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>osmera | Intelligente Dienstplanung für Kliniken</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        osmera: {
+                            dark: '#0f172a',
+                            darker: '#020617',
+                            light: '#f8fafc',
+                            blue: '#0284c7',
+                            bluelight: '#e0f2fe',
+                            accent: '#38bdf8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f8fafc;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-nav.nav-dark-mode {
+            background: rgba(15, 23, 42, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .glass-nav.nav-dark-mode .nav-logo-text {
+            color: #ffffff !important;
+        }
+
+        .glass-nav.nav-dark-mode .nav-link {
+            color: #cbd5e1 !important;
+        }
+
+        .glass-nav.nav-dark-mode .nav-link:hover {
+            color: #38bdf8 !important;
+        }
+        
+        .glass-nav.nav-dark-mode .mobile-btn {
+            color: #cbd5e1 !important;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-content {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide-content.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .slide-content.prev {
+            opacity: 0;
+            transform: translateY(-40px);
+        }
+
+        /* Unsichtbare Slides werfen keinen Schatten */
+        .slide-content.prev, .slide-content.next {
+            box-shadow: none !important;
+            border-color: transparent !important;
+        }
+
+        @media (max-width: 1023px) {
+            #vorteile {
+                height: auto !important;
+            }
+            .slide-content {
+                opacity: 1 !important;
+                transform: none !important;
+                position: relative !important;
+                pointer-events: auto !important;
+                margin-bottom: 1.5rem;
+                /* Schatten für ALLE Kacheln auf Mobile erzwingen, da JS Klassen überschreibt */
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important; 
+                border-color: rgba(255, 255, 255, 0.8) !important;
+            }
+        }
+        
+        .scroll-anim-element {
+            transition: transform 0.1s ease-out, opacity 0.2s ease-out;
+            will-change: transform, opacity;
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-800 selection:bg-osmera-blue selection:text-white">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center pointer-events-none transition-all duration-300" id="nav-wrapper">
+        <nav class="glass-nav rounded-full px-6 py-3 flex items-center justify-between w-full max-w-4xl pointer-events-auto transition-transform" id="navbar">
+            <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="w-7 h-7 bg-osmera-blue rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-layer-group text-white text-xs"></i>
+                </div>
+                <span class="nav-logo-text font-bold text-xl text-slate-900 tracking-tight transition-colors duration-300">osmera</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8 mx-8">
+                <a href="#loesung" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Prinzip</a>
+                <a href="#vorteile" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Mehrwert</a>
+                <a href="#module" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Module</a>
+                <a href="#sicherheit" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Datenschutz</a>
+            </div>
+
+            <div class="hidden md:block">
+                <a href="#kontakt" class="bg-osmera-blue hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium transition-colors shadow-sm text-sm">
+                    Pilotprojekt
+                </a>
+            </div>
+
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="mobile-btn text-slate-600 hover:text-osmera-blue focus:outline-none p-2 transition-colors duration-300">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <div id="mobile-menu" class="hidden fixed top-20 left-4 right-4 z-40 glass-card rounded-2xl shadow-xl overflow-hidden md:hidden">
+        <div class="px-4 py-4 space-y-2">
+            <a href="#loesung" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Das Prinzip</a>
+            <a href="#vorteile" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Mehrwert</a>
+            <a href="#module" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Module</a>
+            <a href="#sicherheit" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Datenschutz</a>
+            <a href="#kontakt" class="block px-3 py-3 bg-osmera-blue/10 text-osmera-blue text-center rounded-xl font-bold mt-4">Pilotprojekt anfragen</a>
+        </div>
+    </div>
+
+    <section class="min-h-screen flex items-center pt-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-12 lg:py-0">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border-blue-200/50 text-osmera-blue text-xs font-semibold mb-6 tracking-wide shadow-sm">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-osmera-blue opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-600"></span>
+                        </span>
+                        Workforce Platform für Kliniken
+                    </div>
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight">
+                        Intelligente Dienstplanung.<br>
+                        <span class="text-gradient">Verbunden mit Ihrem System.</span>
+                    </h1>
+                    <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed font-medium">
+                        Die Erweiterungsschicht für Ihr bestehendes Zeitwirtschaftssystem. 
+                        osmera optimiert die Dienstplanung und automatisiert das Ausfallmanagement – ohne IT-Großprojekt und mit absolutem Datenschutz.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#kontakt" class="bg-osmera-blue hover:bg-sky-700 text-white text-center px-8 py-3.5 rounded-full font-semibold text-base transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                            Pilotprojekt anfragen
+                        </a>
+                        <a href="#loesung" class="glass-card hover:bg-white/90 text-slate-700 text-center px-8 py-3.5 rounded-full font-semibold text-base transition-colors flex items-center justify-center">
+                            Das Prinzip verstehen
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hidden lg:block relative p-8">
+                    <!-- Base Layer (Legacy) -->
+                    <div class="absolute bottom-10 right-10 w-3/4 h-64 bg-slate-200/80 backdrop-blur-sm rounded-2xl border border-slate-300 shadow-inner transform -rotate-3 transition-transform hover:-rotate-1 duration-500">
+                        <div class="p-4 border-b border-slate-300/50 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-server text-slate-400"></i>
+                                <div class="text-xs font-mono text-slate-500 uppercase tracking-widest">Klinik-System</div>
+                            </div>
+                            <div class="flex gap-1">
+                                <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                                <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="h-3 w-full bg-slate-300/50 rounded-full"></div>
+                            <div class="h-3 w-5/6 bg-slate-300/50 rounded-full"></div>
+                            <div class="h-3 w-4/6 bg-slate-300/50 rounded-full"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Layer (osmera) -->
+                    <div class="relative z-10 glass-card rounded-2xl p-6 transform translate-y-4 -translate-x-4 shadow-xl border-t border-l border-white transition-transform hover:-translate-y-2 hover:-translate-x-2 duration-500">
+                        <div class="flex items-center justify-between border-b border-slate-200/50 pb-4 mb-4">
+                            <div class="flex items-center gap-2 text-osmera-blue font-bold">
+                                <div class="w-6 h-6 rounded bg-osmera-blue/10 flex items-center justify-center"><i class="fa-solid fa-layer-group text-xs"></i></div>
+                                osmera engine
+                            </div>
+                            <span class="text-[10px] font-bold text-green-600 bg-green-100/80 px-2.5 py-1 rounded-full uppercase tracking-wider">Verbunden</span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="p-4 bg-white/60 rounded-xl border border-white flex justify-between items-center shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center"><i class="fa-solid fa-bell"></i></div>
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-800">Krankmeldung Station A</div>
+                                        <div class="text-xs text-slate-500 font-medium">Frühschicht unbesetzt</div>
+                                    </div>
+                                </div>
+                                <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                            </div>
+                            
+                            <div class="p-4 bg-white/60 rounded-xl border border-white flex justify-between items-center shadow-sm relative overflow-hidden">
+                                <div class="absolute left-0 top-0 h-full w-1 bg-green-400"></div>
+                                <div class="flex items-center gap-3 pl-2">
+                                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center"><i class="fa-solid fa-check"></i></div>
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-800">Ersatz über Smart-Matching gefunden</div>
+                                        <div class="text-xs text-slate-500 font-medium">Rücklauf in Klinik-System</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="loesung" class="py-32 relative z-10 bg-white/50 backdrop-blur-sm border-y border-slate-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-sm mb-2 block">Das Prinzip</span>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Ein Upgrade per Add-On.<br>Kein harter Systemwechsel.</h2>
+                <p class="text-xl text-slate-600 font-medium">
+                    Vier Schritte zu einer intelligenten Dienstplanung, ohne ein IT-Großprojekt im Haus auszulösen.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 lg:gap-y-8 pt-8">
+                <div class="relative mt-4 lg:mt-8">
+                    <div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">1</div>
+                    <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
+                        <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-6 shadow-sm border border-blue-100">
+                            <i class="fa-solid fa-plug text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Anschließen</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed font-medium">
+                            Das Haus liefert seine Daten so, wie es sie ohnehin exportiert. Spaltennamen, Reihenfolge und Kürzel sind frei. Die Übersetzung in unser Format übernimmt osmera vollautomatisch.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative mt-4 lg:mt-8">
+                    <div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">2</div>
+                    <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
+                        <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-6 shadow-sm border border-blue-100">
+                            <i class="fa-solid fa-calculator text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Optimieren</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed font-medium">
+                            Die Engine erstellt den Plan. Gesetzliche und tarifliche Grenzen werden dabei hart erzwungen, nicht nur als Warnung angezeigt.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative mt-4 lg:mt-8">
+                    <div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">3</div>
+                    <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
+                        <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-6 shadow-sm border border-blue-100">
+                            <i class="fa-solid fa-file-export text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Zurückgeben</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed font-medium">
+                            Der fertige, fehlerfreie Plan geht exakt im Originalformat an Sie zurück. Ihr bestehendes Zeitwirtschaftssystem bleibt die einzige offizielle Quelle.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative mt-4 lg:mt-8">
+                    <div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">4</div>
+                    <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
+                        <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-6 shadow-sm border border-blue-100">
+                            <i class="fa-solid fa-paper-plane text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Erreichen</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed font-medium">
+                            Fällt jemand aus, zeigt osmera, wer einspringen darf und fragt an. Direkt auf dem Smartphone der Mitarbeiter – asynchron und stressfrei.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="vorteile" class="relative z-10 lg:h-[400vh]">
+        <div class="lg:sticky lg:top-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-auto lg:h-[80vh] flex flex-col lg:flex-row items-start lg:items-center gap-12 py-12">
+            
+            <div class="w-full lg:w-1/3 z-20">
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-sm mb-2 block">Der Mehrwert</span>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-6 leading-tight">Ein Werkzeug, vielfacher Mehrwert.</h2>
+                <p class="text-lg text-slate-600 mb-8 font-medium">
+                    Eine intelligente Planung entlastet nicht nur eine Abteilung, sondern verbessert die Prozesse und Transparenz im gesamten Haus.
+                </p>
+                
+                <div class="hidden lg:flex gap-3">
+                    <div class="slide-indicator w-6 h-2 rounded-full bg-osmera-blue transition-all duration-300"></div>
+                    <div class="slide-indicator w-2 h-2 rounded-full bg-slate-300 transition-all duration-300"></div>
+                    <div class="slide-indicator w-2 h-2 rounded-full bg-slate-300 transition-all duration-300"></div>
+                    <div class="slide-indicator w-2 h-2 rounded-full bg-slate-300 transition-all duration-300"></div>
+                    <div class="slide-indicator w-2 h-2 rounded-full bg-slate-300 transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <!-- KEIN overflow-hidden hier! Damit der Schatten der Kacheln intakt bleibt -->
+            <div class="w-full lg:w-2/3 h-auto lg:h-full relative flex flex-col lg:block">
+                
+                <div class="slide-content active glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
+                    <div class="w-16 h-16 bg-blue-100 text-osmera-blue rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-users-gear"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4">Die Stationsleitung</h3>
+                    <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
+                        Keine Zeit mehr damit verschwenden, Personalwünsche und rechtliche Vorgaben mühsam abzugleichen. Das schafft Kapazitäten für die echten Konfliktfälle auf Station. Bei einem kurzfristigen Ausfall erhalten Sie gezielte Unterstützung: Selbst in stressigen Momenten wird jemand gefunden, der einspringen darf – und das auch wirklich möchte.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Keine endlosen Telefonketten mehr</li>
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Sie behalten die volle Kontrolle</li>
+                    </ul>
+                </div>
+
+                <div class="slide-content next glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
+                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-user-nurse"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4">Pflege- & Medizinpersonal</h3>
+                    <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
+                        Der Dienstplan auf dem eigenen Smartphone, mit vollem Respekt für die Erholungsphasen. Einspring-Anfragen kommen asynchron über den selbst gewählten Wunschkanal (App, Messengerdienste oder SMS) – ein einfaches "Ja" oder "Nein" per Klick genügt, ganz ohne belastenden Rechtfertigungsdruck am Telefon.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Entlastung durch partizipative Dienstplanung</li>
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Keine ungeplanten Anrufe in der Freizeit</li>
+                    </ul>
+                </div>
+
+                <div class="slide-content next glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm border border-emerald-200">
+                        <i class="fa-solid fa-handshake-angle"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4">Personalrat / MAV</h3>
+                    <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
+                        Transparenz und algorithmische Einhaltung von Schutzgesetzen und Hausregeln. Die osmera engine plant innerhalb der eingestellten tarif- & tertragsrechtlichen Regeln unter Einhaltung des ArbZG. Die Mitbestimmung wird durch osmera nicht umgangen sondern aktiv gefördert.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Regeln werden umgesetzt, nicht empfohlen</li>
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Automatisierte Benachrichtigungen bei Änderungen</li>
+                    </ul>
+                </div>
+
+                <div class="slide-content next glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
+                    <div class="w-16 h-16 bg-slate-200 text-slate-700 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4">Personalabteilung & IT</h3>
+                    <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
+                        Erhalten ein System, das sich nahtlos anpasst. Kein "Rip-and-Replace" des teuren Altsystems, keine aufwändigen manuellen Exporte im Tagesgeschäft. Innovative Mapping-Tools, vielseitige Schnittstellen und No-Code-Konnektoren reduzieren den Onboarding-Aufwand auf ein Minimum.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Das Altsystem bleibt unabhängig und funktionsfähig</li>
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Keine gefährlichen Firewall-Öffnungen nach innen</li>
+                    </ul>
+                </div>
+
+                <div class="slide-content next glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
+                    <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">
+                        <i class="fa-regular fa-building"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4">Geschäftsführung & Datenschutz</h3>
+                    <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
+                        Garantiert Planbarkeit und Regelkonformität für Ihr Haus. Durch die komplementäre Architektur wird Ihr Bestandssystem intelligent angebunden und erweitert, statt es teuer zu ersetzen. Sie steigern die Personaleffizienz, während die Daten der Mitarbeitenden geschützt bleiben.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Schutz durch Zero Knowledge Architektur</li>
+                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Kein riskanter Datenumzug notwendig</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="module" class="py-32 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-sm mb-2 block">Die Plattform</span>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Module, die einzeln Sinn ergeben.</h2>
+                <p class="text-xl text-slate-600">
+                    Sie müssen kein unübersichtliches Komplettpaket kaufen. Starten Sie mit dem Modul, das Ihr dringendstes Problem löst. Das starke Fundament aus Bridge und Mapper ist immer dabei.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-card rounded-2xl p-8 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border-t-4 border-osmera-blue shadow-lg">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-osmera-blue shadow-sm">
+                            <i class="fa-solid fa-mobile-screen-button text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">osmera flow</h3>
+                    </div>
+                    <p class="font-bold text-slate-800 mb-3 text-lg">Ausfallmanagement mit Co-Pilot.</p>
+                    <p class="text-slate-600 leading-relaxed font-medium">
+                        Zeigt bei einer Krankmeldung an, wer einspringen darf. Anfragen gehen asynchron auf das Handy (App, Messengerdienste oder SMS) der passenden Personen – streng nach rechtlicher und persönlicher Verfügbarkeit sowie Qualitfikationsmatch sortiert. Die manuelle Telefonkette entfällt.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border-t-4 border-osmera-blue shadow-lg">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-osmera-blue shadow-sm">
+                            <i class="fa-regular fa-calendar-check text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900">osmera sync</h3>
+                    </div>
+                    <p class="font-bold text-slate-800 mb-3 text-lg">Die intelligente Dienstplan-Berechnung.</p>
+                    <p class="text-slate-600 leading-relaxed font-medium">
+                        Erstellt den kompletten Dienstplan für eine Periode, optimiert nach Bedarf und Wünschen. Bei Konflikten wird die Dienstplanung aktiv unterstützt und das Ergebnis geht automatisch im Originalformat an Ihr bestehendes System zurück.
+                    </p>
+                </div>
+
+                <div class="bg-white/40 backdrop-blur-md border border-slate-200/60 rounded-2xl p-6 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900">osmera bridge</h3>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full uppercase">Basis-Fundament</span>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">
+                        Das kleine Programm im Netz Ihrer Klinik. Trennt Klarnamen von Kennungen und stellt sicher, dass unsere Server nur anonyme Token verarbeiten.
+                    </p>
+                </div>
+
+                <div class="bg-white/40 backdrop-blur-md border border-slate-200/60 rounded-2xl p-6 hover:-translate-y-1 transition-transform duration-300">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
+                                <i class="fa-solid fa-right-left"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900">osmera mapper</h3>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full uppercase">Basis-Fundament</span>
+                    </div>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">
+                        Der universelle Übersetzer. Sie exportieren Daten so, wie Ihr Altsystem es ausgibt. Der Mapper übersetzt es vollautomatisch in unser Rechenformat.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-12 flex justify-center">
+                <div class="inline-flex items-center gap-3 px-4 py-2 bg-slate-100/80 rounded-full text-sm font-medium text-slate-500 border border-slate-200">
+                    <i class="fa-solid fa-rocket text-osmera-blue"></i> 
+                    In Vorbereitung: 
+                    <span class="font-bold text-slate-700">horizon</span> (KI-Forecast) & 
+                    <span class="font-bold text-slate-700">audit</span> (Controlling)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sicherheit" class="py-32 relative overflow-hidden">
+        <div class="absolute inset-0 bg-slate-900/95 backdrop-blur-md -z-10 border-y border-slate-800"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="max-w-3xl mb-12">
+                <span class="text-osmera-accent font-bold tracking-wider uppercase text-sm mb-2 block">Sicherheit</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-white leading-tight">Datenschutz als Fundament, nicht als Nachrüstung.</h2>
+                <p class="text-slate-300 leading-relaxed text-lg">
+                    In der Klinik-IT stehen Sicherheit und Datenschutz an erster Stelle. Unser Zero-Knowledge Ansatz stellt sicher, dass sensible Personaldaten Ihr Haus niemals unverschlüsselt verlassen.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                
+                <div class="space-y-6">
+                    <div class="dark-glass-card p-6 rounded-2xl">
+                        <h4 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-building-shield"></i></div>
+                            Intern: Die Bridge
+                        </h4>
+                        <p class="text-slate-400 font-medium">Eine schlanke Komponente in Ihrem lokalen Netzwerk. Nur hier werden Klarnamen verarbeitet und vor dem Versand nach außen durch kryptische Token ersetzt.</p>
+                    </div>
+                    <div class="dark-glass-card p-6 rounded-2xl">
+                        <h4 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-cloud"></i></div>
+                            Extern: Der osmera-Server
+                        </h4>
+                        <p class="text-slate-400 font-medium">Unser Rechenzentrum kalkuliert Dienstpläne ausschließlich auf Basis anonymisierter Token. Dort gibt es weder Klarnamen noch private Adressen.</p>
+                    </div>
+                    <div class="dark-glass-card p-6 rounded-2xl">
+                        <h4 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-server"></i></div>
+                            Dedizierte Infrastruktur
+                        </h4>
+                        <p class="text-slate-400 font-medium">Jeder Kunde erhält eine eigene, dedizierte virtuelle Maschine (VM). Es gibt keine geteilte Anlage und keine gemeinsame Datenbank – absolute logische Trennung.</p>
+                    </div>
+                    <div class="dark-glass-card p-6 rounded-2xl">
+                        <h4 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-network-wired"></i></div>
+                            Aktiver Push-Transport
+                        </h4>
+                        <p class="text-slate-400 font-medium">Die Bridge in Ihrem Haus initiiert die Verbindung nach außen. Es ist keine kritische Inbound-Freigabe (eingehende Ports) in Ihrer Firewall notwendig.</p>
+                    </div>
+                </div>
+
+                <div class="w-full h-full min-h-[550px] max-w-md mx-auto lg:max-w-none relative z-10 flex items-stretch justify-center">
+                    <div id="security-graphic" class="w-full relative rounded-3xl bg-[#0b1120] p-6 sm:p-8 border border-slate-700/60 shadow-2xl overflow-hidden flex flex-col justify-between ring-1 ring-white/5">
+                        
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-osmera-accent/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+                        <div class="absolute left-1/2 top-[120px] bottom-[100px] w-[2px] bg-slate-800 -translate-x-1/2 z-0">
+                            <div class="absolute w-full h-full bg-gradient-to-b from-transparent via-sky-500/30 to-emerald-400/80 blur-[1px]"></div>
+                            <div class="absolute w-[1px] h-full bg-white/20 left-[0.5px]"></div>
+                        </div>
+
+                        <div id="anim-klartext" class="scroll-anim-element absolute left-1/2 top-0 -translate-x-1/2 z-30 bg-slate-700 text-slate-300 text-[11px] font-mono px-3 py-1.5 rounded border border-slate-600 whitespace-nowrap shadow-lg flex items-center gap-2 opacity-0">
+                            <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            Müller, Anna
+                        </div>
+
+                        <div id="anim-token" class="scroll-anim-element absolute left-1/2 top-0 -translate-x-1/2 z-30 bg-osmera-blue text-white text-[11px] font-mono font-bold px-3 py-1.5 rounded border border-osmera-accent whitespace-nowrap shadow-[0_0_15px_rgba(56,189,248,0.4)] flex items-center gap-2 opacity-0">
+                            <svg class="w-3 h-3 text-osmera-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                            [a7x-9b]
+                        </div>
+
+                        <div class="relative bg-slate-800/90 rounded-2xl p-5 pb-12 border border-slate-600/60 backdrop-blur-md z-10 shadow-lg mb-16">
+                            <div class="flex justify-between items-center mb-4">
+                                <div class="flex items-center gap-3 text-white font-bold text-base">
+                                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1v1H9V7zm5 0h1v1h-1V7zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1zm-5 4h1v1H9v-1zm5 0h1v1h-1v-1z"></path></svg>
+                                    Klinik-Netzwerk
+                                </div>
+                                <span class="bg-slate-700/60 text-slate-300 text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider border border-slate-600/50">Klartext</span>
+                            </div>
+                            
+                            <div class="relative mb-6">
+                                <div id="ui-export-box" class="scroll-anim-element bg-[#0f172a]/50 rounded-lg p-2 border border-slate-700/30 text-center text-slate-500 text-[10px] uppercase tracking-widest shadow-inner h-8 flex items-center justify-center relative z-10">
+                                    Export Altsystem
+                                    <div id="anchor-export" class="absolute left-1/2 top-1/2"></div>
+                                </div>
+                            </div>
+
+                            <div id="ui-bridge" class="absolute left-6 right-6 bottom-0 translate-y-1/2 z-20 bg-slate-700 rounded-xl border border-sky-400/50 p-4 shadow-[0_4px_20px_rgba(2,132,199,0.3)] flex items-center justify-center min-h-[80px] transition-all duration-300">
+                                <div class="absolute inset-0 bg-gradient-to-b from-sky-400/10 to-transparent rounded-xl"></div>
+                                <div class="relative z-10 flex justify-center items-center gap-2 text-sky-300 font-bold text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                    osmera bridge
+                                </div>
+                                <div id="anchor-bridge" class="absolute left-1/2 top-1/2"></div>
+                            </div>
+                        </div>
+
+                        <div class="relative bg-slate-800/90 rounded-2xl p-5 pt-8 border border-slate-600/60 backdrop-blur-md z-10 shadow-lg mt-8">
+                            
+                            <div id="ui-connector" class="scroll-anim-element absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-700 text-emerald-400 px-4 py-2 rounded-lg flex flex-col items-center gap-1 shadow-lg border border-emerald-500/50 z-20 transition-all duration-300">
+                                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                <span class="text-[10px] font-bold uppercase tracking-widest leading-none">Connector</span>
+                                <div id="anchor-connector" class="absolute left-1/2 top-2"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center mb-4 mt-2">
+                                <div class="flex items-center gap-3 text-white font-bold text-base">
+                                    <svg class="w-5 h-5 text-osmera-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                                    osmera server
+                                </div>
+                                <span class="bg-slate-700/60 text-slate-300 text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider border border-slate-600/50">Nur Token</span>
+                            </div>
+                            <div class="bg-[#0f172a]/90 rounded-lg p-3 border border-slate-700/50 flex items-center gap-4">
+                                <svg class="w-6 h-6 text-slate-500 animate-[spin_4s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                <div class="text-slate-300 font-mono text-xs leading-relaxed">
+                                    Optimiere Plan für<br>
+                                    <span class="text-white font-bold">[a7x-9b]</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="kontakt" class="py-32 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-sm mb-2 block">Pilotprojekt</span>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Lassen Sie uns gemeinsam messen.</h2>
+                <p class="text-xl text-slate-600">
+                    Wir wollen im Piloten beweisen, was wir Ihnen ersparen können. Ohne Ihr Altsystem zu gefährden.
+                </p>
+            </div>
+            
+            <div class="glass-card rounded-3xl p-8 md:p-12 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                <div class="flex-1 space-y-8">
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">1</span></div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-lg">Erstberatung</p>
+                            <p class="text-base text-slate-600 font-medium">Wir klären, ob Ihre aktuelle IT-Infrastruktur für eine Anbindung geeignet ist.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">2</span></div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-lg">Unterlagen für BR & Datenschutz</p>
+                            <p class="text-base text-slate-600 font-medium">Wir stellen alle notwendigen Dokumente (AVV, TOMs) zur schnellen internen Vorabprüfung bereit.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">3</span></div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-lg">Testlauf mit echten Daten</p>
+                            <p class="text-base text-slate-600 font-medium">Sie stellen einen regulären Export bereit, wir zeigen Ihnen die Optimierung in osmera.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-auto">
+                    <a href="mailto:kontakt@osmera.de" class="inline-flex items-center justify-center gap-2 bg-osmera-blue hover:bg-sky-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-md hover:shadow-lg w-full sm:w-auto min-w-[250px]">
+                        <i class="fa-regular fa-envelope"></i> kontakt@osmera.de
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass-card py-12 relative z-10 border-t border-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-6 h-6 bg-slate-900 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-layer-group text-white text-xs"></i>
+                        </div>
+                        <span class="font-bold text-lg text-slate-900">osmera</span>
+                    </div>
+                    <p class="text-sm text-slate-600 font-medium max-w-xs">
+                        Intelligente Dienstplanung und Ausfallmanagement für Kliniken. Die nahtlose Erweiterung für Ihr bestehendes System.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-slate-900 font-bold mb-4 text-sm uppercase tracking-wider">Kontakt</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 font-medium">
+                        <li>Lars Kutsche | Development</li>
+                        <li>Jonas Köhl | CRM</li>
+                        <li class="pt-2"><a href="mailto:kontakt@osmera.de" class="text-osmera-blue hover:underline">kontakt@osmera.de</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-slate-900 font-bold mb-4 text-sm uppercase tracking-wider">Rechtliches</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 font-medium">
+                        <li><a href="#" class="hover:text-osmera-blue transition-colors">Impressum</a></li>
+                        <li><a href="#" class="hover:text-osmera-blue transition-colors">Datenschutz</a></li>
+                        <li class="pt-2 text-slate-400">Osmera GmbH i.G.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-200/60 pt-8 flex justify-between items-center text-xs text-slate-500 font-medium">
+                <p>&copy; 2026 Osmera GmbH i.G. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => menu.classList.add('hidden'));
+        });
+
+        // --- Sticky Slideshow Logic ---
+        const scrollContainer = document.getElementById('vorteile');
+        const slides = document.querySelectorAll('.slide-content');
+        const indicators = document.querySelectorAll('.slide-indicator');
+        let isTicking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!isTicking) {
+                window.requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    const windowHeight = window.innerHeight;
+
+                    // --- Navbar Dark Mode Logic ---
+                    const navbar = document.getElementById('navbar');
+                    const darkSection = document.getElementById('sicherheit');
+                    if (navbar && darkSection) {
+                        const navRect = navbar.getBoundingClientRect();
+                        const darkRect = darkSection.getBoundingClientRect();
+                        if (navRect.top + navRect.height / 2 >= darkRect.top && navRect.top <= darkRect.bottom) {
+                            navbar.classList.add('nav-dark-mode');
+                        } else {
+                            navbar.classList.remove('nav-dark-mode');
+                        }
+                    }
+
+                    // --- Security Graphic Scroll-Linked Animation ---
+                    const securityGraphic = document.getElementById('security-graphic');
+                    if (securityGraphic) {
+                        const rect = securityGraphic.getBoundingClientRect();
+                        
+                        const startScroll = windowHeight * 0.75;
+                        const endScroll = windowHeight * -0.15;
+                        
+                        let animProgress = (startScroll - rect.top) / (startScroll - endScroll);
+                        animProgress = Math.max(0, Math.min(1, animProgress));
+
+                        const graphicTop = securityGraphic.getBoundingClientRect().top;
+                        const yExport = document.getElementById('anchor-export').getBoundingClientRect().top - graphicTop;
+                        const yBridge = document.getElementById('anchor-bridge').getBoundingClientRect().top - graphicTop;
+                        const yConnector = document.getElementById('anchor-connector').getBoundingClientRect().top - graphicTop;
+
+                        const pktKlartext = document.getElementById('anim-klartext');
+                        const pktToken = document.getElementById('anim-token');
+                        const uiExport = document.getElementById('ui-export-box');
+                        const uiConnector = document.getElementById('ui-connector');
+                        const uiBridge = document.getElementById('ui-bridge');
+
+                        uiExport.style.boxShadow = 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)';
+                        uiExport.style.borderColor = 'rgba(51, 65, 85, 0.3)';
+                        uiConnector.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                        uiConnector.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+                        if (uiBridge) {
+                            uiBridge.style.boxShadow = '0 4px 20px rgba(2, 132, 199, 0.3)';
+                            uiBridge.style.borderColor = 'rgba(56, 189, 248, 0.5)';
+                        }
+
+                        if (animProgress > 0.0 && animProgress < 0.20) {
+                            uiExport.style.boxShadow = '0 0 15px rgba(148, 163, 184, 0.5)';
+                            uiExport.style.borderColor = 'rgba(148, 163, 184, 0.8)';
+                        }
+
+                        if (animProgress >= 0.10 && animProgress <= 0.45) {
+                            let travelProgress = Math.max(0, Math.min(1, (animProgress - 0.10) / 0.30));
+                            let currentY = yExport + (yBridge - yExport) * travelProgress;
+                            pktKlartext.style.transform = `translateX(-50%) translateY(${currentY - 15}px)`; 
+                            
+                            if (animProgress < 0.15) {
+                                pktKlartext.style.opacity = (animProgress - 0.10) / 0.05;
+                            } else if (animProgress > 0.35) {
+                                pktKlartext.style.opacity = 1 - ((animProgress - 0.35) / 0.10);
+                            } else {
+                                pktKlartext.style.opacity = 1;
+                            }
+                        } else {
+                            pktKlartext.style.opacity = 0;
+                        }
+
+                        if (uiBridge && animProgress >= 0.35 && animProgress <= 0.55) {
+                            uiBridge.style.boxShadow = '0 0 30px rgba(56, 189, 248, 0.8)';
+                            uiBridge.style.borderColor = 'rgba(56, 189, 248, 1)';
+                        }
+
+                        if (animProgress >= 0.45 && animProgress <= 0.95) {
+                            let travelProgress = Math.max(0, Math.min(1, (animProgress - 0.45) / 0.50));
+                            let currentY = yBridge + (yConnector - yBridge) * travelProgress;
+                            pktToken.style.transform = `translateX(-50%) translateY(${currentY - 15}px)`;
+                            
+                            if (animProgress < 0.50) {
+                                pktToken.style.opacity = (animProgress - 0.45) / 0.05;
+                            } else if (animProgress > 0.85) {
+                                pktToken.style.opacity = 1 - ((animProgress - 0.85) / 0.10);
+                                uiConnector.style.boxShadow = '0 0 30px rgba(16, 185, 129, 1)';
+                                uiConnector.style.borderColor = '#6ee7b7';
+                            } else {
+                                pktToken.style.opacity = 1;
+                            }
+                        } else {
+                            pktToken.style.opacity = 0;
+                        }
+                    }
+
+                    // --- Sticky Slideshow Logic ---
+                    if (scrollContainer && window.innerWidth >= 1024) {
+                        const containerTop = scrollContainer.offsetTop;
+                        const containerHeight = scrollContainer.offsetHeight;
+                        
+                        let progress = 0;
+                        if (scrollY > containerTop) {
+                            const scrollableDistance = containerHeight - windowHeight;
+                            progress = (scrollY - containerTop) / scrollableDistance;
+                        }
+
+                        let safeProgress = Math.min(Math.max(progress, 0), 0.999);
+                        let slideIndex = Math.floor(safeProgress * slides.length);
+
+                        slides.forEach((slide, idx) => {
+                            slide.style.transform = '';
+                            slide.style.opacity = '';
+                            
+                            slide.classList.remove('active', 'prev', 'next');
+                            
+                            if (idx === slideIndex) {
+                                slide.classList.add('active');
+                                indicators[idx].classList.replace('bg-slate-300', 'bg-osmera-blue');
+                                indicators[idx].classList.add('w-6');
+                                indicators[idx].classList.remove('w-2');
+                            } else if (idx < slideIndex) {
+                                slide.classList.add('prev');
+                                indicators[idx].classList.replace('bg-osmera-blue', 'bg-slate-300');
+                                indicators[idx].classList.remove('w-6');
+                                indicators[idx].classList.add('w-2');
+                            } else {
+                                slide.classList.add('next');
+                                indicators[idx].classList.replace('bg-osmera-blue', 'bg-slate-300');
+                                indicators[idx].classList.remove('w-6');
+                                indicators[idx].classList.add('w-2');
+                            }
+                        });
+                    }
+                    
+                    isTicking = false;
+                });
+                isTicking = true;
+            }
+        });
+
+        // --- Canvas Network Animation ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        let lastScrollY = window.scrollY;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.baseY = this.y;
+            }
+            update(scrollDelta) {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.y -= scrollDelta * 0.15;
+
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const density = window.innerWidth < 768 ? 20000 : 15000;
+            const numParticles = Math.floor((width * height) / density); 
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - lastScrollY;
+            lastScrollY = currentScrollY;
+
+            particles.forEach(p => p.update(scrollDelta));
+            
+            const connectDistance = 150;
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].draw();
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        const opacity = 1 - (distance / connectDistance);
+                        ctx.strokeStyle = `rgba(2, 132, 199, ${opacity * 0.25})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            clearTimeout(window.resizeTimer);
+            window.resizeTimer = setTimeout(() => {
+                resizeCanvas();
+                initParticles();
+            }, 200);
+        });
+        
+        resizeCanvas();
+        initParticles();
+        animate();
+
+        // --- Robust Smooth Scrolling ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
+                    
+                    const menu = document.getElementById('mobile-menu');
+                    if (menu && !menu.classList.contains('hidden')) {
+                        menu.classList.add('hidden');
+                    }
+                    
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
