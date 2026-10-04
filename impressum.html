@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressum | osmera</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        osmera: {
+                            dark: '#0f172a',
+                            darker: '#020617',
+                            light: '#f8fafc',
+                            blue: '#0284c7',
+                            bluelight: '#e0f2fe',
+                            accent: '#38bdf8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f8fafc;
+        }
+        
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-800 selection:bg-osmera-blue selection:text-white flex flex-col min-h-screen">
+
+    <div class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center pointer-events-none transition-all duration-300">
+        <nav class="glass-nav rounded-full px-6 py-3 flex items-center justify-between w-full max-w-4xl pointer-events-auto transition-transform" id="navbar">
+            <!-- Logo -->
+            <a href="index.html" class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                <div class="w-7 h-7 bg-osmera-blue rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-layer-group text-white text-xs"></i>
+                </div>
+                <span class="nav-logo-text font-bold text-xl text-slate-900 tracking-tight transition-colors duration-300">osmera</span>
+            </a>
+            
+            <!-- Desktop Menu (Links back to main page) -->
+            <div class="hidden md:flex items-center space-x-8 mx-8">
+                <a href="index.html#loesung" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Prinzip</a>
+                <a href="index.html#vorteile" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Mehrwert</a>
+                <a href="index.html#module" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Module</a>
+                <a href="index.html#sicherheit" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Datenschutz</a>
+            </div>
+
+            <!-- CTA Desktop -->
+            <div class="hidden md:block">
+                <a href="index.html#kontakt" class="bg-osmera-blue hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium transition-colors shadow-sm text-sm">
+                    Pilotprojekt
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="mobile-btn text-slate-600 hover:text-osmera-blue focus:outline-none p-2 transition-colors duration-300">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobile-menu" class="hidden fixed top-20 left-4 right-4 z-40 glass-card rounded-2xl shadow-xl overflow-hidden md:hidden">
+        <div class="px-4 py-4 space-y-2">
+            <a href="index.html#loesung" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Das Prinzip</a>
+            <a href="index.html#vorteile" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Mehrwert</a>
+            <a href="index.html#module" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Module</a>
+            <a href="index.html#sicherheit" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Datenschutz</a>
+            <a href="index.html#kontakt" class="block px-3 py-3 bg-osmera-blue/10 text-osmera-blue text-center rounded-xl font-bold mt-4">Pilotprojekt anfragen</a>
+        </div>
+    </div>
+
+    <main class="flex-grow pt-32 pb-24 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-10">Impressum</h1>
+            
+            <div class="glass-card rounded-3xl p-8 md:p-12 text-slate-700 space-y-8 leading-relaxed">
+                
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-3 border-b border-slate-200 pb-2">Angaben gemäß § 5 TMG</h2>
+                    <p class="font-medium">
+                        Lars Kutsche<br>
+                        Zeithstraße 26<br>
+                        53721 Siegburg
+                    </p>
+                </div>
+                
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-3 border-b border-slate-200 pb-2">Kontakt</h2>
+                    <p class="font-medium">
+                        E-Mail: <a href="mailto:kontakt@osmera.de" class="text-osmera-blue hover:underline">kontakt@osmera.de</a>
+                    </p>
+                </div>
+
+                <!-- wieder aktiv machen, falls redaktioneller / journalistischer Inhalt aufkommt.
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 mb-3 border-b border-slate-200 pb-2">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+                    <p class="font-medium">
+                        Lars Kutsche<br>
+                        Zeithstraße 26<br>
+                        53721 Siegburg
+                    </p>
+                </div>-->
+
+                <div class="pt-6 mt-6 border-t border-slate-200/60">
+                    <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fa-solid fa-circle-info text-amber-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-amber-700 font-medium">
+                                    Hinweis: Da sich das Unternehmen noch in Gründung befindet, sind dies die rechtsgültigen Angaben der handelnden Personen.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="glass-card py-12 relative z-10 border-t border-white mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-6 h-6 bg-slate-900 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-layer-group text-white text-xs"></i>
+                        </div>
+                        <span class="font-bold text-lg text-slate-900">osmera</span>
+                    </div>
+                    <p class="text-sm text-slate-600 font-medium max-w-xs">
+                        Intelligente Dienstplanung und Ausfallmanagement für Kliniken. Die nahtlose Erweiterung für Ihr bestehendes System.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-slate-900 font-bold mb-4 text-sm uppercase tracking-wider">Kontakt</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 font-medium">
+                        <li>Lars Kutsche | Development</li>
+                        <li>Jonas Köhl | CRM</li>
+                        <li class="pt-2"><a href="mailto:kontakt@osmera.de" class="text-osmera-blue hover:underline">kontakt@osmera.de</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-slate-900 font-bold mb-4 text-sm uppercase tracking-wider">Rechtliches</h4>
+                    <ul class="space-y-2 text-sm text-slate-600 font-medium">
+                        <li><a href="impressum.html" class="text-osmera-blue transition-colors font-bold">Impressum</a></li>
+                        <li><a href="#" class="hover:text-osmera-blue transition-colors">Datenschutz</a></li>
+                        <li class="pt-2 text-slate-400">osmera</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-200/60 pt-8 flex justify-between items-center text-xs text-slate-500 font-medium">
+                <p>&copy; 2026 osmera. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => menu.classList.add('hidden'));
+        });
+    </script>
+</body>
+</html>
