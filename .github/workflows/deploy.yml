@@ -1,0 +1,124 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - '101026_NewVersion'
+      - '101027_*'
+      - '101028_VersionTwo'
+
+  # Allow manual triggering (e.g. to test staging deployments)
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy (use main for production)'
+        required: true
+        default: 'main'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine deployment target
+        id: target
+        run: |
+          BRANCH="${{ github.ref_name }}"
+          if [ "$BRANCH" = "main" ]; then
+            echo "deploy_type=production" >> $GITHUB_OUTPUT
+            echo "destination=" >> $GITHUB_OUTPUT
+            echo "staging_hash=" >> $GITHUB_OUTPUT
+            echo "staging_url=" >> $GITHUB_OUTPUT
+            echo "::notice::📦 Branch detected: main → PRODUCTION deployment"
+          else
+            HASH=$(openssl rand -hex 4)
+            DEST="staging-${HASH}"
+            STAGE_URL="https://osmera.de/${DEST}/"
+            echo "deploy_type=staging" >> $GITHUB_OUTPUT
+            echo "destination=${DEST}" >> $GITHUB_OUTPUT
+            echo "staging_hash=${HASH}" >> $GITHUB_OUTPUT
+            echo "staging_url=${STAGE_URL}" >> $GITHUB_OUTPUT
+            echo "::notice::📦 Branch detected: ${BRANCH} → STAGING deployment (randomized subdir)"
+          fi
+
+      - name: Prepare staging deployment
+        if: steps.target.outputs.deploy_type == 'staging'
+        run: |
+          DEST="${{ steps.target.outputs.destination }}"
+          echo "🔧 Preparing staging directory: ${DEST}"
+          mkdir -p "$DEST"
+
+          # Copy site files into staging directory
+          cp index.html impressum.html CNAME "$DEST/"
+
+          # Copy staging-specific files
+          cp .staging/access-control.js "$DEST/"
+          cp .staging/robots.txt "$DEST/"
+
+          # Generate a unique, random access token for this staging deployment
+          TOKEN=$(openssl rand -hex 8 | tr -d '\n')
+          echo "🔑 Generated staging access token: ${TOKEN}"
+
+          # Inject the token into access-control.js so each staging URL gets a unique token
+          sed "s/STAGING_TOKEN_PLACEHOLDER/${TOKEN}/g" .staging/access-control.js > "$DEST/access-control.js"
+
+          # Inject noindex meta tag before </head> (prevents indexing as fallback)
+          # Add access-control.js script before </body>
+          for f in "$DEST"/*.html; do
+            echo "🔧 Processing staging page: $f"
+            sed -i 's|</head>|<meta name="robots" content="noindex, nofollow">\n</head>|' "$f"
+            sed -i 's|</body>|<script src="access-control.js"></script>\n</body>|' "$f"
+          done
+
+          # Persist outputs so later steps can reference them
+          echo "STAGING_URL=${{ steps.target.outputs.staging_url }}" >> $GITHUB_OUTPUT
+          echo "STAGING_TOKEN=${TOKEN}" >> $GITHUB_OUTPUT
+          echo "::notice::✅ Staging files prepared in ${DEST}"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          destination_dir: ${{ steps.target.outputs.destination }}
+
+      - name: Output deployment results
+        if: steps.target.outputs.deploy_type == 'staging'
+        run: |
+          echo "================================================================"
+          echo "🚀 STAGING DEPLOYMENT SUCCESSFUL"
+          echo "================================================================"
+          echo "🔗 Staging URL:      ${{ steps.target.outputs.staging_url }}"
+          echo "🔑 Access token:     ${{ steps.target.outputs.staging_token }}"
+          echo "🔗 Direct access:    ${{ steps.target.outputs.staging_url }}?token=${{ steps.target.outputs.staging_token }}"
+          echo "⚠️  This URL is NOT public. Block by robots.txt + meta noindex + token gate."
+          echo "================================================================"
+          echo "::notice::🚀 Staging deployment successful!"
+          echo "::notice::🔗 URL: ${{ steps.target.outputs.staging_url }}"
+          echo "::notice::🔑 Access token: ${{ steps.target.outputs.staging_token }}"
+          echo "::notice::🔗 Direct access: ${{ steps.target.outputs.staging_url }}?token=${{ steps.target.outputs.staging_token }}"
+
+      - name: Output production results
+        if: steps.target.outputs.deploy_type == 'production'
+        run: |
+          echo "================================================================"
+          echo "✅ PRODUCTION DEPLOYMENT SUCCESSFUL"
+          echo "================================================================"
+          echo "🔗 Live site: https://osmera.de/"
+          echo "================================================================"
+          echo "::notice::✅ Production deployment successful!"
+          echo "::notice::🔗 URL: https://osmera.de/"
