@@ -95,6 +95,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
           destination_dir: ${{ steps.target.outputs.destination }}
+          keep_files: false
+          allow_empty_commit: true
+          force_orphan: true
 
       - name: Output deployment results
         if: steps.target.outputs.deploy_type == 'staging'
