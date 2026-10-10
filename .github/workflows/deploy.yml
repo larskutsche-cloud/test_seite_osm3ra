@@ -87,7 +87,10 @@ jobs:
 
           # Copy site files into deployment directory (NOT into the repo root,
           # to avoid the deploy action copying the staging dir into itself)
-          cp index.html impressum.html CNAME "$STAGING_DEPLOY_DIR/"
+          # IMPORTANT: We do NOT copy CNAME here - the CNAME file in the
+          # staging subdirectory makes GitHub Pages treat it as a separate
+          # site, which returns 404. The root CNAME handles the custom domain.
+          cp index.html impressum.html "$STAGING_DEPLOY_DIR/"
 
           # Copy staging-specific files
           cp .staging/access-control.js "$STAGING_DEPLOY_DIR/"
