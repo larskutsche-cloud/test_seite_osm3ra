@@ -11,6 +11,10 @@ Thumbs.db
 .roomodes
 README.md
 
+# Git worktrees (separate git repositories)
+development/
+staging-101028/
+
 # Build artifacts
 *.log
 node_modules/
