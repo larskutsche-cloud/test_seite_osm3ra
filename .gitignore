@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.sso
+*~
+.vscode/
+.idea/
+.roomodes
+README.md
+DEPLOYMENT_WORKFLOW.md
+SCHRITT_FÜR_SCHRITT_ANLEITUNG_DE.md
+
+# Git worktrees (separate git repositories)
+development/
+staging-101028/
+
+# Build artifacts
+*.log
+node_modules/
