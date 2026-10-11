@@ -55,30 +55,52 @@ jobs:
             echo "::notice::📦 Branch detected: ${BRANCH} → STAGING deployment (randomized subdir)"
           fi
 
+      - name: Clean up old staging directories (always run)
+        id: cleanup
+        run: |
+          git fetch origin gh-pages
+          git worktree add /tmp/gh-pages-clean origin/gh-pages
+          find /tmp/gh-pages-clean -maxdepth 1 -type d -name 'staging-*' -exec rm -rf {} + 2>/dev/null || true
+          if [ "$(git -C /tmp/gh-pages-clean diff --stat)" != "" ]; then
+            git -C /tmp/gh-pages-clean add -A
+            git -C /tmp/gh-pages-clean commit -m "chore: clean up old staging directories before deployment"
+            git -C /tmp/gh-pages-clean push origin gh-pages
+            echo "🧹 Cleaned up old staging directories"
+          else
+            echo "✅ No old staging directories found"
+          fi
+          rm -rf /tmp/gh-pages-clean
+
       - name: Prepare staging deployment
         if: steps.target.outputs.deploy_type == 'staging'
         run: |
           DEST="${{ steps.target.outputs.destination }}"
-          echo "🔧 Preparing staging directory: ${DEST}"
-          mkdir -p "$DEST"
+          STAGING_DEPLOY_DIR="staging-deploy"
 
-          # Copy site files into staging directory
-          cp index.html impressum.html CNAME "$DEST/"
+          echo "🔧 Preparing staging deployment directory: ${STAGING_DEPLOY_DIR}"
+          mkdir -p "$STAGING_DEPLOY_DIR"
+
+          # Copy site files into deployment directory (NOT into the repo root,
+          # to avoid the deploy action copying the staging dir into itself)
+          # IMPORTANT: We do NOT copy CNAME here - the CNAME file in the
+          # staging subdirectory makes GitHub Pages treat it as a separate
+          # site, which returns 404. The root CNAME handles the custom domain.
+          cp index.html impressum.html "$STAGING_DEPLOY_DIR/"
 
           # Copy staging-specific files
-          cp .staging/access-control.js "$DEST/"
-          cp .staging/robots.txt "$DEST/"
+          cp .staging/access-control.js "$STAGING_DEPLOY_DIR/"
+          cp .staging/robots.txt "$STAGING_DEPLOY_DIR/"
 
           # Generate a unique, random access token for this staging deployment
           TOKEN=$(openssl rand -hex 8 | tr -d '\n')
           echo "🔑 Generated staging access token: ${TOKEN}"
 
           # Inject the token into access-control.js so each staging URL gets a unique token
-          sed "s/STAGING_TOKEN_PLACEHOLDER/${TOKEN}/g" .staging/access-control.js > "$DEST/access-control.js"
+          sed "s/STAGING_TOKEN_PLACEHOLDER/${TOKEN}/g" .staging/access-control.js > "$STAGING_DEPLOY_DIR/access-control.js"
 
           # Inject noindex meta tag before </head> (prevents indexing as fallback)
           # Add access-control.js script before </body>
-          for f in "$DEST"/*.html; do
+          for f in "$STAGING_DEPLOY_DIR"/*.html; do
             echo "🔧 Processing staging page: $f"
             sed -i 's|</head>|<meta name="robots" content="noindex, nofollow">\n</head>|' "$f"
             sed -i 's|</body>|<script src="access-control.js"></script>\n</body>|' "$f"
