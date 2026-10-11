@@ -34,6 +34,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Clean up old staging directories (always run)
+        id: cleanup
+        run: |
+          git fetch origin gh-pages
+          git worktree add /tmp/gh-pages-clean origin/gh-pages
+          find /tmp/gh-pages-clean -maxdepth 1 -type d -name 'staging-*' -exec rm -rf {} + 2>/dev/null || true
+          if [ "$(git -C /tmp/gh-pages-clean diff --stat)" != "" ]; then
+            git -C /tmp/gh-pages-clean add -A
+            git -C /tmp/gh-pages-clean commit -m "chore: clean up old staging directories before deployment"
+            git -C /tmp/gh-pages-clean push origin gh-pages
+            echo "🧹 Cleaned up old staging directories"
+          else
+            echo "✅ No old staging directories found"
+          fi
+          rm -rf /tmp/gh-pages-clean
+
       - name: Determine deployment target
         id: target
         run: |
@@ -53,27 +69,6 @@ jobs:
             echo "staging_hash=${HASH}" >> $GITHUB_OUTPUT
             echo "staging_url=${STAGE_URL}" >> $GITHUB_OUTPUT
             echo "::notice::📦 Branch detected: ${BRANCH} → STAGING deployment (randomized subdir)"
-          fi
-
-      - name: Clean up old staging directories
-        if: steps.target.outputs.deploy_type == 'production'
-        run: |
-          # Fetch the current gh-pages branch to clean up old staging dirs
-          git fetch origin gh-pages
-          git worktree add /tmp/gh-pages-checkout origin/gh-pages
-
-          # Remove old staging-* directories to prevent accumulation
-          find /tmp/gh-pages-checkout -maxdepth 1 -type d -name 'staging-*' -exec rm -rf {} + 2>/dev/null || true
-
-          # Commit the cleanup if anything was removed
-          cd /tmp/gh-pages-checkout
-          if ! git diff --quiet; then
-            git add -A
-            git commit -m "chore: clean up old staging directories before production deploy"
-            git push origin gh-pages
-            echo "🧹 Cleaned up old staging directories"
-          else
-            echo "✅ No old staging directories found"
           fi
 
       - name: Prepare staging deployment
