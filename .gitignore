@@ -11,11 +11,13 @@ Thumbs.db
 .roomodes
 README.md
 SCHRITT_FÜR_SCHRITT_ANLEITUNG_DE.md
+DEPLOYMENT_WORKFLOW.md
 
 # Git worktrees (separate git repositories)
 development/
 staging-101028/
+dev_macbook/
 
 # Build artifacts
 *.log
-node_modules/
+./dev_macbook/index.html
