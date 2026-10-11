@@ -113,12 +113,23 @@ jobs:
           echo "STAGING_TOKEN=${TOKEN}" >> $GITHUB_OUTPUT
           echo "::notice::✅ Staging files prepared in ${DEST}"
 
+      - name: Set publish directory
+        id: publish_dir
+        run: |
+          if [ "${{ steps.target.outputs.deploy_type }}" = "staging" ]; then
+            echo "dir=staging-deploy" >> $GITHUB_OUTPUT
+          else
+            echo "dir=." >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: ${{ steps.publish_dir.outputs.dir }}
           destination_dir: ${{ steps.target.outputs.destination }}
+          keep_files: true
+          allow_empty_commit: true
 
       - name: Output deployment results
         if: steps.target.outputs.deploy_type == 'staging'
