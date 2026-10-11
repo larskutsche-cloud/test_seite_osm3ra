@@ -129,10 +129,10 @@
         }
 
         /* Unsichtbare Slides werfen keinen Schatten */
-        .slide-content.prev, .slide-content.next {
+        /*.slide-content.prev, .slide-content.next {
             box-shadow: none !important;
             border-color: transparent !important;
-        }
+        }*/
 
         @media (max-width: 1023px) {
             #vorteile {
@@ -171,9 +171,9 @@
 
             <div class="hidden md:flex items-center space-x-8 mx-8">
                 <a href="#loesung" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Die Lösung</a>
-                <a href="#vorteile" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Mehrwert</a>
-                <a href="#module" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Module</a>
-                <a href="#sicherheit" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Datenschutz</a>
+                <a href="#vorteile" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Ihr Mehrwert</a>
+                <a href="#module" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Die Plattform</a>
+                <a href="#sicherheit" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Sicherheit</a>
             </div>
 
             <div class="hidden md:block">
@@ -193,10 +193,10 @@
     <div id="mobile-menu" class="hidden fixed top-20 left-4 right-4 z-40 glass-card rounded-2xl shadow-xl overflow-hidden md:hidden">
         <div class="px-4 py-4 space-y-2">
             <a href="#loesung" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Die Lösung</a>
-            <a href="#vorteile" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Mehrwert</a>
-            <a href="#module" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Module</a>
-            <a href="#sicherheit" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Datenschutz</a>
-            <a href="#kontakt" class="block px-3 py-3 bg-osmera-blue/10 text-osmera-blue text-center rounded-xl font-bold mt-4">Pilotprojekt anfragen</a>
+            <a href="#vorteile" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Ihr Mehrwert</a>
+            <a href="#module" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Die Plattform</a>
+            <a href="#sicherheit" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Sicherheit</a>
+            <a href="#kontakt" class="block px-3 py-3 bg-osmera-blue/10 text-osmera-blue text-center rounded-xl font-bold mt-4">Pilotkunde werden</a>
         </div>
     </div>
 
@@ -204,16 +204,18 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-12 lg:py-0">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="text-left">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border-blue-200/50 text-osmera-blue text-xs font-semibold mb-6 tracking-wide shadow-sm">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border-blue-200/50 text-osmera-blue text-xs font-semibold mb-5 tracking-wide shadow-sm">
                         <span class="relative flex h-2 w-2">
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-osmera-blue opacity-75"></span>
                           <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-600"></span>
                         </span>
                         Workforce Platform für Kliniken
                     </div>
-                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight">
-                        Intelligente Dienstplanung.<br>
-                        <span class="text-gradient">Verbunden mit Ihrem System.</span>
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-5 tracking-tight">
+                        <p style="line-height: 1.1;">
+                            Intelligente Dienstplanung.<br>
+                            <span class="text-gradient">Verbunden mit Ihrem System.</span>
+                        </p>
                     </h1>
                     <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed font-medium">
                         Das Add-On für Ihr Dienstplanprogramm.<br>
@@ -290,58 +292,66 @@
 
     <section id="loesung" class="py-32 relative z-10 bg-white/50 backdrop-blur-sm border-y border-slate-200/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-20">
-                <span class="text-osmera-blue font-bold tracking-wider uppercase text-sm mb-2 block">Die Lösung</span>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Ein Upgrade.<br>Ohne Systemwechsel.</h2>
+            <div class="text-center max-w-3xl mx-auto mb-10">
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Die Lösung</span>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-4">Ein Upgrade.<br>Ohne Systemwechsel.</h2>
                 <p class="text-xl text-slate-600 font-medium">
-                    Unsere vier Punkte zu einer intelligenten Dienstplanung. Einfach umgesetzt, im laufenden Betrieb.
+                    Unsere vier Komponenten einer intelligenten Dienstplanung. Einfach umgesetzt, im laufenden Betrieb.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 lg:gap-y-8 pt-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4 lg:gap-y-4 pt-8">
                 <div class="relative mt-4 lg:mt-8">
-                    <div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">1</div>
+                    <!--<div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">1</div>-->
                     <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
-                        <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-6 shadow-sm border border-blue-100">
-                            <i class="fa-solid fa-plug text-xl"></i>
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-4 shadow-sm border border-blue-100 flex-shrink-0">
+                                <i class="fa-solid fa-plug text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Verbindung</h3>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Verbinden</h3>
                         <p class="text-slate-600 text-sm leading-relaxed font-medium">
                             Ihr Dienstplanprogramm liefert die Daten so, wie sie ohnehin verarbeitet werden. Unser smartes Schnittstellen-Tool übernimmt die Anbindung und unterstützt beim gemeinsamen Mapping. Die Übersetzung in unser Format übernimmt osmera vollautomatisch.
                         </p>
                     </div>
                 </div>
                 <div class="relative mt-4 lg:mt-8">
-                    <div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">2</div>
+                    <!--<div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">2</div>-->
                     <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
-                        <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-6 shadow-sm border border-blue-100">
-                            <i class="fa-solid fa-calculator text-xl"></i>
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-4 shadow-sm border border-blue-100 flex-shrink-0">
+                                <i class="fa-solid fa-calculator text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Optimierung</h3>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Optimieren</h3>
                         <p class="text-slate-600 text-sm leading-relaxed font-medium">
                             Unser Algorithmus plant mit dem, was für Ihren Dienstplan zählt: Qualifikationen, rechtlichen Vorgaben, Personalbedarf und Dienstplanmodell. Dabei achtet er aktiv auf die Zufriedenheit in Ihrem Team, indem er die Wünsche aller Mitarbeitenden fair umsetzt.
                         </p>
                     </div>
                 </div>
                 <div class="relative mt-4 lg:mt-8">
-                    <div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">3</div>
+                    <!--<div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">3</div>-->
                     <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
-                        <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-6 shadow-sm border border-blue-100">
-                            <i class="fa-solid fa-file-export text-xl"></i>
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-4 shadow-sm border border-blue-100 flex-shrink-0">
+                                <i class="fa-solid fa-file-export text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Rückgabe</h3>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Zurückgeben</h3>
                         <p class="text-slate-600 text-sm leading-relaxed font-medium">
                             Sie erhalten den fertigen, optimierten Plan exakt in Ihrem Originalformat zurück. Ihr bestehendes Dienstplanprogramm bleibt dabei die einzige offizielle Quelle. Dank unserem smarten Schnittstellen-Tool müssen Sie keine Datenkonflikte oder Missverständnisse befürchten.
                         </p>
                     </div>
                 </div>
                 <div class="relative mt-4 lg:mt-8">
-                    <div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">4</div>
+                    <!--<div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">4</div>-->
                     <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
-                        <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-6 shadow-sm border border-blue-100">
-                            <i class="fa-solid fa-paper-plane text-xl"></i>
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-12 h-12 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue mb-4 shadow-sm border border-blue-100 flex-shrink-0">
+                                <i class="fa-solid fa-paper-plane text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Anfragen versenden</h3>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-3">Anfragen versenden</h3>
                         <p class="text-slate-600 text-sm leading-relaxed font-medium">
                             Ersatz benötigt? osmera schlägt passende Kolleginnen und Kollegen vor, geprüft nach Verfügbarkeit und Qualifikation, und fragt sie bequem per Mitarbeitenden-App an. Ihre Teammitglieder entscheiden in Ruhe und melden sich im vorgegebenen Zeitfenster zurück.
                         </p>
@@ -355,9 +365,9 @@
         <div class="lg:sticky lg:top-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-auto lg:h-[80vh] flex flex-col lg:flex-row items-start lg:items-center gap-12 py-12">
 
             <div class="w-full lg:w-1/3 z-20">
-                <span class="text-osmera-blue font-bold tracking-wider uppercase text-sm mb-2 block">Ihr Mehrwert</span>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-6 leading-tight">Ein Werkzeug, vielfacher Nutzen.</h2>
-                <p class="text-lg text-slate-600 mb-8 font-medium">
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Ihr Mehrwert</span>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-4 leading-tight">Ein Werkzeug, vielfacher Nutzen.</h2>
+                <p class="text-lg text-slate-600 mb-6 font-medium">
                     Eine intelligente Dienstplanung entlastet nicht nur eine Abteilung, sondern verbessert die Prozesse und Transparenz im gesamten Haus.
                 </p>
 
@@ -422,7 +432,7 @@
                     <h3 class="text-3xl font-bold text-slate-900 mb-4">Personalabteilung &amp; IT</h3>
                     <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
                         Sie erhalten ein System, das sich nahtlos in Ihre bestehende Programm-Landschaft einfügt. Das bestehende System muss nicht ersetzt werden und aufwändige manuelle Datentransfers im Tagesgeschäft entfallen. Innovative Mapping-Tools, intelligente Schnittstellen-Tools und No-Code-Konnektoren halten den Onboarding-Aufwand auf einem Minimum.
-                    </p>
+                    </p>w
                     <ul class="space-y-3">
                         <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Das Altsystem bleibt unabhängig und voll funktionsfähig</li>
                         <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Keine gefährlichen Firewall-Öffnungen nach innen: Ihre Sicherheitsarchitektur bleibt unangetastet</li>
@@ -450,10 +460,10 @@
     <section id="module" class="py-32 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-osmera-blue font-bold tracking-wider uppercase text-sm mb-2 block">Die Plattform</span>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Module, die einzeln Sinn ergeben.</h2>
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Die Plattform</span>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-4">Modular aufgebaut und erweiterbar.<br>Das System wächst mit Ihren Anforderungen.</h2>
                 <p class="text-xl text-slate-600">
-                    Sie müssen kein unübersichtliches Komplettpaket kaufen. Starten Sie mit dem Modul, das Ihr dringendstes Problem löst. Das starke Fundament aus Bridge und Mapper ist immer dabei.
+                    Bauen Sie sich Ihre Lösung nach Maß. Sie entscheiden, welche Module Sie nutzen und können sich dabei jederzeit auf das starke Fundament aus Bridge und Mapper verlassen.
                 </p>
             </div>
 
@@ -467,7 +477,7 @@
                     </div>
                     <p class="font-bold text-slate-800 mb-3 text-lg">Ausfallmanagement mit Co-Pilot.</p>
                     <p class="text-slate-600 leading-relaxed font-medium">
-                        Zeigt bei einer Krankmeldung an, wer einspringen darf. Anfragen gehen asynchron auf das Handy (App, Messengerdienste oder SMS) der passenden Personen – streng nach rechtlicher und persönlicher Verfügbarkeit sowie Qualitfikationsmatch sortiert. Die manuelle Telefonkette entfällt.
+                        Bei einer Krankmeldung zeigt <b class="text-osmera-blue">flow</b> Ihnen auf Ihre Anfrage hin direkt, wer einspringen kann, darf und am besten geeignet ist. Sortiert werden sie nach rechtlicher und persönlicher Verfügbarkeit sowie nach passender Qualifikation. Die Anfragen gehen direkt auf das Handy der angefragten Person, wahlweise per App, Messenger-Dienst oder SMS. Die Mitarbeitenden antworten sofort auf die Anfrage und flow trägt sie ein.
                     </p>
                 </div>
 
@@ -480,7 +490,7 @@
                     </div>
                     <p class="font-bold text-slate-800 mb-3 text-lg">Die intelligente Dienstplan-Berechnung.</p>
                     <p class="text-slate-600 leading-relaxed font-medium">
-                        Erstellt den kompletten Dienstplan für eine Periode, optimiert nach Bedarf und Wünschen. Bei Konflikten wird die Dienstplanung aktiv unterstützt und das Ergebnis geht automatisch im Originalformat an Ihr bestehendes System zurück.
+                        <b class="text-osmera-blue">Sync</b> erstellt Ihren Dienstplan für den gesamten Planungszeitraum, abgestimmt auf Bedarf und die Wünsche der Mitarbeitenden. Bei Konflikten werden Sie gezielt bei dem Finden einer Lösung unterstützt. Das Ergebnis fließt nach Ihrer Freigabe automatisch im Originalformat Ihres Dienstplanprogramms zurück in Ihr System. Das Herzstück dieses Moduls bildet der <b>osmera</b> <b class="text-osmera-blue">core</b> – unser selbst entwickelter und innovativer Zuteilungsalgorithmus.
                     </p>
                 </div>
 
@@ -535,7 +545,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
             <div class="max-w-3xl mb-12">
-                <span class="text-osmera-accent font-bold tracking-wider uppercase text-sm mb-2 block">Sicherheit</span>
+                <span class="text-osmera-accent font-bold tracking-wider uppercase text-lg mb-2 block">Sicherheit</span>
                 <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-white leading-tight">Datenschutz als Fundament, nicht als Nachrüstung.</h2>
                 <p class="text-slate-300 leading-relaxed text-lg">
                     In der Klinik-IT stehen Sicherheit und Datenschutz an erster Stelle. Unser Zero-Knowledge Ansatz stellt sicher, dass sensible Personaldaten Ihr Haus niemals unverschlüsselt verlassen.
@@ -655,7 +665,7 @@
     <section id="kontakt" class="py-32 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-20">
-                <span class="text-osmera-blue font-bold tracking-wider uppercase text-sm mb-2 block">Pilotprojekt</span>
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Pilotprojekt</span>
                 <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Lassen Sie uns gemeinsam messen.</h2>
                 <p class="text-xl text-slate-600">
                     Wir wollen im Piloten beweisen, was wir Ihnen ersparen können. Ohne Ihr Altsystem zu gefährden.
