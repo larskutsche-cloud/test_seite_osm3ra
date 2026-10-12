@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>osmera | Intelligente Dienstplanung per Add-On</title>
+    <title>osmera | Intelligente Dienstplanung per Add-on</title>
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Tailwind CSS -->
@@ -19,6 +21,7 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        logo: ['Urbanist', 'sans-serif'],
                     },
                     colors: {
                         osmera: {
@@ -81,6 +84,10 @@
             color: #cbd5e1 !important;
         }
         
+        .glass-nav.nav-dark-mode .nav-logo-circle {
+            color: #ffffff !important;
+        }
+
         .glass-card {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(20px);
@@ -128,6 +135,11 @@
             transform: translateY(-40px);
         }
 
+        .font-logo {
+            font-size: 1.09rem;
+            font-weight: 550;
+        }
+
         /* Unsichtbare Slides werfen keinen Schatten */
         /*.slide-content.prev, .slide-content.next {
             box-shadow: none !important;
@@ -162,11 +174,16 @@
 
     <div class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center pointer-events-none transition-all duration-300" id="nav-wrapper">
         <nav class="glass-nav rounded-full px-6 py-3 flex items-center justify-between w-full max-w-4xl pointer-events-auto transition-transform" id="navbar">
-            <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <div class="w-7 h-7 bg-osmera-blue rounded-full flex items-center justify-center">
-                    <i class="fa-solid fa-layer-group text-white text-xs"></i>
+            <div class="flex-shrink-0 flex items-center gap-1.5 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="nav-logo-circle w-7 h-7 rounded-full border-2 border-current flex items-center justify-center">
+                    <!--<i class="fa-solid fa-layer-group text-white text-xs"></i>-->
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center">
+                        <div class="w-5 h-5 rounded-full border-2 border-current transition-colors flex items-center justify-center"></div>
+                    </div>
                 </div>
-                <span class="nav-logo-text font-bold text-xl text-slate-900 tracking-tight transition-colors duration-300">osmera</span>
+                <span class="nav-logo-text font-logo font-bold text-[1.35rem] text-slate-900 tracking-tight transition-colors duration-300 inline-block transform -translate-y-[2.4px]">
+                    osmera
+                </span>
             </div>
 
             <div class="hidden md:flex items-center space-x-8 mx-8">
@@ -216,7 +233,7 @@
                             <span class="text-gradient">Verbunden mit Ihrem System.</span>
                     </h1>
                     <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed font-medium">
-                        Das Add-On für Ihr Dienstplanprogramm.<br>
+                        Das Add-on für Ihr Dienstplanprogramm.<br>
                         Ohne Mehraufwand im Alltag, passgenau auf Ihre Strukturen – mit höchstem Datenschutzstandard.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
@@ -254,7 +271,7 @@
                         <div class="flex items-center justify-between border-b border-slate-200/50 pb-4 mb-4">
                             <div class="flex items-center gap-2 text-osmera-blue font-bold">
                                 <div class="w-6 h-6 rounded bg-osmera-blue/10 flex items-center justify-center"><i class="fa-solid fa-layer-group text-xs"></i></div>
-                                osmera engine
+                                <span class="font-logo">osmera engine</span>
                             </div>
                             <span class="text-[10px] font-bold text-green-600 bg-green-100/80 px-2.5 py-1 rounded-full uppercase tracking-wider">Verbunden</span>
                         </div>
@@ -309,7 +326,7 @@
                             <h3 class="text-xl font-bold text-slate-900 mb-3">Verbindung</h3>
                         </div>
                         <p class="text-slate-600 text-sm leading-relaxed font-medium">
-                            Ihr Dienstplanprogramm liefert die Daten so, wie sie ohnehin verarbeitet werden. Unser smartes Schnittstellen-Tool übernimmt die Anbindung und unterstützt beim gemeinsamen Mapping. Die Übersetzung in unser Format übernimmt osmera vollautomatisch.
+                            Ihr Dienstplanprogramm liefert die Daten so, wie sie ohnehin verarbeitet werden. Unser smartes Schnittstellen-Tool übernimmt die Anbindung und unterstützt beim gemeinsamen Mapping. Die Übersetzung in unser Format übernimmt <span class="font-logo text-[0.95rem]">osmera</span> vollautomatisch.
                         </p>
                     </div>
                 </div>
@@ -351,7 +368,7 @@
                             <h3 class="text-xl font-bold text-slate-900 mb-3">Anfragen versenden</h3>
                         </div>
                         <p class="text-slate-600 text-sm leading-relaxed font-medium">
-                            Ersatz benötigt? osmera schlägt passende Kolleginnen und Kollegen vor, geprüft nach Verfügbarkeit und Qualifikation, und fragt sie bequem per Mitarbeitenden-App an. Ihre Teammitglieder entscheiden in Ruhe und melden sich im vorgegebenen Zeitfenster zurück.
+                            Ersatz benötigt? <span class="font-logo text-[0.95rem]">osmera</span> schlägt passende Kolleginnen und Kollegen vor, geprüft nach Verfügbarkeit und Qualifikation, und fragt sie bequem per Mitarbeitenden-App an. Ihre Teammitglieder entscheiden in Ruhe und melden sich im vorgegebenen Zeitfenster zurück.
                         </p>
                     </div>
                 </div>
@@ -453,7 +470,7 @@
                         <h3 class="text-3xl font-bold text-slate-900 mb-0">Leitung &amp; DSB</h3>
                     </div>
                         <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
-                        Sie sichern Planbarkeit und Regelkonformität für Ihr Haus. Dank der komplementären Architektur wird Ihr Bestandssystem intelligent angebunden und erweitert, statt es teuer zu ersetzen. So steigern Sie die Personaleffizienz, wöhrend die Mitarbeitenden jederzeit geschützt bleiben.
+                        Sie sichern Planbarkeit und Regelkonformität für Ihr Haus. Dank der komplementären Architektur wird Ihr Bestandssystem intelligent angebunden und erweitert, statt es teuer zu ersetzen. So steigern Sie die Personaleffizienz, während die Mitarbeitenden jederzeit geschützt bleiben.
                     </p>
                     <ul class="space-y-3">
                         <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Datenschutz durch Zero-Knowledge-Architektur: Sensible Mitarbeitendendaten bleiben für Dritte unzugänglich</li>
@@ -469,9 +486,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Die Plattform</span>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-4">Modular aufgebaut und erweiterbar.<br>Das System wächst mit Ihren Anforderungen.</h2>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-4">Modular erweiterbar.<br>Wächst mit Ihren Anforderungen.</h2>
                 <p class="text-xl text-slate-600">
-                    Bauen Sie sich Ihre Lösung nach Maß. Sie entscheiden, welche Module Sie nutzen und können sich dabei jederzeit auf das starke Fundament aus Bridge und Mapper verlassen.
+                    Bauen Sie sich Ihre Lösung nach Maß. Sie entscheiden, welche Module Sie nutzen und können sich dabei jederzeit auf das starke Fundament aus <span class="font-logo text-[1.33rem]">bridge</span> und <span class="font-logo text-[1.33rem]">mapper</span> verlassen.
                 </p>
             </div>
 
@@ -479,26 +496,26 @@
                 <div class="glass-card rounded-2xl p-8 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border-t-4 border-osmera-blue shadow-lg">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-osmera-blue shadow-sm">
-                            <i class="fa-solid fa-mobile-screen-button text-2xl"></i>
+                            <i class="fa-solid fa-mobile-screen-button text-3xl"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-slate-900">osmera flow</h3>
+                        <h3 class="font-logo text-3xl font-bold text-slate-900">osmera flow</h3>
                     </div>
                     <p class="font-bold text-slate-800 mb-3 text-lg">Ausfallmanagement mit Co-Pilot.</p>
                     <p class="text-slate-600 leading-relaxed font-medium">
-                        Bei einer Krankmeldung zeigt <b class="text-osmera-blue">flow</b> Ihnen auf Ihre Anfrage hin direkt, wer einspringen kann, darf und am besten geeignet ist. Sortiert werden sie nach rechtlicher und persönlicher Verfügbarkeit sowie nach passender Qualifikation. Die Anfragen gehen direkt auf das Handy der angefragten Person, wahlweise per App, Messenger-Dienst oder SMS. Die Mitarbeitenden antworten sofort auf die Anfrage und flow trägt sie ein.
+                        Bei einer Krankmeldung zeigt <span class="font-logo font- text-osmera-blue">flow</span> Ihnen auf Ihre Anfrage hin direkt, wer einspringen kann, darf und am besten geeignet ist. Sortiert werden sie nach rechtlicher und persönlicher Verfügbarkeit sowie nach passender Qualifikation. Die Anfragen gehen direkt auf das Handy der angefragten Person, wahlweise per App, Messenger-Dienst oder SMS. Die Mitarbeitenden antworten sofort auf die Anfrage und flow trägt sie ein.
                     </p>
                 </div>
 
                 <div class="glass-card rounded-2xl p-8 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border-t-4 border-osmera-blue shadow-lg">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-osmera-blue shadow-sm">
-                            <i class="fa-regular fa-calendar-check text-2xl"></i>
+                            <i class="fa-regular fa-calendar-check text-3xl"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-slate-900">osmera sync</h3>
+                        <h3 class="font-logo text-3xl font-bold text-slate-900">osmera sync</h3>
                     </div>
                     <p class="font-bold text-slate-800 mb-3 text-lg">Die intelligente Dienstplan-Berechnung.</p>
                     <p class="text-slate-600 leading-relaxed font-medium">
-                        <b class="text-osmera-blue">Sync</b> erstellt Ihren Dienstplan für den gesamten Planungszeitraum, abgestimmt auf Bedarf und die Wünsche der Mitarbeitenden. Bei Konflikten werden Sie gezielt bei dem Finden einer Lösung unterstützt. Das Ergebnis fließt nach Ihrer Freigabe automatisch im Originalformat Ihres Dienstplanprogramms zurück in Ihr System. Das Herzstück dieses Moduls bildet der <b>osmera</b> <b class="text-osmera-blue">core</b> – unser selbst entwickelter und innovativer Zuteilungsalgorithmus.
+                        <span class="font-logo text-osmera-blue">Sync</span> erstellt Ihren Dienstplan für den gesamten Planungszeitraum, abgestimmt auf Bedarf und die Wünsche der Mitarbeitenden. Bei Konflikten werden Sie gezielt bei dem Finden einer Lösung unterstützt. Das Ergebnis fließt nach Ihrer Freigabe automatisch im Originalformat Ihres Dienstplanprogramms zurück in Ihr System. Das Herzstück dieses Moduls bildet der <span class="font-logo">osmera</span> <span class="font-logo text-osmera-blue">core</span> – unser selbst entwickelter und innovativer Zuteilungsalgorithmus.
                     </p>
                 </div>
 
@@ -508,9 +525,9 @@
                             <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
                                 <i class="fa-solid fa-lock"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-900">osmera bridge</h3>
+                            <h3 class="text-[1.36rem] font-logo font-bold text-slate-900">osmera bridge</h3>
                         </div>
-                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full uppercase">Basis-Fundament</span>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full uppercase">Basis-Modul</span>
                     </div>
                     <p class="text-slate-600 text-sm leading-relaxed font-medium">
                         Das kleine Programm im Netz Ihrer Klinik. Trennt Klarnamen von Kennungen und stellt sicher, dass unsere Server nur anonyme Token verarbeiten.
@@ -523,9 +540,9 @@
                             <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-600">
                                 <i class="fa-solid fa-right-left"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-900">osmera mapper</h3>
+                            <h3 class="text-[1.36rem] font-logo font-bold text-slate-900">osmera mapper</h3>
                         </div>
-                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full uppercase">Basis-Fundament</span>
+                        <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full uppercase">Basis-Modul</span>
                     </div>
                     <p class="text-slate-600 text-sm leading-relaxed font-medium">
                         Der universelle Übersetzer. Sie exportieren Daten so, wie Ihr Altsystem es ausgibt. Der Mapper übersetzt es vollautomatisch in unser Rechenformat.
@@ -539,8 +556,8 @@
 
                     <span class="leading-relaxed">
                         In Vorbereitung:
-                        <span class="font-bold text-slate-700">horizon</span> (KI-Forecast) &amp;
-                        <span class="font-bold text-slate-700">audit</span> (Controlling)
+                        <span class="font-logo font-bold text-[1.01rem] text-slate-700">horizon</span> (KI-Forecast) &amp;
+                        <span class="font-logo font-bold text-[1.01rem] text-slate-700">audit</span> (Controlling)
                     </span>
                 </div>
             </div>
@@ -554,9 +571,9 @@
 
             <div class="max-w-3xl mb-12">
                 <span class="text-osmera-accent font-bold tracking-wider uppercase text-lg mb-2 block">Sicherheit</span>
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-white leading-tight">Datenschutz als Fundament, nicht als Nachrüstung.</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-white leading-tight">Datenschutz als Fundament.<br>In jeder Schicht verankert.</h2>
                 <p class="text-slate-300 leading-relaxed text-lg">
-                    In der Klinik-IT stehen Sicherheit und Datenschutz an erster Stelle. Unser Zero-Knowledge Ansatz stellt sicher, dass sensible Personaldaten Ihr Haus niemals unverschlüsselt verlassen.
+                    In der Klinik-IT stehen Sicherheit und Datenschutz an erster Stelle. Mit unserem Zero-Knowledge-Ansatz verbleiben sensible Personaldaten geschützt in Ihrem Klinik-Netzwerk.
                 </p>
             </div>
 
@@ -565,37 +582,37 @@
                 <div class="space-y-6">
                     <div class="dark-glass-card p-6 rounded-2xl">
                         <h4 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-building-shield"></i></div>
-                            Intern: Die Bridge
+                            <div class="w-8 h-8 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-building-shield"></i></div>
+                            Ihre Bridge
                         </h4>
-                        <p class="text-slate-400 font-medium">Eine schlanke Komponente in Ihrem lokalen Netzwerk. Nur hier werden Klarnamen verarbeitet und vor dem Versand nach außen durch kryptische Token ersetzt.</p>
+                        <p class="text-slate-400 font-medium">Ein ressourcenschonendes Modul in Ihrem Netzwerk. Nur hier werden sensible Daten im Klartext verarbeitet und in kryptische Token umgewandelt, bevor sie Ihr Haus verlassen.</p>
                     </div>
                     <div class="dark-glass-card p-6 rounded-2xl">
                         <h4 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-cloud"></i></div>
-                            Extern: Der osmera-Server
+                            <div class="w-8 h-8 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-cloud"></i></div>
+                            Unser Server
                         </h4>
-                        <p class="text-slate-400 font-medium">Unser Rechenzentrum kalkuliert Dienstpläne ausschließlich auf Basis anonymisierter Token. Dort gibt es weder Klarnamen noch private Adressen.</p>
+                        <p class="text-slate-400 font-medium">Unser Rechenzentrum arbeitet ausschließlich auf Basis dieser anonymisierten Token. Klarnamen oder private Adressen erreichen unseren Server erst gar nicht und können somit nicht verloren gehen.</p>
                     </div>
                     <div class="dark-glass-card p-6 rounded-2xl">
                         <h4 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-server"></i></div>
+                            <div class="w-8 h-8 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-server"></i></div>
                             Dedizierte Infrastruktur
                         </h4>
-                        <p class="text-slate-400 font-medium">Jeder Kunde erhält eine eigene, dedizierte virtuelle Maschine (VM). Es gibt keine geteilte Anlage und keine gemeinsame Datenbank – absolute logische Trennung.</p>
+                        <p class="text-slate-400 font-medium">Sie erhalten als Kunde eine eigene, isolierte virtuelle Maschine (VM). Keine geteilten Systeme, keine gemeinsamen Datenbanken – Ihre Daten gehören weiterhin Ihnen und bleiben dauerhaft isoliert.</p>
                     </div>
                     <div class="dark-glass-card p-6 rounded-2xl">
                         <h4 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-network-wired"></i></div>
+                            <div class="w-8 h-8 flex items-center justify-center text-osmera-accent"><i class="fa-solid fa-network-wired"></i></div>
                             Aktiver Push-Transport
                         </h4>
-                        <p class="text-slate-400 font-medium">Die Bridge in Ihrem Haus initiiert die Verbindung nach außen. Es ist keine kritische Inbound-Freigabe (eingehende Ports) in Ihrer Firewall notwendig.</p>
+                        <p class="text-slate-400 font-medium">Die lokale Bridge initiiert die Verbindung stets von innen nach außen. Sie müssen also keine kritischen Inbound-Ports in Ihrer Firewall freigeben.</p>
                     </div>
                 </div>
-
+                                <!-- Animation der Bridge-Architektur (START) -->
                 <div class="w-full h-full min-h-[550px] max-w-md mx-auto lg:max-w-none relative z-10 flex items-stretch justify-center">
                     <div id="security-graphic" class="w-full relative rounded-3xl bg-[#0b1120] p-6 sm:p-8 border border-slate-700/60 shadow-2xl overflow-hidden flex flex-col justify-between ring-1 ring-white/5">
-                        
+
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-osmera-accent/10 rounded-full blur-[80px] pointer-events-none"></div>
 
                         <div class="absolute left-1/2 top-[120px] bottom-[100px] w-[2px] bg-slate-800 -translate-x-1/2 z-0">
@@ -621,7 +638,7 @@
                                 </div>
                                 <span class="bg-slate-700/60 text-slate-300 text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider border border-slate-600/50">Klartext</span>
                             </div>
-                            
+
                             <div class="relative mb-6">
                                 <div id="ui-export-box" class="scroll-anim-element bg-[#0f172a]/50 rounded-lg p-2 border border-slate-700/30 text-center text-slate-500 text-[10px] uppercase tracking-widest shadow-inner h-8 flex items-center justify-center relative z-10">
                                     Dienstplanprogramm
@@ -633,7 +650,7 @@
                                 <div class="absolute inset-0 bg-gradient-to-b from-sky-400/10 to-transparent rounded-xl"></div>
                                 <div class="relative z-10 flex justify-center items-center gap-2 text-sky-300 font-bold text-sm">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                    osmera bridge
+                                    <span class="font-logo">osmera bridge</span>
                                 </div>
                                 <div id="anchor-bridge" class="absolute left-1/2 top-1/2"></div>
                             </div>
@@ -643,14 +660,14 @@
 
                             <div id="ui-connector" class="scroll-anim-element absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-700 text-emerald-400 px-4 py-2 rounded-lg flex flex-col items-center gap-1 shadow-lg border border-emerald-500/50 z-20 transition-all duration-300">
                                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                                <span class="text-[10px] font-bold uppercase tracking-widest leading-none">Connector</span>
+                                <span class="text-[10px] font-logo font-bold uppercase tracking-widest leading-none">Connector</span>
                                 <div id="anchor-connector" class="absolute left-1/2 top-2"></div>
                             </div>
 
                             <div class="flex justify-between items-center mb-4 mt-2">
                                 <div class="flex items-center gap-3 text-white font-bold text-base">
                                     <svg class="w-5 h-5 text-osmera-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
-                                    osmera server
+                                    <span class="font-logo">osmera Server</span>
                                 </div>
                                 <span class="bg-slate-700/60 text-slate-300 text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider border border-slate-600/50">Nur Token</span>
                             </div>
@@ -662,10 +679,10 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
-
+                                <!-- Animation der Bridge Architektur (ENDE) -->
             </div>
         </div>
     </section>
@@ -674,33 +691,34 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-20">
                 <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Pilotprojekt</span>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Lassen Sie uns gemeinsam messen.</h2>
+                <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Gemeinsam Ergebnisse sichtbar machen.</h2>
                 <p class="text-xl text-slate-600">
-                    Wir wollen im Piloten beweisen, was wir Ihnen ersparen können. Ohne Ihr Altsystem zu gefährden.
+                    Im Pilotprojekt machen wir die konkreten Vorteile von <span class="font-logo text-[1.374rem] text-osmera-blue">osmera</span> direkt anhand Ihrer eigenen Daten messbar. Ihr Dienstplanprogramm läuft dabei völlig risikofrei weiter und wird Schritt für Schritt sicher durch unser <span class="font-medium">Add-on</span> sicher ergänzt.
                 </p>
             </div>
-            
+
             <div class="glass-card rounded-3xl p-8 md:p-12 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
                 <div class="flex-1 space-y-8">
+                    <h3 class="text-gradient font-bold text-slate-800 text-2xl">So einfach starten wir</h3>
                     <div class="flex items-start gap-4">
                         <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">1</span></div>
                         <div>
                             <p class="font-bold text-slate-800 text-lg">Erstberatung</p>
-                            <p class="text-base text-slate-600 font-medium">Wir klären, ob Ihre aktuelle IT-Infrastruktur für eine Anbindung geeignet ist.</p>
+                            <p class="text-base text-slate-600 font-medium">Gemeinsam klären wir, ob Ihre aktuelle IT-Infrastruktur für eine Anbindung geeignet ist oder vorher noch geringfügige Anpassungen notwendig sind.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
                         <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">2</span></div>
                         <div>
-                            <p class="font-bold text-slate-800 text-lg">Unterlagen für BR & Datenschutz</p>
-                            <p class="text-base text-slate-600 font-medium">Wir stellen alle notwendigen Dokumente (AVV, TOMs) zur schnellen internen Vorabprüfung bereit.</p>
+                            <p class="font-bold text-slate-800 text-lg">Unterlagen für Betriebsrat &amp; Datenschutz</p>
+                            <p class="text-base text-slate-600 font-medium">Wir stellen Ihnen alle notwendigen Dokumente (AVV, TOMs) bereit, damit Sie diese intern vorab prüfen können.</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
                         <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">3</span></div>
                         <div>
                             <p class="font-bold text-slate-800 text-lg">Testlauf mit echten Daten</p>
-                            <p class="text-base text-slate-600 font-medium">Sie stellen einen regulären Export bereit, wir zeigen Ihnen die Optimierung in osmera.</p>
+                            <p class="text-base text-slate-600 font-medium">Mit einem regulären Export von Ihnen zeigen wir Ihnen an Ihren eigenen Daten, welche Vorteile <span class="font-logo">osmera</span> für Sie mitbringt.</p>
                         </div>
                     </div>
                 </div>
@@ -719,18 +737,21 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div class="col-span-1">
                     <div class="flex items-center gap-2 mb-4">
-                        <div class="w-6 h-6 bg-slate-900 rounded-full flex items-center justify-center">
-                            <i class="fa-solid fa-layer-group text-white text-xs"></i>
+                        <div class="nav-logo-circle w-7 h-7 rounded-full border-2 border-current flex items-center justify-center">
+                            <!--<i class="fa-solid fa-layer-group text-white text-xs"></i>-->
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center">
+                                <div class="w-5 h-5 rounded-full border-2 border-current transition-colors flex items-center justify-center"></div>
+                            </div>
                         </div>
-                        <span class="font-bold text-lg text-slate-900">osmera</span>
+                        <span class="font-bold font-logo text-xl text-slate-900 inline-block transform -translate-y-[2.2px]">osmera</span>
                     </div>
-                    <p class="text-sm text-slate-600 font-medium max-w-xs">
-                        Intelligente Dienstplanung und Ausfallmanagement für Kliniken. Die nahtlose Erweiterung für Ihr bestehendes System.
+                    <p class="space-y-0.5 text-sm text-slate-600 font-medium max-w-xs">
+                        Intelligente Dienstplanung und Ausfallmanagement für Kliniken.<br>Die nahtlose Erweiterung für Ihr<br>bestehendes Dienstplanprogramm.
                     </p>
                 </div>
 
                 <div>
-                    <h4 class="text-slate-900 font-bold mb-4 text-sm uppercase tracking-wider">Kontakt</h4>
+                    <h4 class="text-slate-900 font-bold mb-5 text-sm uppercase tracking-wider inline-block transform -translate-y-[0px]">Kontakt</h4>
                     <ul class="space-y-2 text-sm text-slate-600 font-medium">
                         <li>Lars Kutsche | Development</li>
                         <li>Jonas Köhl | CRM</li>
@@ -739,17 +760,17 @@
                 </div>
 
                 <div>
-                    <h4 class="text-slate-900 font-bold mb-4 text-sm uppercase tracking-wider">Rechtliches</h4>
+                    <h4 class="text-slate-900 font-bold mb-5 text-sm uppercase tracking-wider inline-block transform -translate-y-[0px]">Rechtliches</h4>
                     <ul class="space-y-2 text-sm text-slate-600 font-medium">
                         <li><a href="impressum.html" class="hover:text-osmera-blue transition-colors">Impressum</a></li>
                         <li><a href="#" class="hover:text-osmera-blue transition-colors">Datenschutz</a></li>
-                        <li class="pt-2 text-slate-400">osmera</li>
+                        <li class="font-logo pt-2 text-slate-400 inline-block transform -translate-y-[2px]">osmera</li>
                     </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-slate-200/60 pt-8 flex justify-between items-center text-xs text-slate-500 font-medium">
-                <p>&copy; 2026 osmera. Alle Rechte vorbehalten.</p>
+                <p>&copy; 2026 <span class="font-logo text-sm">osmera</span>. Alle Rechte vorbehalten.</p>
             </div>
         </div>
     </footer>
