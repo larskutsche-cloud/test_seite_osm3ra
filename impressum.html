@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="de" class="scroll-smooth">
+<html lang="de" class="scroll-smooth scroll-pt-24">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impressum | osmera</title>
-    
+
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -19,6 +20,7 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        logo: ['Urbanist', 'sans-serif'],
                     },
                     colors: {
                         osmera: {
@@ -40,13 +42,24 @@
             -moz-osx-font-smoothing: grayscale;
             background-color: #f8fafc;
         }
-        
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
         .glass-nav {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .glass-card {
@@ -56,72 +69,151 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
+
+        .font-logo {
+            font-size: 1.09rem;
+            font-weight: 550;
+        }
+
+        /* Fließtext der Rechtstexte (Datenschutzerklärung): Tailwind-Preflight setzt Überschriften, Listen und Links zurück */
+        .legal-content {
+            color: #334155;
+            line-height: 1.75;
+            overflow-wrap: anywhere;
+        }
+        .legal-content h2 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: #0f172a;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(203, 213, 225, 0.7);
+        }
+        .legal-content h3 {
+            font-size: 1.2rem;
+            line-height: 1.75rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .legal-content h2 + h3 {
+            margin-top: 0;
+        }
+        .legal-content h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .legal-content p {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        .legal-content ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .legal-content li {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .legal-content a {
+            color: #0284c7;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: color 0.2s ease;
+        }
+        .legal-content a:hover {
+            color: #0369a1;
+        }
+        .legal-content > :last-child {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body class="font-sans text-slate-800 selection:bg-osmera-blue selection:text-white flex flex-col min-h-screen">
 
-    <div class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center pointer-events-none transition-all duration-300">
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="fixed w-full z-50 top-4 px-4 sm:px-6 flex justify-center pointer-events-none transition-all duration-300" id="nav-wrapper">
         <nav class="glass-nav rounded-full px-6 py-3 flex items-center justify-between w-full max-w-4xl pointer-events-auto transition-transform" id="navbar">
-            <!-- Logo -->
-            <a href="index.html" class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
-                <div class="w-7 h-7 bg-osmera-blue rounded-full flex items-center justify-center">
-                    <i class="fa-solid fa-layer-group text-white text-xs"></i>
+            <a href="index.html" class="flex-shrink-0 flex items-center gap-2.5 cursor-pointer">
+                <div class="nav-logo-circle w-7 h-7 rounded-full border-2 border-current flex items-center justify-center">
+                    <div class="w-6 h-6 rounded-full flex items-center justify-center">
+                        <div class="w-5 h-5 rounded-full border-2 border-current transition-colors flex items-center justify-center"></div>
+                    </div>
                 </div>
-                <span class="nav-logo-text font-bold text-xl text-slate-900 tracking-tight transition-colors duration-300">osmera</span>
+                <span class="nav-logo-text font-logo font-bold text-[1.7rem] text-slate-900 tracking-tight transition-colors duration-300 inline-block transform -translate-y-[1.8px]">
+                    osmera
+                </span>
             </a>
-            
-            <!-- Desktop Menu (Links back to main page) -->
-            <div class="hidden md:flex items-center space-x-8 mx-8">
-                <a href="index.html#loesung" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Prinzip</a>
-                <a href="index.html#vorteile" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Mehrwert</a>
-                <a href="index.html#module" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Module</a>
-                <a href="index.html#sicherheit" class="nav-link text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Datenschutz</a>
+
+            <div class="hidden md:flex items-center space-x-5 mx-4 lg:space-x-8 lg:mx-8">
+                <a href="index.html#loesung" class="nav-link whitespace-nowrap text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Die Lösung</a>
+                <a href="index.html#vorteile" class="nav-link whitespace-nowrap text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Ihr Mehrwert</a>
+                <a href="index.html#module" class="nav-link whitespace-nowrap text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Die Plattform</a>
+                <a href="index.html#sicherheit" class="nav-link whitespace-nowrap text-slate-600 hover:text-osmera-blue transition-colors duration-300 font-medium text-sm">Sicherheit</a>
             </div>
 
-            <!-- CTA Desktop -->
             <div class="hidden md:block">
                 <a href="index.html#kontakt" class="bg-osmera-blue hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium transition-colors shadow-sm text-sm">
                     Pilotprojekt
                 </a>
             </div>
 
-            <!-- Mobile Menu Button -->
             <div class="md:hidden flex items-center">
-                <button id="mobile-menu-btn" class="mobile-btn text-slate-600 hover:text-osmera-blue focus:outline-none p-2 transition-colors duration-300">
+                <button id="mobile-menu-btn" class="mobile-btn text-slate-600 hover:text-osmera-blue focus:outline-none p-2 transition-colors duration-300" aria-label="Menü öffnen">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
             </div>
         </nav>
     </div>
 
-    <!-- Mobile Menu Dropdown -->
     <div id="mobile-menu" class="hidden fixed top-20 left-4 right-4 z-40 glass-card rounded-2xl shadow-xl overflow-hidden md:hidden">
         <div class="px-4 py-4 space-y-2">
-            <a href="index.html#loesung" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Das Prinzip</a>
-            <a href="index.html#vorteile" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Mehrwert</a>
-            <a href="index.html#module" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Module</a>
-            <a href="index.html#sicherheit" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Datenschutz</a>
-            <a href="index.html#kontakt" class="block px-3 py-3 bg-osmera-blue/10 text-osmera-blue text-center rounded-xl font-bold mt-4">Pilotprojekt anfragen</a>
+            <a href="index.html#loesung" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Die Lösung</a>
+            <a href="index.html#vorteile" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Ihr Mehrwert</a>
+            <a href="index.html#module" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Die Plattform</a>
+            <a href="index.html#sicherheit" class="block px-3 py-3 text-slate-700 hover:bg-slate-100/50 rounded-xl font-medium">Sicherheit</a>
+            <a href="index.html#kontakt" class="block px-3 py-3 bg-osmera-blue/10 text-osmera-blue text-center rounded-xl font-bold mt-4">Pilotkunde werden</a>
         </div>
     </div>
 
     <main class="flex-grow pt-32 pb-24 relative z-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-extrabold text-slate-900 mb-10">Impressum</h1>
-            
-            <div class="glass-card rounded-3xl p-8 md:p-12 text-slate-700 space-y-8 leading-relaxed">
-                
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Rechtliches</span>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">Impressum</h1>
+            </div>
+
+            <div class="glass-card rounded-3xl p-8 md:p-12 text-slate-700 space-y-8 leading-relaxed border-t-4 border-osmera-blue shadow-lg">
+
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900 mb-3 border-b border-slate-200 pb-2">Angaben gemäß § 5 DDG</h2>
+                    <h2 class="text-xl font-bold text-slate-900 mb-4 pb-3 border-b border-slate-200 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue shadow-sm border border-blue-100 flex-shrink-0">
+                            <i class="fa-solid fa-building"></i>
+                        </span>
+                        Angaben gemäß § 5 DDG
+                    </h2>
                     <p class="font-medium">
-                        Lars Kutsche<br>
+                        Kutsche Köhl GbR<br>
                         Zeithstraße 26<br>
                         53721 Siegburg
                     </p>
                 </div>
-                
+
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900 mb-3 border-b border-slate-200 pb-2">Kontakt</h2>
+                    <h2 class="text-xl font-bold text-slate-900 mb-4 pb-3 border-b border-slate-200 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-blue-50/90 rounded-xl flex items-center justify-center text-osmera-blue shadow-sm border border-blue-100 flex-shrink-0">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        Kontakt
+                    </h2>
                     <p class="font-medium">
                         E-Mail: <a href="mailto:kontakt@osmera.de" class="text-osmera-blue hover:underline">kontakt@osmera.de</a>
                     </p>
@@ -129,7 +221,7 @@
 
                 <!-- wieder aktiv machen, falls redaktioneller / journalistischer Inhalt aufkommt.
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900 mb-3 border-b border-slate-200 pb-2">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+                    <h2 class="text-xl font-bold text-slate-900 mb-4 pb-3 border-b border-slate-200">Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
                     <p class="font-medium">
                         Lars Kutsche<br>
                         Zeithstraße 26<br>
@@ -138,13 +230,13 @@
                 </div>-->
 
                 <div class="pt-6 mt-6 border-t border-slate-200/60">
-                    <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+                    <div class="bg-osmera-bluelight/70 border-l-4 border-osmera-blue p-4 rounded-r-lg">
                         <div class="flex">
                             <div class="flex-shrink-0">
-                                <i class="fa-solid fa-circle-info text-amber-500"></i>
+                                <i class="fa-solid fa-circle-info text-osmera-blue"></i>
                             </div>
                             <div class="ml-3">
-                                <p class="text-sm text-amber-700 font-medium">
+                                <p class="text-sm text-sky-900 font-medium">
                                     Hinweis: Da sich das Unternehmen noch in Gründung befindet, sind dies die rechtsgültigen Angaben der handelnden Personen.
                                 </p>
                             </div>
@@ -156,23 +248,26 @@
         </div>
     </main>
 
-    <footer class="glass-card py-12 relative z-10 border-t border-white mt-auto">
+    <footer class="glass-card py-12 relative z-10 border-t border-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div class="col-span-1">
                     <div class="flex items-center gap-2 mb-4">
-                        <div class="w-6 h-6 bg-slate-900 rounded-full flex items-center justify-center">
-                            <i class="fa-solid fa-layer-group text-white text-xs"></i>
+                        <div class="nav-logo-circle w-7 h-7 rounded-full border-2 border-current flex items-center justify-center">
+                            <!--<i class="fa-solid fa-layer-group text-white text-xs"></i>-->
+                            <div class="w-6 h-6 rounded-full flex items-center justify-center">
+                                <div class="w-5 h-5 rounded-full border-2 border-current transition-colors flex items-center justify-center"></div>
+                            </div>
                         </div>
-                        <span class="font-bold text-lg text-slate-900">osmera</span>
+                        <span class="font-bold font-logo text-xl text-slate-900 inline-block transform -translate-y-[2.2px]">osmera</span>
                     </div>
-                    <p class="text-sm text-slate-600 font-medium max-w-xs">
-                        Intelligente Dienstplanung und Ausfallmanagement für Kliniken. Die nahtlose Erweiterung für Ihr bestehendes System.
+                    <p class="space-y-0.5 text-sm text-slate-600 font-medium max-w-xs">
+                        Intelligente Dienstplanung und Ausfallmanagement für Kliniken.<br>Die nahtlose Erweiterung für Ihr<br>bestehendes Dienstplanprogramm.
                     </p>
                 </div>
-                
+
                 <div>
-                    <h4 class="text-slate-900 font-bold mb-4 text-sm uppercase tracking-wider">Kontakt</h4>
+                    <h4 class="text-slate-900 font-bold mb-5 text-sm uppercase tracking-wider inline-block transform -translate-y-[0px]">Kontakt</h4>
                     <ul class="space-y-2 text-sm text-slate-600 font-medium">
                         <li>Lars Kutsche | Development</li>
                         <li>Jonas Köhl | CRM</li>
@@ -181,17 +276,17 @@
                 </div>
 
                 <div>
-                    <h4 class="text-slate-900 font-bold mb-4 text-sm uppercase tracking-wider">Rechtliches</h4>
+                    <h4 class="text-slate-900 font-bold mb-5 text-sm uppercase tracking-wider inline-block transform -translate-y-[0px]">Rechtliches</h4>
                     <ul class="space-y-2 text-sm text-slate-600 font-medium">
-                        <li><a href="impressum.html" class="text-osmera-blue transition-colors font-bold">Impressum</a></li>
-                        <li><a href="#" class="hover:text-osmera-blue transition-colors">Datenschutz</a></li>
-                        <li class="pt-2 text-slate-400">osmera</li>
+                        <li><a href="impressum.html" class="hover:text-osmera-blue transition-colors">Impressum</a></li>
+                        <li><a href="datenschutz.html" class="hover:text-osmera-blue transition-colors">Datenschutz</a></li>
+                        <li class="font-logo pt-2 text-slate-400 inline-block transform -translate-y-[2px]">osmera</li>
                     </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-slate-200/60 pt-8 flex justify-between items-center text-xs text-slate-500 font-medium">
-                <p>&copy; 2026 osmera. Alle Rechte vorbehalten.</p>
+                <p>&copy; 2026 <span class="font-logo text-sm">osmera</span>. Alle Rechte vorbehalten.</p>
             </div>
         </div>
     </footer>
@@ -206,6 +301,98 @@
         menu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => menu.classList.add('hidden'));
         });
+
+        // --- Canvas Network Animation ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        let lastScrollY = window.scrollY;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.baseY = this.y;
+            }
+            update(scrollDelta) {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.y -= scrollDelta * 0.15;
+
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const density = window.innerWidth < 768 ? 20000 : 15000;
+            const numParticles = Math.floor((width * height) / density);
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            const currentScrollY = window.scrollY;
+            const scrollDelta = currentScrollY - lastScrollY;
+            lastScrollY = currentScrollY;
+
+            particles.forEach(p => p.update(scrollDelta));
+
+            const connectDistance = 150;
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].draw();
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        const opacity = 1 - (distance / connectDistance);
+                        ctx.strokeStyle = `rgba(2, 132, 199, ${opacity * 0.25})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            clearTimeout(window.resizeTimer);
+            window.resizeTimer = setTimeout(() => {
+                resizeCanvas();
+                initParticles();
+            }, 200);
+        });
+
+        resizeCanvas();
+        initParticles();
+        animate();
     </script>
 </body>
 </html>
