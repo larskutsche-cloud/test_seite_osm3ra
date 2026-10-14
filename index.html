@@ -96,6 +96,14 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
+        /* Kachel über Fotos: höherer Weiß-Anteil für Lesbarkeit */
+        .glass-card-strong {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
         .dark-glass-card {
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(20px);
@@ -181,7 +189,7 @@
                         <div class="w-5 h-5 rounded-full border-2 border-current transition-colors flex items-center justify-center"></div>
                     </div>
                 </div>
-                <span class="nav-logo-text font-logo font-bold text-[1.7rem] text-slate-900 tracking-tight transition-colors duration-300 inline-block transform -translate-y-[1.8px]">
+                <span class="nav-logo-text font-logo font-bold text-[1.7rem] text-slate-900 tracking-tight transition-colors duration-300 inline-block transform -translate-y-[2.3px]">
                     osmera
                 </span>
             </div>
@@ -220,19 +228,12 @@
     <section class="min-h-screen flex items-center pt-20 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-12 lg:py-0">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="text-left">
-                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-card border-blue-200/50 text-osmera-blue text-xs font-semibold mb-5 tracking-wide shadow-sm">
-                        <span class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-osmera-blue opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-600"></span>
-                        </span>
-                        Workforce Platform für Kliniken
-                    </div>
-                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.2] mb-5 tracking-tight">
-                            Intelligente Dienstplanung.<br>
+                <div class="text-left lg:-translate-y-[13px]">
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.2] mb-5 lg:mb-7 tracking-tight">
+                            Intelligente Dienstplanung.<span class="block h-2 lg:h-[31px]" aria-hidden="true"></span>
                             <span class="text-gradient">Verbunden mit Ihrem System.</span>
                     </h1>
-                    <p class="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed font-medium">
+                    <p class="text-lg text-slate-600 mb-8 lg:mb-9 max-w-lg leading-relaxed font-medium">
                         Das Add-on für Ihr Dienstplanprogramm.<br>
                         Ohne Mehraufwand im Alltag, passgenau auf Ihre Strukturen – mit höchstem Datenschutzstandard.
                     </p>
@@ -246,66 +247,46 @@
                     </div>
                 </div>
 
-                <div class="hidden lg:block relative p-8">
-                    <!-- Base Layer (Legacy) -->
-                    <div class="absolute bottom-10 right-10 w-3/4 h-64 bg-slate-200/80 backdrop-blur-sm rounded-2xl border border-slate-300 shadow-inner transform -rotate-3 transition-transform hover:-rotate-1 duration-500">
-                        <div class="p-4 border-b border-slate-300/50 flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-server text-slate-400"></i>
-                                <div class="text-xs font-mono text-slate-500 uppercase tracking-widest">Klinik-System</div>
-                            </div>
-                            <div class="flex gap-1">
-                                <div class="w-2 h-2 rounded-full bg-slate-300"></div>
-                                <div class="w-2 h-2 rounded-full bg-slate-300"></div>
-                            </div>
-                        </div>
-                        <div class="p-6 space-y-4">
-                            <div class="h-3 w-full bg-slate-300/50 rounded-full"></div>
-                            <div class="h-3 w-5/6 bg-slate-300/50 rounded-full"></div>
-                            <div class="h-3 w-4/6 bg-slate-300/50 rounded-full"></div>
-                        </div>
-                    </div>
+                <!-- Hero-Bild: Foto im Karten-Rahmen. Kachelpaar (Problem, dann Lösung): bis 1279 px unter dem Foto, ab xl an den äußeren Ecken (Maße nach Vorgabe) -->
+                <div class="relative w-full sm:max-w-xl lg:max-w-none">
+                    <div class="absolute -inset-4 -z-10 rounded-[2.5rem] bg-gradient-to-br from-osmera-accent/25 via-osmera-blue/10 to-transparent blur-2xl pointer-events-none" aria-hidden="true"></div>
 
-                    <!-- Top Layer (osmera) Bewegliche Kachel Hero-->
-                    <div class="relative z-10 glass-card rounded-2xl p-6 transform translate-y-4 -translate-x-4 shadow-xl border-t border-l border-white transition-transform hover:-translate-y-2 hover:-translate-x-2 duration-500">
-                        <div class="flex items-center justify-between border-b border-slate-200/50 pb-4 mb-4">
-                            <div class="flex items-center gap-2 text-osmera-blue font-bold">
-                                <div class="w-6 h-6 rounded bg-osmera-blue/10 flex items-center justify-center"><i class="fa-solid fa-layer-group text-xs"></i></div>
-                                <span class="font-logo"><span class="text-slate-800">osmera</span> engine</span>
-                            </div>
-                            <span class="text-[10px] font-bold text-green-600 bg-green-100/80 px-2.5 py-1 rounded-full uppercase tracking-wider">Verbunden</span>
-                        </div>
+                    <figure class="relative aspect-square overflow-hidden rounded-3xl bg-slate-200 shadow-2xl ring-1 ring-slate-900/5">
+                        <picture>
+                            <source type="image/avif"
+                                    srcset="img/hero-zwei-personen-640.avif 640w, img/hero-zwei-personen-960.avif 960w, img/hero-zwei-personen-1280.avif 1280w, img/hero-zwei-personen-1600.avif 1600w"
+                                    sizes="(min-width: 1024px) 584px, 100vw">
+                            <source type="image/webp"
+                                    srcset="img/hero-zwei-personen-640.webp 640w, img/hero-zwei-personen-960.webp 960w, img/hero-zwei-personen-1280.webp 1280w, img/hero-zwei-personen-1600.webp 1600w"
+                                    sizes="(min-width: 1024px) 584px, 100vw">
+                            <img src="img/hero-zwei-personen-960.webp" width="1600" height="1600"
+                                 alt="Eine Pflegekraft in blauer Berufskleidung und eine Ärztin im weißen Kittel besprechen etwas auf einem Tablet"
+                                 fetchpriority="high" decoding="async"
+                                 class="h-full w-full object-cover">
+                        </picture>
+                        <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-transparent" aria-hidden="true"></div>
+                    </figure>
 
-                        <div class="space-y-4">
-                            <div class="p-4 bg-white/60 rounded-xl border border-white flex justify-between items-center shadow-sm">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center"><i class="fa-solid fa-bell"></i></div>
-                                    <div>
-                                        <div class="text-sm font-bold text-slate-800">Krankmeldung Station A</div>
-                                        <div class="text-xs text-slate-500 font-medium">Frühschicht unbesetzt</div>
-                                    </div>
-                                </div>
-                                <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                            </div>
-
-                            <div class="p-4 bg-white/60 rounded-xl border border-white flex justify-between items-center shadow-sm relative overflow-hidden">
-                                <div class="absolute left-0 top-0 h-full w-1 bg-green-400"></div>
-                                <div class="flex items-center gap-3 pl-2">
-                                    <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center"><i class="fa-solid fa-check"></i></div>
-                                    <div>
-                                        <div class="text-sm font-bold text-slate-800">Ersatz über Smart-Matching gefunden</div>
-                                        <div class="text-xs text-slate-500 font-medium">Rücklauf in Klinik-System</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Kachelpaar: bis 1279 px untereinander unter dem Foto (ragt unten etwas hinein), ab xl getrennt an den Ecken -->
+                    <div class="relative z-10 mx-4 -mt-8 max-w-sm sm:mx-6 flex flex-col gap-1.5 xl:contents">
+                        <div class="transition-transform hover:-translate-y-1 duration-500 xl:absolute xl:z-10 xl:-top-[14px] xl:-right-5 min-[1320px]:-right-[35px] xl:w-[317px] xl:h-[88px]"><div class="glass-card-strong rounded-2xl shadow-xl h-full w-full flex items-center justify-between gap-3 p-5">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-red-100 text-red-500 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-bell"></i></div>
+        <div><div class="text-base font-bold text-slate-800 whitespace-nowrap">Krankmeldung Station A</div><div class="text-sm text-slate-500 font-medium">Frühschicht unbesetzt</div></div>
+      </div><div class="w-2 h-2 rounded-full bg-red-500 animate-pulse flex-shrink-0"></div></div></div>
+                        <div class="xl:hidden flex justify-center text-slate-300" aria-hidden="true"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                        <div class="transition-transform hover:-translate-y-1 duration-500 xl:absolute xl:z-10 xl:-left-[76px] xl:bottom-[23px] xl:w-[312px] xl:h-[166px]"><div class="glass-card-strong rounded-2xl shadow-xl h-full w-full p-4 flex flex-col justify-between gap-3">
+      <div class="flex items-center justify-between"><div class="text-[15px] font-bold text-slate-800">3 passende Vorschläge</div><span class="w-2 h-2 rounded-full bg-green-500"></span></div>
+      <div class="flex items-center gap-3"><div class="flex -space-x-2"><span class="grid place-items-center flex-shrink-0 w-11 h-11 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 ring-2 ring-white">AB</span><span class="grid place-items-center flex-shrink-0 w-11 h-11 rounded-full text-xs font-bold bg-sky-100 text-sky-800 ring-2 ring-white">MK</span><span class="grid place-items-center flex-shrink-0 w-11 h-11 rounded-full text-xs font-bold bg-violet-100 text-violet-800 ring-2 ring-white">JW</span></div>
+        <div class="text-xs text-slate-500 font-medium leading-snug">Geprüft nach Verfügbarkeit und Qualifikation</div></div>
+      <div class="inline-flex items-center gap-2 self-start rounded-full bg-blue-50 text-osmera-blue text-xs font-bold px-3 py-1.5"><i class="fa-solid fa-mobile-screen-button"></i> Anfrage per App</div></div></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="loesung" class="py-32 relative z-10 bg-white/50 backdrop-blur-sm border-y border-slate-200/50">
+    <section id="loesung" class="py-16 lg:py-20 -scroll-mt-12 relative z-10 bg-white/50 backdrop-blur-sm border-y border-slate-200/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-10">
                 <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Die Lösung</span>
@@ -315,8 +296,8 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4 lg:gap-y-4 pt-8">
-                <div class="relative mt-4 lg:mt-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-6 lg:gap-y-4">
+                <div class="relative">
                     <!--<div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">1</div>-->
                     <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
                         <div class="flex items-center gap-2 mb-2">
@@ -330,7 +311,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="relative mt-4 lg:mt-8">
+                <div class="relative">
                     <!--<div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">2</div>-->
                     <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
                         <div class="flex items-center gap-2 mb-2">
@@ -344,7 +325,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="relative mt-4 lg:mt-8">
+                <div class="relative">
                     <!--<div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">3</div>-->
                     <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
                         <div class="flex items-center gap-2 mb-2">
@@ -358,7 +339,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="relative mt-4 lg:mt-8">
+                <div class="relative">
                     <!--<div class="absolute -top-16 -left-4 md:-top-24 md:-left-8 text-[10rem] md:text-[13rem] font-black text-slate-300/70 select-none leading-none z-0 tracking-tighter drop-shadow-sm">4</div>-->
                     <div class="glass-card relative z-10 rounded-2xl p-6 md:p-8 h-full border-t-4 border-osmera-blue hover:-translate-y-2 hover:shadow-2xl transition-all duration-300">
                         <div class="flex items-center gap-2 mb-2">
@@ -376,8 +357,8 @@
         </div>
     </section>
 
-    <section id="vorteile" class="relative z-10 lg:h-[400vh]">
-        <div class="lg:sticky lg:top-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-auto lg:h-[80vh] flex flex-col lg:flex-row items-start lg:items-center gap-12 py-12">
+    <section id="vorteile" class="relative z-10 lg:h-[400vh] lg:-mb-12">
+        <div class="lg:sticky lg:top-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-auto lg:h-[80vh] flex flex-col lg:flex-row items-start lg:items-center gap-12 pt-12 pb-0 lg:py-12">
 
             <div class="w-full lg:w-1/3 z-20">
                 <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Ihr Mehrwert</span>
@@ -482,9 +463,9 @@
         </div>
     </section>
 
-    <section id="module" class="py-32 relative z-10">
+    <section id="module" class="py-16 lg:py-20 -scroll-mt-12 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="text-center max-w-3xl mx-auto mb-10">
                 <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Die Plattform</span>
                 <h2 class="text-4xl font-extrabold text-slate-900 mb-4">Modular erweiterbar.<br>Wächst mit Ihren Anforderungen.</h2>
                 <p class="text-xl text-slate-600">
@@ -551,7 +532,7 @@
                 </div>
             </div>
 
-            <div class="mt-12 flex justify-center">
+            <div class="mt-10 flex justify-center">
                 <div class="inline-flex items-start sm:items-center gap-3 px-4 py-2 bg-slate-100/80 rounded-2xl sm:rounded-full text-sm font-medium text-slate-500 border border-slate-200">
                     <i class="fa-solid fa-rocket text-osmera-blue flex-shrink-0 mt-0.5 sm:mt-0"></i>
 
@@ -565,12 +546,12 @@
         </div>
     </section>
 
-    <section id="sicherheit" class="py-32 relative overflow-hidden">
+    <section id="sicherheit" class="py-16 lg:py-20 -scroll-mt-12 relative overflow-hidden">
         <div class="absolute inset-0 bg-slate-900/95 backdrop-blur-md -z-10 border-y border-slate-800"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-            <div class="max-w-3xl mb-12">
+            <div class="max-w-3xl mb-10">
                 <span class="text-osmera-accent font-bold tracking-wider uppercase text-lg mb-2 block">Sicherheit</span>
                 <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-white leading-tight">Datenschutz als Fundament.<br>In jeder Schicht verankert.</h2>
                 <p class="text-slate-300 leading-relaxed text-lg">
@@ -688,80 +669,73 @@
         </div>
     </section>
 
-    <section id="kontakt" class="py-32 relative z-10">
+    <section id="kontakt" class="pt-16 lg:pt-20 pb-16 lg:pb-32 -scroll-mt-12 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-20">
+            <div class="text-center max-w-3xl mx-auto mb-10 lg:mb-12">
                 <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Pilotprojekt</span>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-6">Gemeinsam Ergebnisse sichtbar machen.</h2>
-                <p class="text-xl text-slate-600">
-                    Im Pilotprojekt machen wir die konkreten Vorteile von <span class="font-logo text-[1.374rem] text-osmera-blue">osmera</span> direkt anhand Ihrer eigenen Daten messbar. Ihr Dienstplanprogramm läuft dabei völlig risikofrei weiter und wird Schritt für Schritt durch unser <span class="font-medium">Add-on</span> ergänzt.
-                </p>
+                <h2 class="text-4xl font-extrabold text-slate-900">So einfach starten wir</h2>
             </div>
-
-            <div class="glass-card rounded-3xl p-8 md:p-12 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
-                <div class="flex-1 space-y-8">
-                    <h3 class="text-gradient font-bold text-slate-800 text-2xl">So einfach starten wir</h3>
-                    <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">1</span></div>
-                        <div>
-                            <p class="font-bold text-slate-800 text-lg">Erstberatung</p>
-                            <p class="text-base text-slate-600 font-medium">Gemeinsam klären wir, ob Ihre aktuelle IT-Infrastruktur für eine Anbindung geeignet ist oder vorher noch geringfügige Anpassungen notwendig sind.</p>
-                        </div>
+            <div class="glass-card rounded-3xl p-6 md:px-10 md:py-10 lg:px-14">
+                <div class="relative grid grid-cols-1 gap-8 md:grid-cols-3 md:[grid-template-rows:auto_auto_1fr] md:gap-x-10 md:gap-y-0">
+                    <div class="hidden md:block absolute left-[calc((100%-5rem)/6)] right-[calc((100%-5rem)/6)] top-5 h-px -translate-y-1/2 bg-gradient-to-r from-osmera-blue/15 via-osmera-blue/45 to-osmera-blue/15" aria-hidden="true"></div>
+                    <div class="relative flex flex-col items-start text-left md:grid md:row-span-3 md:[grid-template-rows:subgrid] md:justify-items-center md:text-center">
+                        <span class="relative z-10 w-10 h-10 rounded-full bg-osmera-blue text-white grid place-items-center font-bold mb-4 shadow-md ring-4 ring-white/80">1</span>
+                        <p class="font-bold text-slate-900 text-xl leading-snug mb-2 md:self-center md:max-w-[17rem] md:text-balance">Erstberatung</p>
+                        <p class="text-slate-600 font-medium leading-relaxed md:max-w-[18rem] md:text-pretty">Gemeinsam klären wir, ob Ihre aktuelle IT-Infrastruktur für eine Anbindung geeignet ist oder vorher noch geringfügige Anpassungen notwendig sind.</p>
                     </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">2</span></div>
-                        <div>
-                            <p class="font-bold text-slate-800 text-lg">Unterlagen für Betriebsrat &amp; Datenschutz</p>
-                            <p class="text-base text-slate-600 font-medium">Wir stellen Ihnen alle notwendigen Dokumente (AVV, TOMs) bereit, damit Sie diese intern vorab prüfen können.</p>
-                        </div>
+                    <div class="relative flex flex-col items-start text-left md:grid md:row-span-3 md:[grid-template-rows:subgrid] md:justify-items-center md:text-center">
+                        <span class="relative z-10 w-10 h-10 rounded-full bg-osmera-blue text-white grid place-items-center font-bold mb-4 shadow-md ring-4 ring-white/80">2</span>
+                        <p class="font-bold text-slate-900 text-xl leading-snug mb-2 md:self-center md:max-w-[17rem] md:text-balance">Unterlagen für Betriebsrat &amp; Datenschutz</p>
+                        <p class="text-slate-600 font-medium leading-relaxed md:max-w-[18rem] md:text-pretty">Wir stellen Ihnen alle notwendigen Dokumente (AVV, TOMs) bereit, damit Sie diese intern vorab prüfen können.</p>
                     </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 rounded-full bg-blue-50 text-osmera-blue flex items-center justify-center shrink-0 mt-1"><span class="font-bold">3</span></div>
-                        <div>
-                            <p class="font-bold text-slate-800 text-lg">Testlauf mit echten Daten</p>
-                            <p class="text-base text-slate-600 font-medium">Mit einem regulären Export von Ihnen zeigen wir Ihnen an Ihren eigenen Daten, welche Vorteile <span class="font-logo">osmera</span> für Sie mitbringt.</p>
-                        </div>
+                    <div class="relative flex flex-col items-start text-left md:grid md:row-span-3 md:[grid-template-rows:subgrid] md:justify-items-center md:text-center">
+                        <span class="relative z-10 w-10 h-10 rounded-full bg-osmera-blue text-white grid place-items-center font-bold mb-4 shadow-md ring-4 ring-white/80">3</span>
+                        <p class="font-bold text-slate-900 text-xl leading-snug mb-2 md:self-center md:max-w-[17rem] md:text-balance">Testlauf mit echten Daten</p>
+                        <p class="text-slate-600 font-medium leading-relaxed md:max-w-[18rem] md:text-pretty">Mit einem regulären Export von Ihnen zeigen wir Ihnen an Ihren eigenen Daten, welche Vorteile <span class="font-logo">osmera</span> für Sie mitbringt.</p>
                     </div>
-                </div>
-
-                <div class="w-full md:w-auto">
-                    <a href="mailto:kontakt@osmera.de" class="inline-flex items-center justify-center gap-2 bg-osmera-blue hover:bg-sky-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-md hover:shadow-lg w-full sm:w-auto min-w-[250px]">
-                        <i class="fa-regular fa-envelope"></i> kontakt@osmera.de
-                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="glass-card py-12 relative z-10 border-t border-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div class="col-span-1">
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="nav-logo-circle w-7 h-7 rounded-full border-2 border-current flex items-center justify-center">
-                            <!--<i class="fa-solid fa-layer-group text-white text-xs"></i>-->
-                            <div class="w-6 h-6 rounded-full flex items-center justify-center">
-                                <div class="w-5 h-5 rounded-full border-2 border-current transition-colors flex items-center justify-center"></div>
-                            </div>
-                        </div>
-                        <span class="font-bold font-logo text-xl text-slate-900 inline-block transform -translate-y-[2.2px]">osmera</span>
+    <div id="abschluss" class="relative z-10">
+        <div class="absolute left-1/2 -translate-x-1/2 top-[61px] bottom-0 w-[min(1264px,calc(100%-1rem))] rounded-t-[1.75rem] lg:rounded-t-[2rem] bg-white/70 backdrop-blur-xl border-x border-t border-white shadow-xl" aria-hidden="true"></div>
+        <div class="relative z-10 max-w-[1184px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="abschluss-band" class="relative overflow-hidden rounded-[1.75rem] lg:rounded-[2rem] bg-osmera-dark shadow-2xl ring-1 ring-white/10 sm:max-w-3xl sm:mx-auto lg:max-w-none lg:h-[clamp(19rem,calc(100vh-21rem),46.5rem)] lg:flex lg:items-center">
+                <picture>
+                    <source type="image/avif" srcset="img/band-aerztin-800.avif 800w, img/band-aerztin-1280.avif 1280w, img/band-aerztin-1920.avif 1920w, img/band-aerztin-2400.avif 2400w" sizes="(min-width: 1280px) 910px, (min-width: 1024px) 780px, 100vw">
+                    <source type="image/webp" srcset="img/band-aerztin-800.webp 800w, img/band-aerztin-1280.webp 1280w, img/band-aerztin-1920.webp 1920w, img/band-aerztin-2400.webp 2400w" sizes="(min-width: 1280px) 910px, (min-width: 1024px) 780px, 100vw">
+                    <img src="img/band-aerztin-1920.webp" width="2400" height="1599" alt="Eine Ärztin mit Tablet lächelt in die Kamera, im Hintergrund sitzen Kolleginnen und Kollegen zusammen" loading="lazy" decoding="async" class="block w-full h-64 sm:h-auto sm:aspect-[1.6/1] object-cover object-[78%_30%] lg:aspect-auto lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-auto lg:max-w-none lg:[mask-image:linear-gradient(90deg,transparent_0%,#000_26%)] lg:[-webkit-mask-image:linear-gradient(90deg,transparent_0%,#000_26%)]">
+                </picture>
+                <div class="hidden lg:block absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.86)_0%,rgba(15,23,42,0.6)_30%,rgba(15,23,42,0)_58%)]" aria-hidden="true"></div>
+                <div class="relative z-10 px-6 py-8 sm:px-10 lg:px-16 lg:py-[clamp(1rem,3vh,2rem)] lg:max-w-[44rem] text-white">
+                    <span class="text-osmera-accent font-bold tracking-wider uppercase text-lg lg:text-[clamp(0.95rem,2.4vh,1.125rem)] mb-3 lg:mb-[clamp(0.4rem,1.6vh,0.75rem)] block">Pilotprojekt</span>
+                    <h2 class="text-[1.7rem] sm:text-4xl lg:text-[clamp(2rem,5.6vh,3rem)] font-extrabold leading-[1.15] tracking-tight">Gemeinsam Ergebnisse<br class="hidden sm:block"> sichtbar machen.</h2>
+                    <p class="mt-4 lg:mt-[clamp(0.6rem,2vh,1rem)] max-w-lg lg:max-w-[28rem] xl:max-w-lg text-slate-200 text-base sm:text-lg lg:text-[clamp(0.95rem,2.4vh,1.125rem)] leading-relaxed font-medium">Ihr Dienstplanprogramm läuft dabei völlig risikofrei weiter und wird Schritt für Schritt durch unser <span class="font-semibold text-white whitespace-nowrap">Add-on</span> ergänzt.</p>
+                    <div class="mt-6 lg:mt-[clamp(0.9rem,3vh,1.75rem)] flex flex-col sm:flex-row sm:items-center gap-4">
+                        <a href="mailto:kontakt@osmera.de" class="inline-flex justify-center bg-white text-slate-900 hover:bg-slate-100 px-8 py-3.5 lg:py-[clamp(0.6rem,1.8vh,0.875rem)] rounded-full font-bold shadow-md transition-colors">Pilotkunde werden</a>
+                        <a href="mailto:kontakt@osmera.de" class="inline-flex items-center gap-2 text-slate-200 hover:text-white text-sm font-medium transition-colors"><i class="fa-regular fa-envelope"></i> kontakt@osmera.de</a>
                     </div>
-                    <p class="space-y-0.5 text-sm text-slate-600 font-medium max-w-xs">
-                        Intelligente Dienstplanung und Ausfallmanagement für Kliniken.<br>Die nahtlose Erweiterung für Ihr<br>bestehendes Dienstplanprogramm.
-                    </p>
                 </div>
-
+            </div>
+        </div>
+        <footer id="abschluss-footer" class="relative z-10 max-w-[1184px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="pt-8 lg:pt-9 pb-3 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+                <div class="col-span-1">
+                    <div class="flex items-center gap-2 mb-3 text-slate-900"><div class="nav-logo-circle w-7 h-7 rounded-full border-2 border-current flex items-center justify-center"><div class="w-6 h-6 rounded-full flex items-center justify-center"><div class="w-5 h-5 rounded-full border-2 border-current flex items-center justify-center"></div></div></div><span class="font-bold font-logo text-xl inline-block transform -translate-y-[2.2px]">osmera</span></div>
+                    <p class="space-y-0.5 text-sm text-slate-600 font-medium max-w-xs">Intelligente Dienstplanung und Ausfallmanagement für Kliniken.<br>Die nahtlose Erweiterung für Ihr<br>bestehendes Dienstplanprogramm.</p>
+                </div>
                 <div>
-                    <h4 class="text-slate-900 font-bold mb-5 text-sm uppercase tracking-wider inline-block transform -translate-y-[0px]">Kontakt</h4>
+                    <h4 class="text-slate-900 font-bold mb-3 text-sm uppercase tracking-wider">Kontakt</h4>
                     <ul class="space-y-2 text-sm text-slate-600 font-medium">
                         <li>Lars Kutsche | Development</li>
                         <li>Jonas Köhl | CRM</li>
                         <li class="pt-2"><a href="mailto:kontakt@osmera.de" class="text-osmera-blue hover:underline">kontakt@osmera.de</a></li>
                     </ul>
                 </div>
-
                 <div>
-                    <h4 class="text-slate-900 font-bold mb-5 text-sm uppercase tracking-wider inline-block transform -translate-y-[0px]">Rechtliches</h4>
+                    <h4 class="text-slate-900 font-bold mb-3 text-sm uppercase tracking-wider">Rechtliches</h4>
                     <ul class="space-y-2 text-sm text-slate-600 font-medium">
                         <li><a href="impressum.html" class="hover:text-osmera-blue transition-colors">Impressum</a></li>
                         <li><a href="datenschutz.html" class="hover:text-osmera-blue transition-colors">Datenschutz</a></li>
@@ -769,12 +743,12 @@
                     </ul>
                 </div>
             </div>
-
-            <div class="border-t border-slate-200/60 pt-8 flex justify-between items-center text-xs text-slate-500 font-medium">
+            <div class="border-t border-slate-200/70 pt-4 flex justify-between items-center text-xs text-slate-400 font-medium">
                 <p>&copy; 2026 <span class="font-logo text-sm">osmera</span>. Alle Rechte vorbehalten.</p>
             </div>
-        </div>
-    </footer>
+            </div>
+        </footer>
+    </div>
 
     <script>
         // --- Mobile Menu Toggle ---
@@ -801,15 +775,14 @@
 
                     // --- Navbar Dark Mode Logic ---
                     const navbar = document.getElementById('navbar');
-                    const darkSection = document.getElementById('sicherheit');
-                    if (navbar && darkSection) {
+                    const darkSections = ['sicherheit', 'abschluss-band'].map(id => document.getElementById(id)).filter(Boolean);
+                    if (navbar && darkSections.length) {
                         const navRect = navbar.getBoundingClientRect();
-                        const darkRect = darkSection.getBoundingClientRect();
-                        if (navRect.top + navRect.height / 2 >= darkRect.top && navRect.top <= darkRect.bottom) {
-                            navbar.classList.add('nav-dark-mode');
-                        } else {
-                            navbar.classList.remove('nav-dark-mode');
-                        }
+                        const overDark = darkSections.some(section => {
+                            const darkRect = section.getBoundingClientRect();
+                            return navRect.top + navRect.height / 2 >= darkRect.top && navRect.top <= darkRect.bottom;
+                        });
+                        navbar.classList.toggle('nav-dark-mode', overDark);
                     }
 
                     // --- Security Graphic Scroll-Linked Animation ---
