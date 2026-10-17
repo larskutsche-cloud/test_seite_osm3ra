@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Konfigurator-Vorlage</title>
+<!--
+  Vorlage für eine Optionen-Seite mit Konfigurator (aus dem Skill design-konfigurator-prozess).
+  Eine Datei, ohne Build. Zeigt: Umschalter-Leiste, Ansicht Fenster/Desktop/Tablet/Handy (iframe mit ?embed=1),
+  Zustand in der Adresse (?var=b&pal=c2), Merken im Browser, Weitergabe an den Rahmen per postMessage.
+  Anpassen: (1) OPTS = die Schalter des Projekts, (2) renderVariant() = die eigentliche Gestaltung, (3) CSS-Variablen je Schalter.
+-->
+<style>
+  :root { --ink:#0f172a; --sub:#475569; --line:#dbe3ec; --blue:#0284c7; --bg:#f8fafc; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: Inter, system-ui, sans-serif; color:var(--ink); background:var(--bg); }
+  /* Leiste */
+  .toolbar { position:sticky; top:6px; z-index:50; margin:6px auto; max-width:1180px; padding:.5rem .8rem; background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:14px; box-shadow:0 8px 26px -14px rgba(15,23,42,.35); font-size:.86rem; }
+  .toolbar .row { display:flex; flex-wrap:wrap; gap:.45rem .9rem; align-items:center; }
+  .grp { font-size:.72rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#64748b; }
+  .pp { display:flex; flex-wrap:wrap; gap:.4rem; }
+  .pp label { display:inline-flex; gap:.4rem; align-items:center; font-weight:600; cursor:pointer; padding:.18rem .55rem; border:1px solid var(--line); border-radius:999px; background:#fff; }
+  .seg { display:inline-flex; border:1px solid var(--line); border-radius:99px; overflow:hidden; background:#fff; }
+  .vbtn { padding:.22rem .8rem; font:700 .8rem Inter, sans-serif; border:0; border-right:1px solid #e5eaf1; background:none; cursor:pointer; }
+  .vbtn:last-child { border-right:0; } .vbtn.on { background:var(--ink); color:#fff; }
+  #vw { margin-left:auto; font-size:.74rem; font-weight:700; color:#475569; background:#fef3c7; padding:.15rem .6rem; border-radius:99px; }
+  #vw.d { background:#dcfce7; color:#166534; }
+  /* Rahmen für Desktop/Tablet/Handy */
+  .devwrap { margin:12px auto; }
+  .devframe { border-radius:1.6rem; border:10px solid var(--ink); overflow:hidden; background:var(--bg); box-shadow:0 40px 70px -40px rgba(15,23,42,.6); transform-origin:top left; }
+  .devframe iframe { border:0; display:block; width:100%; height:100%; }
+  .embed .gal-only { display:none !important; }
+  /* Inhalt der Vorlage: ersetzen */
+  main { max-width:1000px; margin:2rem auto; padding:0 1rem; }
+  .demo { padding:2rem; border-radius:24px; background:#fff; box-shadow:0 20px 40px -24px rgba(15,23,42,.4); }
+  /* Schalter wirken über Attribute am body: hier nur ein Beispiel für Hintergrund-Paletten */
+  body[data-pal="c1"] main { background:linear-gradient(135deg, rgb(56 189 248 / .25), transparent 60%); }
+  body[data-pal="c2"] main { background:linear-gradient(135deg, rgb(255 101 49 / .18), transparent 60%); }
+  body[data-flip="1"] main { background-position:right; transform:scaleX(1); direction:ltr; }
+</style>
+</head>
+<body class="">
+<div class="toolbar gal-only"><div class="row">
+  <b>Ansicht:</b>
+  <span class="seg" id="viewseg"><button class="vbtn on" data-view="win">Fenster</button><button class="vbtn" data-view="d">Desktop</button><button class="vbtn" data-view="t">Tablet</button><button class="vbtn" data-view="p">Handy</button></span>
+  <span class="grp">Variante:</span>
+  <span class="pp"><label><input type="radio" name="var" value="a">A Karten</label><label><input type="radio" name="var" value="b">B Liste</label><label><input type="radio" name="var" value="c">C Raster</label></span>
+  <span class="grp">Hintergrund:</span>
+  <span class="pp"><label><input type="radio" name="pal" value="c0">Ohne</label><label><input type="radio" name="pal" value="c1">Blau</label><label><input type="radio" name="pal" value="c2">Warm</label></span>
+  <span class="grp">Seite:</span>
+  <span class="pp"><label><input type="radio" name="flip" value="0">links</label><label><input type="radio" name="flip" value="1">rechts</label></span>
+  <span id="vw"></span>
+</div></div>
+
+<div id="viewWin"><main id="root"></main></div>
+<div id="viewFrame" hidden><div style="padding:0 16px"><p id="scalehint" style="font-size:.8rem;color:#475569;margin:.2rem 0 .6rem"></p><div class="devwrap"><div class="devframe"><iframe id="fr" title="Vorschau"></iframe></div></div></div></div>
+
+<script>
+(function () {
+  'use strict';
+  /* 1) Schalter des Projekts: key = Name der Radios und der URL-Parameter, attr = Attribut am body */
+  var OPTS = [
+    { key: 'var',  def: 'a'  },
+    { key: 'pal',  def: 'c1' },
+    { key: 'flip', def: '0'  }
+  ];
+  var STORE = 'konfig-vorlage-';
+  var qs = new URLSearchParams(location.search);
+  var EMBED = qs.get('embed');
+  var state = {};
+  function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+
+  /* 2) die eigentliche Gestaltung: je nach state.var etwas anderes zeigen (hier nur Platzhalter) */
+  function renderVariant(s) {
+    var root = document.getElementById('root');
+    var names = { a: 'Karten', b: 'Liste', c: 'Raster' };
+    root.innerHTML = '<div class="demo"><h1 style="margin:0 0 .5rem">Variante ' + s['var'].toUpperCase() + ' · ' + names[s['var']] + '</h1>' +
+      '<p style="color:#475569">Hintergrund <b>' + s.pal + '</b>, Seite <b>' + (s.flip === '1' ? 'rechts' : 'links') + '</b>. Hier steht die echte Gestaltung.</p></div>';
+  }
+
+  /* ---- ab hier Mechanik, in der Regel unverändert ---- */
+  function tell(msg) { var fr = document.getElementById('fr'); if (fr && fr.contentWindow) { try { fr.contentWindow.postMessage(msg, '*'); } catch (e) {} } }
+  function apply(key, val, store) {
+    state[key] = val; document.body.setAttribute('data-' + key, val);
+    if (store) { try { localStorage.setItem(STORE + key, val); } catch (e) {} }
+    var r = document.querySelector('input[name=' + key + '][value="' + val + '"]'); if (r) r.checked = true;
+    var m = {}; m[key] = val; tell(m);
+    renderVariant(state);
+  }
+  OPTS.forEach(function (o) {
+    var v = o.def; try { v = localStorage.getItem(STORE + o.key) || v; } catch (e) {}
+    if (qs.get(o.key) !== null) v = qs.get(o.key);
+    state[o.key] = v; document.body.setAttribute('data-' + o.key, v);
+    $$('input[name=' + o.key + ']').forEach(function (r) { r.checked = r.value === v; r.addEventListener('change', function () { apply(o.key, r.value, true); }); });
+  });
+  renderVariant(state);
+  addEventListener('message', function (e) { if (!e.data) return; Object.keys(e.data).forEach(function (k) { if (state.hasOwnProperty(k)) apply(k, e.data[k], false); }); });
+
+  /* Anzeige: welche Breite und welcher Modus gerade aktiv ist (wichtig in schmalen Vorschau-Fenstern) */
+  var mqD = matchMedia('(min-width:1024px)'), mqT = matchMedia('(min-width:640px)');
+  function vw() { var e = document.getElementById('vw'); if (!e) return; var m = mqD.matches ? 'Desktop-Layout' : mqT.matches ? 'Tablet-Layout' : 'Handy-Layout'; e.textContent = innerWidth + ' px · ' + m; e.className = mqD.matches ? 'd' : ''; }
+  addEventListener('resize', vw); vw();
+
+  /* Einbettung: nur den Inhalt zeigen (für den Rahmen) */
+  if (EMBED) document.body.classList.add('embed');
+
+  /* Ansicht-Umschalter: Fenster = direkt, sonst feste Breite im Rahmen (wird bei Bedarf verkleinert) */
+  var WIDTH = { d: 1280, t: 820, p: 390 }, view = 'win';
+  function fit() {
+    if (view === 'win') return;
+    var W = WIDTH[view], avail = Math.max(280, innerWidth - 32), s = Math.min(1, avail / (W + 20)), H = Math.max(560, innerHeight - 130);
+    var wrap = document.querySelector('.devwrap'), f = document.querySelector('.devframe');
+    wrap.style.width = Math.round((W + 20) * s) + 'px'; wrap.style.height = Math.round(H * s) + 'px';
+    f.style.width = (W + 20) + 'px'; f.style.height = H + 'px'; f.style.transform = 'scale(' + s + ')';
+    document.getElementById('scalehint').textContent = s < 1 ? 'Auf ' + Math.round(s * 100) + ' % verkleinert, damit es in das Fenster passt' : '';
+  }
+  function setView(v) {
+    view = v; $$('.vbtn').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-view') === v); });
+    document.getElementById('viewWin').hidden = v !== 'win'; document.getElementById('viewFrame').hidden = v === 'win';
+    if (v === 'win') return;
+    var fr = document.getElementById('fr');
+    var q = OPTS.map(function (o) { return o.key + '=' + encodeURIComponent(state[o.key]); }).join('&');
+    if (!fr.getAttribute('src')) fr.setAttribute('src', '?embed=1&' + q); else tell(state);
+    fit(); scrollTo(0, 0);
+  }
+  $$('.vbtn').forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-view')); }); });
+  addEventListener('resize', fit);
+  if (qs.get('view')) setView(qs.get('view'));
+})();
+</script>
+</body>
+</html>

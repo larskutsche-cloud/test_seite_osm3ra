@@ -1,0 +1,180 @@
+/* ==========================================================================
+   osmera Brand-Stylesheet, Version 1.0 (Stand 17.10.2026)
+   Quelle: Website osmera.de (Tailwind-Klassen und Konfiguration). "Bestand" = so auf der Website, "Empfehlung" = neu festgelegt.
+   Einsatz: Web, Print (A4, HTML nach PDF), Präsentationen (HTML-Folien 1920 x 1080).
+   Alle Klassen tragen das Präfix .osm-, damit sie sich nicht mit anderem CSS überschneiden.
+   Schriften: Inter (Text) und Urbanist (nur osmera-Begriffe), beide frei bei Google Fonts (SIL Open Font License):
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Urbanist:wght@500;600;700&display=swap" rel="stylesheet">
+   Symbole: Font Awesome 6 Free (6.4.0), solid, bei building / calendar-check / envelope regular.
+   ========================================================================== */
+
+/* ---------- 1. Design-Tokens ---------- */
+:root {
+  /* Marke */
+  --osm-blau: #0284c7;            /* Primär (Bestand) */
+  --osm-blau-dunkel: #0369a1;     /* Hover, Verlaufsende, kleine Schrift auf Hell (Bestand) */
+  --osm-himmel: #38bdf8;          /* Akzent auf Dunkel (Bestand) */
+  --osm-blau-hell: #e0f2fe;       /* Tönung (Bestand) */
+  --osm-blau-ton: #eff6ff;        /* Icon-Kachel (Bestand) */
+  --osm-blau-rand: #dbeafe;       /* Rand Icon-Kachel (Bestand) */
+  /* Neutral */
+  --osm-navy: #0f172a;            /* Überschriften, dunkle Abschnitte, Logo (Bestand) */
+  --osm-nacht: #020617;           /* tiefster Ton (Bestand) */
+  --osm-text: #1e293b;            /* Fließtext (Bestand) */
+  --osm-text-2: #475569;          /* Absätze (Bestand) */
+  --osm-text-3: #64748b;          /* Hinweise (Bestand) */
+  --osm-linie: #e2e8f0;
+  --osm-flaeche: #f1f5f9;
+  --osm-grund: #f8fafc;           /* Seitenhintergrund (Bestand) */
+  --osm-weiss: #ffffff;
+  --osm-auf-dunkel: #cbd5e1;      /* Text auf Navy (Bestand) */
+  --osm-auf-dunkel-2: #94a3b8;
+  --osm-haken: #22c55e;           /* Häkchen in Listen (Bestand) */
+  --osm-meldung: #ef4444;         /* Status Ausfall gemeldet (Bestand, Hero-Kachel) */
+  --osm-meldung-ton: #fee2e2;
+  /* Rollenfarben: Farbe und Tönung (Bestand auf der Website im Abschnitt "Ihr Mehrwert") */
+  --osm-rolle-1: #0284c7; --osm-rolle-1-ton: #e0f2fe;   /* Planende */
+  --osm-rolle-2: #9333ea; --osm-rolle-2-ton: #f3e8ff;   /* Das Team */
+  --osm-rolle-3: #059669; --osm-rolle-3-ton: #d1fae5;   /* PR / MAV */
+  --osm-rolle-4: #475569; --osm-rolle-4-ton: #e2e8f0;   /* HR & IT */
+  --osm-rolle-5: #d97706; --osm-rolle-5-ton: #fef3c7;   /* Leitung & DSB */
+  /* Warm (nur als Hintergrund-Schimmer) */
+  --osm-orange: #ff6531;          /* Bestand (Mehrwert-Hintergrund) */
+  --osm-koralle: #ff9892;         /* Empfehlung */
+  --osm-pfirsich: #ff9989;        /* Empfehlung */
+  /* Schrift */
+  --osm-font-text: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --osm-font-marke: 'Urbanist', 'Inter', system-ui, sans-serif;
+  /* Form */
+  --osm-radius-pill: 9999px;
+  --osm-radius-3xl: 1.5rem;       /* große Karten, Foto-Rahmen (24 px) */
+  --osm-radius-2xl: 1rem;         /* Karten, Chips (16 px) */
+  --osm-radius-xl: .75rem;        /* Kacheln, Listenpunkte (12 px) */
+  --osm-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / .05);
+  --osm-shadow-md: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);
+  --osm-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);
+  --osm-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / .25);
+  --osm-glas-blur: 20px;
+  --osm-container: 80rem;         /* max-w-7xl (Bestand) */
+  --osm-section-y: 5rem;          /* py-20 (Bestand); mobil 4rem */
+}
+
+/* ---------- 2. Grundtypografie (innerhalb von .osm) ---------- */
+.osm { font-family: var(--osm-font-text); color: var(--osm-text); background: var(--osm-grund); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+.osm *, .osm *::before, .osm *::after { box-sizing: border-box; }
+.osm h1, .osm h2, .osm h3, .osm h4, .osm p { margin: 0; }
+
+.osm-h1 { font-size: 3rem; font-weight: 800; line-height: 1.2; letter-spacing: -.025em; color: var(--osm-navy); }   /* Web: 48 px, ab 768 px 60 px */
+.osm-h2 { font-size: 2.25rem; font-weight: 800; line-height: 1.25; color: var(--osm-navy); }                       /* 36 px */
+.osm-h3 { font-size: 1.875rem; font-weight: 700; line-height: 1.2; color: var(--osm-navy); }                       /* 30 px */
+.osm-h4 { font-size: 1.25rem; font-weight: 700; line-height: 1.3; color: var(--osm-navy); }                        /* 20 px */
+.osm-lead { font-size: 1.25rem; font-weight: 500; line-height: 1.6; color: var(--osm-text-2); }                    /* 20 px */
+.osm-text { font-size: 1rem; font-weight: 500; line-height: 1.65; color: var(--osm-text-2); }                      /* 16 px */
+.osm-small { font-size: .875rem; font-weight: 500; line-height: 1.5; color: var(--osm-text-2); }                   /* 14 px */
+.osm-micro { font-size: .75rem; font-weight: 500; line-height: 1.4; color: var(--osm-text-3); }                    /* 12 px */
+.osm-eyebrow { display: block; font-size: 1.125rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--osm-blau); line-height: 1.5; margin-bottom: .5rem; }
+.osm-eyebrow--dunkel { color: var(--osm-himmel); }
+.osm-label { font-size: .625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--osm-text-3); }  /* 10 px Badge-Schrift */
+/* Print/PDF: Verlauf wird Vollton (Chrome zeichnet background-clip:text im PDF mit Rahmen) */
+@media print { .osm-gradient-text { background: none !important; -webkit-text-fill-color: currentColor !important; color: var(--osm-blau) !important; } }
+.osm-gradient-text { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+/* osmera-Begriffe stehen immer in Urbanist (auf der Website: .font-logo) */
+.osm-marke { font-family: var(--osm-font-marke); font-weight: 550; font-size: 1.09em; letter-spacing: 0; }
+.osm-marke--titel { font-weight: 700; font-size: 1em; }
+@media (min-width: 768px) { .osm-h1 { font-size: 3.75rem; } }
+
+/* ---------- 3. Flächen ---------- */
+.osm-container { max-width: var(--osm-container); margin-inline: auto; padding-inline: 1rem; }
+@media (min-width: 640px) { .osm-container { padding-inline: 1.5rem; } }
+@media (min-width: 1024px) { .osm-container { padding-inline: 2rem; } }
+.osm-section { padding-block: 4rem; position: relative; }
+@media (min-width: 1024px) { .osm-section { padding-block: var(--osm-section-y); } }
+
+.osm-glas { background: rgb(255 255 255 / .4); backdrop-filter: blur(var(--osm-glas-blur)); -webkit-backdrop-filter: blur(var(--osm-glas-blur)); border: 1px solid rgb(255 255 255 / .5); box-shadow: 0 4px 6px -1px rgb(0 0 0 / .05); }
+.osm-glas--stark { background: rgb(255 255 255 / .82); border-color: rgb(255 255 255 / .7); }     /* über Fotos, bessere Lesbarkeit */
+.osm-glas--dunkel { background: rgb(15 23 42 / .6); border: 1px solid rgb(255 255 255 / .1); backdrop-filter: blur(var(--osm-glas-blur)); -webkit-backdrop-filter: blur(var(--osm-glas-blur)); color: var(--osm-auf-dunkel); }
+.osm-karte { background: var(--osm-weiss); border: 1px solid rgb(255 255 255 / .9); border-radius: var(--osm-radius-3xl); padding: 2rem; box-shadow: var(--osm-shadow-xl); }
+.osm-karte--blau-oben { border-top: 4px solid var(--osm-blau); border-radius: var(--osm-radius-2xl); }   /* Lösungs- und Modulkarten */
+.osm-karte--rolle { position: relative; overflow: hidden; }                                              /* Rollenkarte (Ihr Mehrwert): getönte Ecke, kein Farbbalken */
+.osm-karte--rolle::before { content: ""; position: absolute; right: 0; top: 0; width: 62%; height: 55%; pointer-events: none; background: radial-gradient(80% 90% at 100% 0, color-mix(in srgb, var(--rolle, var(--osm-blau)) 16%, transparent), transparent 72%); }
+.osm-karte--rolle > * { position: relative; }
+
+/* ---------- 4. Bedienelemente ---------- */
+.osm-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .875rem 2rem; border-radius: var(--osm-radius-pill); font-weight: 600; font-size: 1rem; line-height: 1.5; text-decoration: none; cursor: pointer; border: 0; transition: background-color .2s, box-shadow .2s; }
+.osm-btn--primaer { background: var(--osm-blau); color: #fff; box-shadow: var(--osm-shadow-md); }
+.osm-btn--primaer:hover { background: var(--osm-blau-dunkel); }
+.osm-btn--primaer-aa { background: var(--osm-blau-dunkel); }              /* Empfehlung: für kleine Schrift (Kontrast 5,9:1 statt 4,1:1) */
+.osm-btn--glas { color: var(--osm-text); background: rgb(255 255 255 / .4); border: 1px solid rgb(255 255 255 / .5); backdrop-filter: blur(var(--osm-glas-blur)); -webkit-backdrop-filter: blur(var(--osm-glas-blur)); }
+.osm-btn--klein { padding: .5rem 1.25rem; font-size: .875rem; font-weight: 500; box-shadow: var(--osm-shadow-sm); }   /* Navigation "Pilotprojekt" */
+.osm-btn--hell { background: #fff; color: var(--osm-navy); font-weight: 700; }                                  /* auf dunklem Foto-Band */
+
+.osm-chip { display: inline-flex; align-items: center; gap: .5rem; padding: .375rem .875rem; border-radius: var(--osm-radius-pill); background: rgb(255 255 255 / .72); border: 1px solid rgb(255 255 255 / .85); font-weight: 700; font-size: .875rem; color: var(--osm-navy); }
+.osm-chip--aktiv { background: #fff; box-shadow: 0 14px 26px -14px rgb(15 23 42 / .5); }
+.osm-badge { display: inline-block; padding: .25rem .5rem; border-radius: var(--osm-radius-pill); background: var(--osm-flaeche); color: var(--osm-text-3); font-size: .625rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }   /* "Basis-Modul" */
+.osm-badge--blau { background: var(--osm-blau-ton); color: var(--osm-blau); }
+
+.osm-haken { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+.osm-haken li { display: flex; gap: .75rem; align-items: flex-start; font-weight: 500; color: #334155; }
+.osm-haken li::before { content: "\f00c"; font-family: "Font Awesome 6 Free"; font-weight: 900; font-size: .8em; color: var(--osm-haken); margin-top: .28em; }
+
+/* Symbol-Kachel (Font Awesome in einer getönten Fläche) */
+.osm-icon { display: inline-grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: var(--osm-radius-2xl); background: var(--osm-blau-ton); border: 1px solid var(--osm-blau-rand); color: var(--osm-blau); font-size: 1.5rem; box-shadow: var(--osm-shadow-sm); }
+.osm-icon--klein { width: 2.5rem; height: 2.5rem; border-radius: var(--osm-radius-xl); font-size: 1.1rem; }
+.osm-icon--rolle { background: var(--osm-rolle-ton, var(--osm-blau-hell)); border-color: transparent; color: var(--rolle, var(--osm-blau)); }
+.osm-rolle-1 { --rolle: var(--osm-rolle-1); --osm-rolle-ton: var(--osm-rolle-1-ton); }
+.osm-rolle-2 { --rolle: var(--osm-rolle-2); --osm-rolle-ton: var(--osm-rolle-2-ton); }
+.osm-rolle-3 { --rolle: var(--osm-rolle-3); --osm-rolle-ton: var(--osm-rolle-3-ton); }
+.osm-rolle-4 { --rolle: var(--osm-rolle-4); --osm-rolle-ton: var(--osm-rolle-4-ton); }
+.osm-rolle-5 { --rolle: var(--osm-rolle-5); --osm-rolle-ton: var(--osm-rolle-5-ton); }
+
+/* ---------- 5. Hintergrund-Schimmer (Aurora): Blau rechts, warmer Farbspot links ---------- */
+.osm-aurora { position: relative; isolation: isolate; background-color: var(--osm-grund);
+  --a-blau: 56 189 248; --a-blau-tief: 2 132 199; --a-warm: 255 101 49; --a-hell: 255 205 190; --a-stufe: 1; }
+.osm-aurora::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(38% 34% at 6% 78%,  rgb(var(--a-warm) / calc(.075 * var(--a-stufe))), transparent 72%),
+    radial-gradient(34% 30% at 18% 18%, rgb(var(--a-warm) / calc(.05  * var(--a-stufe))), transparent 72%),
+    radial-gradient(40% 34% at 94% 22%, rgb(var(--a-blau) / calc(.11  * var(--a-stufe))), transparent 72%),
+    radial-gradient(34% 30% at 78% 82%, rgb(var(--a-blau-tief) / calc(.06 * var(--a-stufe))), transparent 72%),
+    radial-gradient(46% 36% at 50% 50%, rgb(var(--a-hell) / calc(.09 * var(--a-stufe))), transparent 78%); }
+.osm-aurora--gespiegelt::before { transform: scaleX(-1); }   /* Blau links, warmer Spot rechts */
+/* Stärke über --a-stufe: 1 = sehr leicht (so auf der Website), 1.9 = leicht, 3 = halb, 5.3 = kräftig (gerechnet aus den Prototypen) */
+.osm-aurora--leicht { --a-stufe: 1.9; }
+.osm-aurora--halb { --a-stufe: 3; }
+.osm-aurora--kraeftig { --a-stufe: 5.3; }
+.osm-aurora--dunkel { background-color: var(--osm-navy); color: var(--osm-auf-dunkel); }
+.osm-aurora--dunkel::before { background: radial-gradient(60% 50% at 85% 10%, rgb(56 189 248 / .22), transparent 70%), linear-gradient(160deg, #0f172a 0%, #0c4a6e 100%); }
+
+/* ---------- 6. Logo-Anordnung ---------- */
+.osm-logo { display: inline-flex; align-items: center; gap: .625rem; color: var(--osm-navy); text-decoration: none; }  /* CSS-Variante (Web); für Print immer die SVG-Dateien nutzen */
+.osm-logo img { height: 1.75rem; width: auto; display: block; }
+.osm-logo--dunkel { color: #fff; }
+.osm-logo-claim { display: inline-flex; flex-direction: column; gap: .35rem; }
+.osm-logo-claim > span { font-size: .875rem; font-weight: 500; color: var(--osm-text-2); }
+
+/* ---------- 7. Print (A4) ---------- */
+@page osm-a4-quer { size: A4 landscape; margin: 0; }
+@page osm-a4-hoch { size: A4 portrait; margin: 0; }
+.osm-seite { position: relative; width: 210mm; height: 297mm; padding: 18mm 20mm; overflow: hidden; background: #fff; color: var(--osm-text); font-size: 10pt; line-height: 1.5; }
+.osm-seite--quer { width: 297mm; height: 210mm; }
+.osm-seite h1 { font-size: 28pt; line-height: 1.15; font-weight: 800; letter-spacing: -.02em; color: var(--osm-navy); }
+.osm-seite h2 { font-size: 20pt; line-height: 1.2; font-weight: 800; color: var(--osm-navy); }
+.osm-seite h3 { font-size: 14pt; line-height: 1.25; font-weight: 700; color: var(--osm-navy); }
+.osm-seite p, .osm-seite li { font-size: 10pt; font-weight: 400; color: var(--osm-text); hyphens: auto; }
+.osm-seite .osm-eyebrow { font-size: 9pt; }
+@media print { .osm-seite { break-after: page; page-break-after: always; } .osm-keine-umbruch { break-inside: avoid; } }
+
+/* ---------- 8. Präsentation (HTML-Folie 1920 x 1080 px = 13,333 x 7,5 Zoll; 1 px = 0,5 pt) ---------- */
+.osm-folie { position: relative; width: 1920px; height: 1080px; padding: 96px 120px; overflow: hidden; background: var(--osm-grund); color: var(--osm-text); font-size: 40px; line-height: 1.4; }
+.osm-folie--dunkel { background: var(--osm-navy); color: var(--osm-auf-dunkel); }
+.osm-folie h1 { font-size: 112px; line-height: 1.1; font-weight: 800; letter-spacing: -.025em; color: var(--osm-navy); }   /* 56 pt */
+.osm-folie h2 { font-size: 80px;  line-height: 1.15; font-weight: 800; color: var(--osm-navy); }                          /* 40 pt */
+.osm-folie h3 { font-size: 52px;  line-height: 1.2;  font-weight: 700; color: var(--osm-navy); }                          /* 26 pt */
+.osm-folie p, .osm-folie li { font-size: 40px; font-weight: 500; color: var(--osm-text-2); }                            /* 20 pt */
+.osm-folie--dunkel h1, .osm-folie--dunkel h2, .osm-folie--dunkel h3 { color: #fff; }
+.osm-folie--dunkel p, .osm-folie--dunkel li { color: var(--osm-auf-dunkel); }
+.osm-folie .osm-eyebrow { font-size: 32px; }                                                                              /* 16 pt, kleinste Schrift auf Folien */
+.osm-folie__logo { position: absolute; left: 120px; top: 64px; height: 56px; }
+.osm-folie__nr { position: absolute; right: 120px; bottom: 56px; font-size: 28px; color: var(--osm-text-3); }
+
+@media (prefers-reduced-motion: reduce) { .osm * { transition: none !important; animation: none !important; } }

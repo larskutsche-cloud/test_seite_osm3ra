@@ -1,0 +1,525 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mehrwert Layout</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Urbanist:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>/* ===== Grundlagen ===== */
+:root{--ink:#0f172a;--sub:#475569;--mut:#64748b;--blue:#0284c7;--coral:#ff7a6b;--line:rgba(15,23,42,.09);--page:#f8fafc}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--page);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+h1,h2,h3,h4,h5{font-family:'Inter',system-ui,sans-serif;margin:0;line-height:1.15}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0;text-align:inherit}
+a{color:inherit}
+.wrap{max-width:80rem;margin:0 auto;padding:0 1rem}
+@media (min-width:640px){.wrap{padding:0 1.5rem}}
+@media (min-width:1024px){.wrap{padding:0 2rem}}
+
+/* ===== Hintergrund: durchgehende, weiche Farbflächen (werden per Skript über die ganze Höhe verteilt) ===== */
+body[data-pal="c0"]{--b1:transparent;--b2:transparent;--w1:transparent;--w2:transparent;--m1:transparent}
+body[data-pal="c1"]{--b1:rgba(56,189,248,.58);--b2:rgba(2,132,199,.30);--w1:rgba(255,152,146,.62);--w2:rgba(255,152,146,.42);--m1:rgba(186,230,253,.52)}
+body[data-pal="c2"]{--b1:rgba(56,189,248,.56);--b2:rgba(2,132,199,.28);--w1:rgba(255,153,137,.64);--w2:rgba(255,153,137,.44);--m1:rgba(255,226,214,.52)}
+body[data-pal="c3"]{--b1:rgba(56,189,248,.58);--b2:rgba(2,132,199,.30);--w1:rgba(255,101,49,.40);--w2:rgba(255,101,49,.28);--m1:rgba(255,205,190,.44)}
+.pal{position:relative;isolation:isolate;padding:4.5rem 0 5rem}
+.bgfx{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 150px,#000 calc(100% - 150px),transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0,#000 150px,#000 calc(100% - 150px),transparent 100%)}
+.bgfx i{position:absolute;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,var(--col) 0%,transparent 100%)}
+.embed .pal{padding:1.6rem 0 2.2rem}
+
+/* ===== Abschnitts-Kopf ===== */
+.sh{max-width:46rem}
+.chip{display:inline-flex;align-items:center;gap:.5rem;background:#fff;border-radius:99px;padding:.4rem .8rem;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 18px -10px rgba(15,23,42,.35)}
+.chip i{width:.5rem;height:.5rem;border-radius:99px;background:var(--coral)}
+.sh h2{font-size:clamp(2rem,4.2vw,3rem);font-weight:800;letter-spacing:-.02em;margin:.9rem 0 .7rem}
+/* osmera-Verlauf wie auf der Website (.text-gradient) */
+.text-gradient{background:linear-gradient(135deg,#0284c7 0%,#0369a1 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* Schrift: Website-Text immer Inter; nur osmera-Begriffe in Urbanist (wie .font-logo auf der Website) */
+.font-logo{font-family:'Urbanist','Inter',sans-serif;font-size:1.09em;font-weight:550;letter-spacing:0}
+.sh p{color:var(--sub);font-size:1.02rem;max-width:40rem}
+
+/* ===== Rollen-Farben ===== */
+.role-0{--c:#0284c7;--t:#e0f2fe;--rgb:2,132,199}.role-1{--c:#9333ea;--t:#f3e8ff;--rgb:147,51,234}.role-2{--c:#059669;--t:#d1fae5;--rgb:5,150,105}.role-3{--c:#475569;--t:#e2e8f0;--rgb:71,85,105}.role-4{--c:#d97706;--t:#fef3c7;--rgb:217,119,6}
+
+/* ===== Karte (Inhalt wie auf der Website: Symbol, Titel, Text, zwei Stichpunkte) ===== */
+.dc{position:relative;background:#fff;border-radius:1.6rem;padding:1.8rem 1.9rem 1.7rem;border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 34px 60px -34px rgba(15,23,42,.42),0 2px 8px rgba(15,23,42,.05);overflow:hidden;color:var(--ink)}
+.dc::before{content:"";position:absolute;right:0;top:0;width:62%;height:55%;background:radial-gradient(80% 90% at 100% 0,rgba(var(--rgb),.16),transparent 72%);pointer-events:none}
+.dc::after{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--c)}
+.dc>*{position:relative;z-index:1}
+.dc-head{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.dc-ic{width:3.7rem;height:3.7rem;border-radius:1.1rem;background:var(--t);color:var(--c);display:grid;place-items:center;font-size:1.45rem;flex:none;box-shadow:0 10px 18px -12px rgba(var(--rgb),.8)}
+.dc h3{font-size:1.85rem;font-weight:800;letter-spacing:-.01em}
+.dc-para{color:var(--sub);font-size:1.02rem;line-height:1.65;margin-bottom:1.1rem}
+.chk{list-style:none;margin:0;padding:0;display:grid;gap:.6rem}
+.chk li{display:flex;gap:.7rem;align-items:flex-start;color:#334155;font-weight:500;font-size:.95rem;line-height:1.45}
+.chk i{color:#22c55e;margin-top:.28rem;font-size:.8rem}
+
+/* ===== Rollen-Eintrag (kleine Karte: Symbol, Titel, erster Stichpunkt) ===== */
+.rl{display:flex;gap:.85rem;align-items:center;width:100%;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.85);border-radius:1.15rem;padding:.8rem .95rem;box-shadow:0 10px 24px -16px rgba(15,23,42,.35);position:relative;transition:background .3s,box-shadow .3s}
+.rl .ib{width:2.8rem;height:2.8rem;border-radius:.9rem;display:grid;place-items:center;background:var(--t);color:var(--c);font-size:1.1rem;flex:none}
+.rl .tx{min-width:0;flex:1}
+.rl b{display:block;font-family:'Inter',sans-serif;font-size:1.08rem;line-height:1.2;font-weight:700}
+.rl p{font-size:.78rem;color:var(--sub);margin-top:.2rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rl.on{background:#fff;box-shadow:0 26px 44px -24px rgba(15,23,42,.5)}
+.rl.on::after{content:"";position:absolute;right:-.3rem;top:-.3rem;width:.7rem;height:.7rem;border-radius:99px;background:var(--coral);border:2px solid #fff}
+
+/* ===== D1 Rollen-Schaufenster: der Bereich klebt am Bildschirm, Scrollen schaltet die Rollen durch ===== */
+.d1-wrap{position:relative}
+.d1-pin{position:sticky;top:0;height:100vh;display:flex;align-items:center;padding-top:4.2rem}
+.d1-pin>.wrap{width:100%}
+.d1-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:2.4rem;align-items:center}
+.d1-left .sh h2{font-size:clamp(1.8rem,3.2vw,2.6rem);margin:.7rem 0 .5rem}
+.d1-left .sh p{font-size:.95rem}
+.rs-head{display:flex;align-items:center;gap:.7rem;margin:1.2rem 0 .5rem}
+.rs-label{display:inline-flex;align-items:center;gap:.5rem;font-size:.64rem;font-weight:800;letter-spacing:.12em;color:var(--mut);text-transform:uppercase}
+.rs-label i{width:.45rem;height:.45rem;border-radius:99px;background:var(--mut)}
+.rs-btns{margin-left:auto;display:flex;gap:.4rem}
+.rs-btn{width:2rem;height:2rem;border-radius:99px;background:#fff;display:grid;place-items:center;box-shadow:0 6px 14px -8px rgba(15,23,42,.45);font-size:.7rem;transition:transform .2s}
+.rs-btn:hover{transform:scale(1.08)}
+.rs-hint{font-size:.66rem;color:var(--mut);font-weight:600}
+.cf{position:relative;height:clamp(15rem,calc(100vh - 24.5rem),24rem);outline:none}
+.cf:focus-visible{box-shadow:0 0 0 3px rgba(2,132,199,.35);border-radius:1.2rem}
+.cf .rl{position:absolute;left:0;top:50%;height:5.6rem;will-change:transform,opacity;cursor:pointer}
+.cf .rl:not(.on){filter:saturate(.75)}
+.dots{display:flex;gap:.4rem;margin-top:.7rem}
+.dots i{width:.5rem;height:.5rem;border-radius:99px;background:rgba(15,23,42,.18);transition:all .3s;cursor:pointer}
+.dots i.on{width:1.8rem;background:var(--c)}
+.stack{display:grid;grid-template-columns:minmax(0,1fr)}
+.stack>.dc{grid-area:1/1;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .4s,transform .4s,visibility 0s .4s}
+.stack>.dc.on{opacity:1;visibility:visible;transform:none;transition:opacity .4s,transform .4s,visibility 0s}
+.chips{display:flex;gap:.55rem;overflow-x:auto;scroll-snap-type:x proximity;padding:.35rem .25rem .7rem;margin:0 -.25rem;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chp{flex:none;display:flex;align-items:center;gap:.55rem;padding:.55rem .85rem;border-radius:1rem;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.85);font-weight:700;font-size:.88rem;position:relative;overflow:hidden;scroll-snap-align:center;white-space:nowrap;transition:all .3s}
+.chp .ib{width:2rem;height:2rem;border-radius:.65rem;display:grid;place-items:center;background:var(--t);color:var(--c);font-size:.85rem}
+.chp.on{background:#fff;box-shadow:0 14px 26px -14px rgba(15,23,42,.5);transform:translateY(-1px)}
+.chp .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--c)}
+@keyframes fill{from{width:0}to{width:100%}}
+.chp.on.auto .bar{animation:fill 7s linear forwards}
+.only-m{display:none}
+@media (max-width:1023px){
+  .d1-wrap{height:auto!important}
+  .d1-pin{position:static;height:auto;display:block;padding-top:0}
+  .d1-grid{grid-template-columns:minmax(0,1fr);gap:1.2rem}
+  .only-d{display:none!important}.only-m{display:block}
+}
+@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+/* ===== D2 Titel und Rollen-Liste kleben links, die Karten laufen rechts vorbei ===== */
+.d2-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:3rem;align-items:stretch}
+.d2-left{align-self:stretch}
+.d2-left .st{position:sticky;top:5.5rem}
+.al{position:relative;margin-top:1.6rem}
+.al::before{content:"";position:absolute;left:0;top:.2rem;bottom:.2rem;width:2px;background:rgba(15,23,42,.14);border-radius:2px}
+.al-i{position:relative;padding:.6rem 0 .6rem 1.3rem;cursor:pointer;opacity:.5;transition:opacity .3s}
+.al-i::before{content:"";position:absolute;left:0;top:.35rem;bottom:.35rem;width:2px;background:transparent;border-radius:2px;transition:background .3s}
+.al-i b{display:flex;align-items:center;gap:.6rem;font-family:'Inter',sans-serif;font-size:1.08rem}
+.al-i b i{font-size:.85rem;color:var(--c)}
+.al-i span{display:block;font-size:.82rem;color:var(--sub);max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .3s ease;line-height:1.45}
+.al-i.on{opacity:1}.al-i.on::before{background:var(--c)}
+.al-i.on span{max-height:5rem;opacity:1;margin-top:.25rem}
+.d2-right{display:flex;flex-direction:column}
+.d2-step{min-height:66vh;display:flex;align-items:center}
+.d2-step:first-child{min-height:0;align-items:flex-start;padding-bottom:2vh}
+.d2-step:last-child{min-height:0;padding-top:2vh}
+.d2-step .dc{width:100%;opacity:.78;transition:opacity .45s,transform .45s}
+.d2-step .dc.on{opacity:1;transform:translateY(-2px)}
+@media (max-width:1023px){.d2-grid{grid-template-columns:minmax(0,1fr);gap:1.6rem}.d2-left .st{position:static}.d2-left .al{display:none}.d2-step,.d2-step:first-child,.d2-step:last-child{min-height:0;padding:.6rem 0}}
+
+/* ===== D3 / D4 Karussell ===== */
+.car-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.4rem}
+.ctl{display:flex;align-items:center;gap:.7rem}
+.cnt{font-weight:800;font-size:.85rem;color:var(--sub);min-width:2.8rem;text-align:right}
+.cbtn{width:3rem;height:3rem;border-radius:99px;display:grid;place-items:center;background:#fff;box-shadow:0 10px 22px -12px rgba(15,23,42,.55);transition:transform .2s,opacity .2s}
+.cbtn:hover{transform:scale(1.07)}.cbtn[disabled]{opacity:.35;cursor:default;transform:none}
+.track{display:flex;gap:1.4rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:1.6rem max(1rem,calc((100% - 80rem)/2 + 2rem)) 2rem;scroll-padding-inline:max(1rem,calc((100% - 80rem)/2 + 2rem));scrollbar-width:none;cursor:grab}
+.track::-webkit-scrollbar{display:none}
+.track.drag{cursor:grabbing;scroll-snap-type:none}
+.cc{flex:0 0 min(88vw,31rem);scroll-snap-align:start}
+.cc .dc{height:100%}
+.dotrow{display:flex;justify-content:center;gap:.4rem}
+.dotrow i{width:.5rem;height:.5rem;border-radius:99px;background:rgba(15,23,42,.2);cursor:pointer;transition:all .3s}
+.dotrow i.on{width:1.8rem;background:var(--blue)}
+/* D4: Mausrad bewegt die Karten waagerecht */
+.d4-wrap{position:relative}
+.d4-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:4rem;overflow:hidden}
+.d4-view{overflow:visible;margin-top:.8rem}
+.d4-track{display:flex;gap:1.4rem;padding:.6rem max(1rem,calc((100% - 80rem)/2 + 2rem)) 1rem;will-change:transform;position:relative}
+.d4-foot{display:flex;align-items:center;gap:1.2rem;margin-top:.6rem}
+.prog{flex:1;height:4px;border-radius:4px;background:rgba(15,23,42,.14);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),#8b5cf6,var(--coral));border-radius:4px}
+.mhint{display:inline-flex;align-items:center;gap:.5rem;font-size:.74rem;font-weight:700;color:var(--sub);background:rgba(255,255,255,.72);padding:.4rem .8rem;border-radius:99px}
+.mhint i{animation:nudge 1.4s ease-in-out infinite}
+@media (max-width:1023px){
+  .d4-wrap{height:auto!important}
+  .d4-pin{position:static;height:auto;padding-top:0;overflow:visible}
+  .d4-view{overflow-x:auto;scroll-snap-type:x mandatory}
+  .d4-track{transform:none!important}
+  .d4-track .cc{opacity:1!important;transform:none!important;scroll-snap-align:start}
+  .mhint{display:none}
+}
+
+/* ===== D5 Zeilen im Wechsel ===== */
+.rows{display:flex;flex-direction:column;gap:3.4rem;margin-top:2.6rem}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3.2rem;align-items:center}
+.row:nth-child(even) .rv{order:2}
+.rv{border-radius:1.8rem;padding:2.2rem;background:linear-gradient(145deg,var(--t),rgba(255,255,255,.78));border:1px solid rgba(255,255,255,.85);min-height:20rem;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:1.2rem;box-shadow:0 30px 56px -36px rgba(15,23,42,.4)}
+.rv .big{width:4.6rem;height:4.6rem;border-radius:1.4rem;background:#fff;color:var(--c);display:grid;place-items:center;font-size:1.9rem;box-shadow:0 18px 30px -18px rgba(var(--rgb),.85)}
+.rv h3{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;letter-spacing:-.015em}
+.rv .nr{font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.rt .lead{color:var(--sub);font-size:1.02rem;line-height:1.65}
+.rt .al{margin-top:1.4rem}
+.rt .al-i{opacity:.55;padding:.7rem 0 .7rem 1.3rem}
+.rt .al-i.on{opacity:1}
+.rt .al-i b{font-size:1rem;font-weight:600;font-family:'Inter',sans-serif;line-height:1.4}
+@media (max-width:1023px){.row{grid-template-columns:minmax(0,1fr);gap:1.4rem}.row:nth-child(even) .rv{order:0}.rv{min-height:0;padding:1.6rem}.rows{gap:2.4rem}}
+
+/* ===== Handy: P1 Rollenwahl, P2 Akkordeon, P3 Raster ===== */
+.p-head .sh h2{font-size:1.9rem;margin:.8rem 0 .6rem}
+.p-head .sh p{font-size:.95rem}
+.lbl{font-size:.64rem;font-weight:800;letter-spacing:.12em;color:var(--mut);text-transform:uppercase;margin:1.4rem 0 .4rem}
+.p-body .dc{padding:1.4rem 1.2rem 1.3rem;border-radius:1.4rem}
+.p-body .dc h3{font-size:1.5rem}
+.p-body .dc-ic{width:3.2rem;height:3.2rem;font-size:1.25rem}
+.p-body .dc-para{font-size:.95rem}
+.acc{background:rgba(255,255,255,.74);border:1px solid rgba(255,255,255,.88);border-radius:1.3rem;margin-bottom:.7rem;box-shadow:0 12px 26px -20px rgba(15,23,42,.4);overflow:hidden;transition:box-shadow .3s,background .3s}
+.acc.on{background:#fff;box-shadow:0 26px 44px -26px rgba(15,23,42,.5)}
+.acc-h{display:flex;gap:.8rem;align-items:center;width:100%;padding:.85rem .95rem}
+.acc-h .ib{width:2.7rem;height:2.7rem;border-radius:.85rem;display:grid;place-items:center;background:var(--t);color:var(--c);flex:none}
+.acc-h b{display:block;font-family:'Inter',sans-serif;font-size:1.05rem;line-height:1.25}
+.acc-h .s{font-size:.76rem;color:var(--sub);line-height:1.4;margin-top:.1rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.acc-h .tx{flex:1;min-width:0}
+.acc-h .chev{transition:transform .35s;color:var(--mut);font-size:.8rem}
+.acc.on .chev{transform:rotate(180deg)}
+.acc-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1)}
+.acc.on .acc-b{grid-template-rows:1fr}
+.acc-b>div{min-height:0;overflow:hidden}
+.acc-b .dc{border:0;box-shadow:none;border-radius:0;border-top:1px solid var(--line);padding:1.1rem 1.1rem 1.2rem}
+.acc-b .dc::after,.acc-b .dc::before{display:none}
+.acc-b .dc-head{display:none}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.gt{display:flex;flex-direction:column;align-items:flex-start;gap:.5rem;padding:.8rem .85rem;border-radius:1.1rem;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.85);font-weight:700;font-size:.9rem;position:relative;transition:all .3s;min-height:5.2rem}
+.gt .ib{width:2.1rem;height:2.1rem;border-radius:.7rem;display:grid;place-items:center;background:var(--t);color:var(--c);font-size:.9rem}
+.gt.on{background:#fff;box-shadow:0 18px 30px -18px rgba(15,23,42,.5);outline:2px solid var(--c)}
+.gt.cta{background:var(--ink);color:#fff;justify-content:center;text-decoration:none;align-items:center;text-align:center;font-size:.82rem}
+
+/* ===== Galerie-Rahmen ===== */
+.toolbar{position:sticky;top:6px;z-index:80;margin:6px auto;max-width:1180px;padding:.5rem .8rem;background:rgba(255,255,255,.96);border:1px solid #dbe3ec;border-radius:14px;font-size:.86rem;box-shadow:0 8px 26px -14px rgba(15,23,42,.35)}
+.toolbar .row{display:flex;flex-wrap:wrap;gap:.45rem .9rem;align-items:center}
+.toolbar b{font-family:'Inter',sans-serif}
+.pp{display:flex;flex-wrap:wrap;gap:.4rem}
+.pp label{display:inline-flex;gap:.4rem;align-items:center;font-weight:600;cursor:pointer;padding:.18rem .55rem;border:1px solid #dbe3ec;border-radius:999px;background:#fff}
+.pp input{accent-color:#0284c7}
+.sw{width:1.05rem;height:1.05rem;border-radius:99px;border:1px solid rgba(15,23,42,.2);display:inline-block}
+.vw{margin-left:auto;font-size:.74rem;font-weight:700;color:#475569;background:#fef3c7;padding:.15rem .6rem;border-radius:99px}
+.vw.d{background:#dcfce7;color:#166534}
+.nav a{font-weight:700;font-size:.78rem;text-decoration:none;padding:.16rem .5rem;border-radius:99px;background:#eef2f7;margin-right:.25rem}
+.intro{max-width:1180px;margin:1.6rem auto 0;padding:0 1.25rem}
+.intro h1{font-size:2rem;font-weight:800}
+.intro>p{color:var(--sub);max-width:54rem;margin-top:.5rem}
+.g3{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));margin-top:1rem}
+.box{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:.9rem 1rem;font-size:.9rem;color:var(--sub)}
+.box b{display:block;color:var(--ink);font-family:'Inter',sans-serif;margin-bottom:.2rem}
+.box.rec{border-color:#0284c7;background:#e0f2fe}
+.optbar{max-width:1180px;margin:0 auto;padding:3.4rem 1.25rem 1rem;display:flex;gap:.9rem;align-items:flex-start}
+.optbar .id{flex:none;width:2.5rem;height:2.5rem;border-radius:10px;background:#0f172a;color:#fff;display:grid;place-items:center;font-family:'Inter',sans-serif;font-weight:800}
+.optbar h2{font-size:1.3rem;font-weight:800}
+.optbar p{color:var(--sub);font-size:.93rem;max-width:54rem;margin-top:.15rem}
+.optbar .pc{display:flex;flex-wrap:wrap;gap:.4rem .6rem;margin-top:.5rem;font-size:.8rem}
+.optbar .pc span{padding:.15rem .55rem;border-radius:999px;font-weight:600}
+.pro{background:#dcfce7;color:#166534}.con{background:#fee2e2;color:#991b1b}.mob{background:#e0e7ff;color:#3730a3}
+.phones{max-width:1240px;margin:0 auto;padding:0 1.25rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(21rem,1fr));gap:2rem;justify-items:center}
+.phone{width:min(100%,24.4rem)}
+.phone .fr{border:10px solid #0f172a;border-radius:2.6rem;overflow:hidden;background:#f8fafc;box-shadow:0 40px 70px -40px rgba(15,23,42,.6)}
+.phone iframe{width:100%;height:46rem;border:0;display:block;background:transparent}
+.phone h3{font-size:1.1rem;margin:1rem 0 .2rem}
+.phone p{color:var(--sub);font-size:.88rem}
+.phone .pc{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem;font-size:.78rem}
+.phone .pc span{padding:.12rem .5rem;border-radius:99px;font-weight:600}
+.foot{max-width:1180px;margin:3.4rem auto 4rem;padding:0 1.25rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+body.embed{background:transparent}
+
+/* ===== Kopf wie live auf osmera.de (text-osmera-blue font-bold tracking-wider uppercase text-lg / text-4xl font-extrabold text-slate-900) ===== */
+.sh{max-width:none}
+.eyebrow{display:block;color:#0284c7;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:1.125rem;line-height:1.75rem;margin-bottom:.5rem}
+.sh h2{font-size:2.25rem;font-weight:800;line-height:1.25;color:#0f172a;letter-spacing:normal;margin:0 0 1rem}
+.sh p{font-size:1.125rem;line-height:1.75rem;color:#475569;font-weight:500;max-width:none;margin:0 0 1.5rem}
+
+/* ===== Leichte Hintergründe: nur ein Schimmer (hohe Transparenz) ===== */
+/* l1 Leicht, Himmel + Koralle (#ff9892), etwa ein Drittel der Stärke von c1 */
+body[data-pal="l1"]{--b1:rgba(56,189,248,.20);--b2:rgba(2,132,199,.10);--w1:rgba(255,152,146,.22);--w2:rgba(255,152,146,.15);--m1:rgba(186,230,253,.18)}
+/* l2 Sehr leicht, Himmel + Koralle (#ff9892), etwa ein Sechstel */
+body[data-pal="l2"]{--b1:rgba(56,189,248,.11);--b2:rgba(2,132,199,.06);--w1:rgba(255,152,146,.13);--w2:rgba(255,152,146,.09);--m1:rgba(186,230,253,.10)}
+/* l3 Leicht, Himmel + Pfirsich (#ff9989) */
+body[data-pal="l3"]{--b1:rgba(56,189,248,.20);--b2:rgba(2,132,199,.10);--w1:rgba(255,153,137,.23);--w2:rgba(255,153,137,.16);--m1:rgba(255,226,214,.20)}
+/* l4 Leicht, Himmel + Orange (#ff6531), sehr dezent */
+body[data-pal="l4"]{--b1:rgba(56,189,248,.20);--b2:rgba(2,132,199,.10);--w1:rgba(255,101,49,.14);--w2:rgba(255,101,49,.10);--m1:rgba(255,205,190,.16)}
+/* l5 Leicht, nur Himmelblau (kein Koralle) */
+body[data-pal="l5"]{--b1:rgba(56,189,248,.22);--b2:rgba(2,132,199,.12);--w1:rgba(56,189,248,.14);--w2:rgba(125,211,252,.12);--m1:rgba(186,230,253,.18)}
+
+/* l0 Halb so stark wie c1 (Zwischenstufe zwischen kräftig und leicht) */
+body[data-pal="l0"]{--b1:rgba(56,189,248,.32);--b2:rgba(2,132,199,.16);--w1:rgba(255,152,146,.34);--w2:rgba(255,152,146,.23);--m1:rgba(186,230,253,.28)}
+
+/* Orange (#ff6531) in denselben Stufen wie Koralle: Halb (l6), Leicht (l4, schon da), Sehr leicht (l7). Orange ist gesättigter, daher etwas weniger Deckkraft bei gleicher Wirkung */
+body[data-pal="l6"]{--b1:rgba(56,189,248,.32);--b2:rgba(2,132,199,.16);--w1:rgba(255,101,49,.22);--w2:rgba(255,101,49,.15);--m1:rgba(255,205,190,.24)}
+body[data-pal="l7"]{--b1:rgba(56,189,248,.11);--b2:rgba(2,132,199,.06);--w1:rgba(255,101,49,.075);--w2:rgba(255,101,49,.05);--m1:rgba(255,205,190,.09)}
+
+/* ===== Endgültiges Layout: Desktop = D2, Tablet = Rollen-Chips + Karte, Handy = Akkordeon ===== */
+@media (min-width:1024px){.pal[data-v="f"]{padding-top:6rem}}   /* Startposition = Klebe-Position, damit links und rechts oben bündig beginnen */
+.f-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:3rem;align-items:stretch}
+.f-left{align-self:stretch}
+.f-left .st{position:sticky;top:6rem}
+.f-left .al{margin-top:.4rem}
+.f-cards{display:flex;flex-direction:column;gap:3.5rem}          /* gleichmäßiger Abstand zwischen den Karten */
+.f-cards>.dc{opacity:.8;transition:opacity .45s,transform .45s}
+.f-cards>.dc.on{opacity:1;transform:translateY(-2px)}
+.f-chips,.f-acc{display:none}
+
+/* Tablet: zwischen Desktop und Handy */
+@media (max-width:1023px){
+  .f-grid{grid-template-columns:minmax(0,1fr);gap:.4rem}
+  .f-left .st{position:static}
+  .f-desk{display:none}
+  .f-chips{display:block}
+  .f-chips .lbl{margin-top:.4rem}
+  .f-cards{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+  .f-cards>.dc{grid-area:1/1;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .4s,transform .4s,visibility 0s .4s}
+  .f-cards>.dc.on{opacity:1;visibility:visible;transform:none;transition:opacity .4s,transform .4s,visibility 0s}
+}
+/* Handy: Akkordeon */
+@media (max-width:639px){
+  .f-chips,.f-cards{display:none}
+  .f-acc{display:block}
+  .f-acc .lbl{margin-top:.2rem}
+  .sh h2{font-size:2rem}
+}
+
+/* ===== Ansicht-Umschalter (nur für die Vorführung) ===== */
+.seg{display:inline-flex;border:1px solid #dbe3ec;border-radius:99px;overflow:hidden;background:#fff}
+.vbtn{padding:.22rem .8rem;font-weight:700;font-size:.8rem;border-right:1px solid #e5eaf1}
+.vbtn:last-child{border-right:0}
+.vbtn.on{background:#0f172a;color:#fff}
+.stage{padding:1rem 0 3rem}
+.devwrap{margin:0 auto;position:relative}
+.devframe{border-radius:1.6rem;border:10px solid #0f172a;overflow:hidden;background:#f8fafc;box-shadow:0 40px 70px -40px rgba(15,23,42,.6);transform-origin:top left}
+.devframe iframe{border:0;display:block;width:100%;height:100%}
+.notes{max-width:1180px;margin:1.2rem auto 0;padding:0 1.25rem}
+
+.grp{font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#64748b;align-self:center;margin:0 .1rem 0 .3rem}
+
+/* Farbseite: Blau rechts, Koralle/Pfirsich/Orange links = Farbflächen waagerecht gespiegelt */
+
+.nt{display:block}.embed .gal-only{display:none}</style></head><body data-pal="l1"><div class="toolbar gal-only"><div class="row"><b>Ansicht:</b><span class="seg"><button class="vbtn on" data-v="win">Fenster</button><button class="vbtn" data-v="d">Desktop</button><button class="vbtn" data-v="t">Tablet</button><button class="vbtn" data-v="p">Handy</button></span><b>Hintergrund:</b><span class="pp"><span class="grp">Leicht:</span><label><input type="radio" name="pal" value="l0"><span class="sw" style="background:linear-gradient(135deg,#cfeefd,#ffd9d6)"></span>Halb, Koralle</label><label><input type="radio" name="pal" value="l1"><span class="sw" style="background:linear-gradient(135deg,#e1f4fe,#ffe4e2)"></span>Leicht, Koralle</label><label><input type="radio" name="pal" value="l2"><span class="sw" style="background:linear-gradient(135deg,#f0f9fe,#fff1f0)"></span>Sehr leicht, Koralle</label><label><input type="radio" name="pal" value="l3"><span class="sw" style="background:linear-gradient(135deg,#e1f4fe,#ffe6e0)"></span>Leicht, Pfirsich</label><label><input type="radio" name="pal" value="l6"><span class="sw" style="background:linear-gradient(135deg,#cfeefd,#ffd2c2)"></span>Halb, Orange</label><label><input type="radio" name="pal" value="l4"><span class="sw" style="background:linear-gradient(135deg,#e1f4fe,#ffe3d9)"></span>Leicht, Orange</label><label><input type="radio" name="pal" value="l7"><span class="sw" style="background:linear-gradient(135deg,#f0f9fe,#fff0ea)"></span>Sehr leicht, Orange</label><label><input type="radio" name="pal" value="l5"><span class="sw" style="background:linear-gradient(135deg,#d9f1fd,#eef9ff)"></span>Leicht, nur Himmel</label><span class="grp">Kräftig / ohne:</span><label><input type="radio" name="pal" value="c0"><span class="sw" style="background:#fff"></span>Ohne (heute)</label><label><input type="radio" name="pal" value="c1"><span class="sw" style="background:linear-gradient(135deg,#7dd3fc,#ff9892)"></span>Kräftig, Koralle</label><label><input type="radio" name="pal" value="c2"><span class="sw" style="background:linear-gradient(135deg,#7dd3fc,#ff9989)"></span>Kräftig, Pfirsich</label><label><input type="radio" name="pal" value="c3"><span class="sw" style="background:linear-gradient(135deg,#7dd3fc,#ff6531)"></span>Kräftig, Orange</label></span><span class="grp">Blau:</span><span class="pp"><label><input type="radio" name="flip" value="0" checked>links, Koralle rechts</label><label><input type="radio" name="flip" value="1">rechts, Koralle links</label></span><span class="grp">Warmer Farbspot:</span><span class="pp"><label><input type="radio" name="warm" value="0" checked>Standard</label><label><input type="radio" name="warm" value="-8">weiter links</label><label><input type="radio" name="warm" value="-16">ganz links</label></span><span class="vw" id="vw"></span></div></div><div class="stage gal-only"><div id="viewWin"><div class="pal" data-v="f"></div></div><div id="viewFrame" hidden><div class="wrap"><p id="scalehint" class="nt" style="font-size:.8rem;color:#475569;margin:.2rem 0 .6rem"></p><div class="devwrap"><div class="devframe"><iframe id="fr" title="Vorschau"></iframe></div></div></div></div></div><div class="notes gal-only"><div class="g3"><div class="box"><b>Desktop (ab 1024 px)</b>Titel und Rollen-Liste kleben links, die Karten laufen rechts vorbei, mit gleichmäßigem Abstand. Die Liste ist anklickbar.</div><div class="box"><b>Tablet (640 bis 1023 px)</b>Rollen-Chips in einer Reihe, darunter eine Karte. Wechselt zunächst alle 7 Sekunden, nach der ersten Eingabe nicht mehr. Wischen wechselt ebenfalls.</div><div class="box"><b>Handy (unter 640 px)</b>Akkordeon: die fünf Rollen untereinander, die angetippte klappt ihren Text darunter auf. Immer nur eine ist offen.</div></div></div><script>var ROLES=[{"id": 0, "title": "Planende", "icon": "fa-solid fa-users-gear", "para": "Personalwünsche und rechtliche Vorgaben müssen Sie nicht mehr mühsam von Hand abgleichen. So gewinnen Sie Kapazitäten für die echten Konfliktfälle auf Ihrer Station. Bei einem kurzfristigen Ausfall unterstützt Sie <span class=\"font-logo\">osmera</span> gezielt: Passende Kolleginnen und Kollegen werden identifiziert und auf Ihren Wunsch hin angefragt – Sie behalten die Kontrolle, <span class=\"font-logo\">osmera</span> übernimmt die administrative Fleißarbeit.", "bullets": ["Kontaktaufnahme über verschiedene Kanäle", "Sie behalten die volle Kontrolle"], "c": "#0284c7", "t": "#e0f2fe", "rgb": "2,132,199"}, {"id": 1, "title": "Das Team", "icon": "fa-solid fa-user-nurse", "para": "Den Dienstplan haben Sie auf Ihrem Smartphone jederzeit im Blick – einfach und übersichtlich per Mitarbeitenden-App. Persönliche Wunschdienste und Ihre Einspringbereitschaft übermitteln Sie völlig flexibel mit nur wenigen Klicks. Auf Anfragen antworten Sie entspannt über Ihren gewählten Lieblingskanal – per App, Messenger oder SMS. Ein einfaches „Ja“ oder „Nein“ reicht aus, ganz ohne Rechtfertigungsdruck in der Freizeit.", "bullets": ["Entlastung durch partizipative Dienstplanung", "Keine ungeplanten Anrufe in der Freizeit"], "c": "#9333ea", "t": "#f3e8ff", "rgb": "147,51,234"}, {"id": 2, "title": "PR / MAV", "icon": "fa-solid fa-handshake-angle", "para": "Transparenz und algorithmische Einhaltung von Schutzgesetzen und Hausregeln. Die <span class=\"font-logo\">osmera</span> engine plant innerhalb der eingestellten tarif- &amp; vertragsrechtlichen Regeln unter Einhaltung des ArbZG. Die Mitbestimmung wird durch <span class=\"font-logo\">osmera</span> nicht umgangen sondern aktiv gefördert.", "bullets": ["Regeln werden nach Ihren Vorgaben im Algorithmus berücksichtigt", "Automatisierte Benachrichtigungen bei Änderungen"], "c": "#059669", "t": "#d1fae5", "rgb": "5,150,105"}, {"id": 3, "title": "HR &amp; IT", "icon": "fa-solid fa-server", "para": "Sie erhalten ein System, das sich nahtlos in Ihre bestehende Programm-Landschaft einfügt. Das bestehende System muss nicht ersetzt werden und aufwändige manuelle Datentransfers im Tagesgeschäft entfallen. Innovative Mapping-Tools, intelligente Schnittstellen-Tools und No-Code-Konnektoren halten den Onboarding-Aufwand auf einem Minimum.", "bullets": ["Das Altsystem bleibt unabhängig und voll funktionsfähig", "Keine gefährlichen Firewall-Öffnungen nach innen: Ihre Sicherheitsarchitektur bleibt unangetastet"], "c": "#475569", "t": "#e2e8f0", "rgb": "71,85,105"}, {"id": 4, "title": "Leitung &amp; DSB", "icon": "fa-regular fa-building", "para": "Sie sichern Planbarkeit und Regelkonformität für Ihr Haus. Dank der komplementären Architektur wird Ihr Bestandssystem intelligent angebunden und erweitert, statt es teuer zu ersetzen. So steigern Sie die Personaleffizienz, während die Mitarbeitenden jederzeit geschützt bleiben.", "bullets": ["Datenschutz durch Zero-Knowledge-Architektur: Sensible Mitarbeitendendaten bleiben für Dritte unzugänglich", "Kein riskanter Datenumzug notwendig: Ihre sensiblen Daten verbleiben dort, wo sie heute sind"], "c": "#d97706", "t": "#fef3c7", "rgb": "217,119,6"}];
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var N = ROLES.length;
+  var mqD = window.matchMedia('(min-width:1024px)'), mqT = window.matchMedia('(min-width:640px)');
+  function mode() { return mqD.matches ? 'd' : (mqT.matches ? 't' : 'p'); }
+  var qs = new URLSearchParams(location.search);
+  var EMBED = qs.get('embed');
+
+  /* ---------- Vorlagen ---------- */
+  function cardHTML(r, cls) {
+    return '<article class="dc role-' + r.id + (cls ? ' ' + cls : '') + '" data-i="' + r.id + '">' +
+      '<div class="dc-head"><span class="dc-ic"><i class="' + r.icon + '"></i></span><h3>' + r.title + '</h3></div>' +
+      '<p class="dc-para">' + r.para + '</p>' +
+      '<ul class="chk">' + r.bullets.map(function (b) { return '<li><i class="fa-solid fa-check"></i><span>' + b + '</span></li>'; }).join('') + '</ul></article>';
+  }
+  function head() {   // wie live auf osmera.de
+    return '<header class="sh"><span class="eyebrow">Ihr Mehrwert</span>' +
+      '<h2>Ein Werkzeug, vielfacher Nutzen.</h2>' +
+      '<p>Eine intelligente Dienstplanung entlastet nicht nur eine Abteilung, sondern verbessert die Prozesse und Transparenz im gesamten Haus.</p></header>';
+  }
+  function chip(r, i) {
+    return '<button type="button" class="chp role-' + r.id + '" data-i="' + i + '" role="tab"><span class="ib"><i class="' + r.icon + '"></i></span><span>' + r.title + '</span><span class="bar"></span></button>';
+  }
+  function accItem(r, i) {
+    return '<div class="acc role-' + r.id + '" data-i="' + i + '"><button type="button" class="acc-h" aria-expanded="false"><span class="ib"><i class="' + r.icon + '"></i></span>' +
+      '<span class="tx"><b>' + r.title + '</b><span class="s">' + r.bullets[0] + '</span></span><i class="fa-solid fa-chevron-down chev"></i></button>' +
+      '<div class="acc-b"><div>' + cardHTML(r, 'flat') + '</div></div></div>';
+  }
+
+  /* ---------- Durchgehender Hintergrund ---------- */
+  function paintBg(pal) {
+    var fx = pal.querySelector(':scope > .bgfx');
+    if (!fx) { fx = document.createElement('div'); fx.className = 'bgfx'; fx.setAttribute('aria-hidden', 'true'); pal.insertBefore(fx, pal.firstChild); }
+    var H = pal.offsetHeight, W = pal.offsetWidth; if (!H) return;
+    var R = Math.max(2, Math.round(H / 620)), size = Math.max(520, Math.min(W * .62, 920)), step = H / R, html = '';
+    var flip = document.body.getAttribute('data-flip') === '1', warm = parseFloat(document.body.getAttribute('data-warm') || '0') || 0;
+    function blob(x, y, s, col) {
+      if (flip) x = 100 - x;                       // Blau rechts, warm links
+      if (col === '--w1' || col === '--w2') x += warm;   // warmer Farbspot: negativ = weiter nach links
+      html += '<i style="left:' + x.toFixed(1) + '%;top:' + Math.round(y) + 'px;width:' + Math.round(s) + 'px;height:' + Math.round(s) + 'px;--col:var(' + col + ')"></i>';
+    }
+    for (var j = 0; j < R; j++) {
+      var y = (j + .5) * step, odd = j % 2;
+      blob(odd ? 6 : 14, y, size, '--b1'); blob(odd ? 90 : 82, y + step * .5, size * .95, '--w1');
+      blob(odd ? 30 : 22, y + step * .78, size * .78, '--b2'); blob(odd ? 74 : 80, y + step * .12, size * .72, '--w2'); blob(50, y + step * .42, size * .9, '--m1');
+    }
+    fx.innerHTML = html;
+  }
+  function watchBg(pal) {
+    paintBg(pal);
+    if ('ResizeObserver' in window) { var t; new ResizeObserver(function () { clearTimeout(t); t = setTimeout(function () { paintBg(pal); }, 120); }).observe(pal); }
+  }
+
+  /* ---------- Das Layout ---------- */
+  function buildF(root) {
+    root.innerHTML = '<div class="wrap"><div class="f-grid"><div class="f-left"><div class="st">' + head() +
+      '<div class="al f-desk">' + ROLES.map(function (r, i) {
+        return '<div class="al-i role-' + r.id + '" data-i="' + i + '"><b><i class="' + r.icon + '"></i>' + r.title + '</b><span>' + r.bullets[0] + '</span></div>';
+      }).join('') + '</div></div></div>' +
+      '<div class="f-right"><div class="f-chips"><p class="lbl">Wählen Sie Ihre Rolle</p><div class="chips" role="tablist">' + ROLES.map(chip).join('') + '</div></div>' +
+      '<div class="f-cards">' + ROLES.map(function (r) { return cardHTML(r); }).join('') + '</div>' +
+      '<div class="f-acc"><p class="lbl">Rolle antippen</p>' + ROLES.map(accItem).join('') + '</div></div></div></div>';
+
+    var cards = $$('.f-cards > .dc', root), items = $$('.al-i', root), chips = $$('.chp', root), accs = $$('.acc', root), cur = 0, stopAuto = null;
+
+    function setChips(i, auto) {
+      chips.forEach(function (c, k) { c.classList.toggle('on', k === i); c.classList.remove('auto'); c.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+      var on = chips[i];
+      if (auto && on) { void on.offsetWidth; on.classList.add('auto'); }
+      var box = on && on.parentNode;
+      if (box && box.scrollWidth > box.clientWidth) box.scrollTo({ left: on.offsetLeft - (box.clientWidth - on.offsetWidth) / 2, behavior: 'smooth' });
+    }
+    function openAcc(i) {
+      accs.forEach(function (a, k) { var on = k === i; a.classList.toggle('on', on); $('.acc-h', a).setAttribute('aria-expanded', on ? 'true' : 'false'); });
+    }
+    function apply(i, auto) {
+      cur = i;
+      cards.forEach(function (c, k) { c.classList.toggle('on', k === i); });
+      items.forEach(function (it, k) { it.classList.toggle('on', k === i); });
+      setChips(i, auto && mode() === 't');
+    }
+
+    /* Desktop: die Karte, die der Bildschirmmitte am nächsten ist, ist aktiv */
+    var tick = false;
+    function upd() {
+      if (mode() !== 'd') return;
+      var vh = innerHeight, best = 0, bd = 1e9;
+      cards.forEach(function (c, i) { var r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - vh * .5); if (r.bottom > vh * .2 && r.top < vh * .85 && d < bd) { bd = d; best = i; } });
+      var f = cards[0].getBoundingClientRect(), l = cards[N - 1].getBoundingClientRect();
+      if (f.top > vh * .55) best = 0; if (l.bottom < vh * .5) best = N - 1;
+      apply(best);
+    }
+    addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(function () { upd(); tick = false; }); } }, { passive: true });
+    items.forEach(function (it, i) { it.addEventListener('click', function () { var r = cards[i].getBoundingClientRect(); scrollTo({ top: scrollY + r.top - (innerHeight - r.height) / 2, behavior: 'smooth' }); }); });
+
+    /* Tablet: Chips wählen die Karte, Wischen wechselt, zunächst wechselt es alle 7 Sekunden */
+    chips.forEach(function (c, k) { c.addEventListener('click', function () { apply(k); if (stopAuto) stopAuto(); }); });
+    var st = $('.f-cards', root), x0 = 0, y0 = 0;
+    st.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    st.addEventListener('touchend', function (e) {
+      if (mode() !== 't') return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) { apply((cur + (dx < 0 ? 1 : N - 1)) % N); if (stopAuto) stopAuto(); }
+    }, { passive: true });
+    (function () {
+      var timer = null, stopped = false;
+      function start() { if (stopped || timer) return; timer = setInterval(function () { if (mode() === 't') apply((cur + 1) % N, true); }, 7000); }
+      stopAuto = function () { stopped = true; clearInterval(timer); timer = null; };
+      if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { if (en[0].isIntersecting) start(); else { clearInterval(timer); timer = null; } }, { threshold: .35 }).observe($('.f-chips', root));
+    })();
+
+    /* Handy: Akkordeon, immer nur eine Rolle offen */
+    accs.forEach(function (a, k) {
+      $('.acc-h', a).addEventListener('click', function () {
+        var open = a.classList.contains('on');
+        if (open) { openAcc(-1); return; }
+        cur = k; openAcc(k); setChips(k); apply(k);
+        setTimeout(function () { a.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 480);
+      });
+    });
+
+    function sync() {
+      var m = mode();
+      if (m === 'd') upd();
+      else if (m === 't') apply(cur, true);
+      else openAcc(cur);
+    }
+    [mqD, mqT].forEach(function (mq) { if (mq.addEventListener) mq.addEventListener('change', sync); else mq.addListener(sync); });
+    addEventListener('resize', function () { if (mode() === 'd') upd(); });
+    apply(0, true); openAcc(0); sync();
+  }
+
+  /* ---------- Rahmen: Palette, Ansicht, Einbettung ---------- */
+  function tell(msg) { var fr = $('#fr'); if (fr && fr.contentWindow) { try { fr.contentWindow.postMessage(msg, '*'); } catch (e) { } } }
+  function setPal(v, store) {
+    document.body.setAttribute('data-pal', v);
+    if (store) { try { localStorage.setItem('mw3-pal', v); } catch (e) { } }
+    tell({ pal: v });
+  }
+  function repaint() { $$('.pal[data-v]').forEach(paintBg); }
+  function setFlip(v, store) {
+    document.body.setAttribute('data-flip', v);
+    if (store) { try { localStorage.setItem('mw3-flip', v); } catch (e) { } }
+    tell({ flip: v }); repaint();
+  }
+  function setWarm(v, store) {
+    document.body.setAttribute('data-warm', v);
+    if (store) { try { localStorage.setItem('mw3-warm', v); } catch (e) { } }
+    tell({ warm: v }); repaint();
+  }
+  var pals = $$('input[name=pal]');
+  pals.forEach(function (r) { r.addEventListener('change', function () { setPal(r.value, true); }); });
+  var saved = 'l1'; try { saved = localStorage.getItem('mw3-pal') || 'l1'; } catch (e) { }
+  if (qs.get('pal')) saved = qs.get('pal');
+  var pick = pals.filter(function (r) { return r.value === saved; })[0]; if (pick) pick.checked = true;
+  setPal(saved, false);
+  var flips = $$('input[name=flip]');
+  flips.forEach(function (r) { r.addEventListener('change', function () { setFlip(r.value, true); }); });
+  var sflip = '0'; try { sflip = localStorage.getItem('mw3-flip') || '0'; } catch (e) { }
+  if (qs.get('flip')) sflip = qs.get('flip');
+  var fpick = flips.filter(function (r) { return r.value === sflip; })[0]; if (fpick) fpick.checked = true;
+  setFlip(sflip, false);
+  var warms = $$('input[name=warm]');
+  warms.forEach(function (r) { r.addEventListener('change', function () { setWarm(r.value, true); }); });
+  var swarm = '0'; try { swarm = localStorage.getItem('mw3-warm') || '0'; } catch (e) { }
+  if (qs.get('warm') !== null) swarm = qs.get('warm');
+  var wpick = warms.filter(function (r) { return r.value === swarm; })[0]; if (wpick) wpick.checked = true;
+  setWarm(swarm, false);
+  addEventListener('message', function (e) {
+    if (!e.data) return;
+    if (e.data.pal) setPal(e.data.pal, false);
+    if (e.data.flip !== undefined) setFlip(e.data.flip, false);
+    if (e.data.warm !== undefined) setWarm(e.data.warm, false);
+  });
+
+  function vw() { var e = $('#vw'); if (!e) return; var m = mode(); e.textContent = innerWidth + ' px · ' + (m === 'd' ? 'Desktop-Layout' : m === 't' ? 'Tablet-Layout' : 'Handy-Layout'); }
+  addEventListener('resize', vw); vw();
+
+  if (EMBED) {
+    document.body.classList.add('embed');
+    var keep = $('[data-v="f"]'), holder = document.createElement('main');
+    holder.appendChild(keep);
+    Array.prototype.slice.call(document.body.children).forEach(function (c) { if (c.tagName !== 'SCRIPT') c.remove(); });
+    document.body.insertBefore(holder, document.body.firstChild);
+  }
+  var root = $('[data-v="f"]'); buildF(root); watchBg(root);
+
+  /* Ansicht-Umschalter (nur Vorführung): Fenster = direkt, sonst feste Breite in einem Rahmen */
+  var WIDTH = { d: 1280, t: 820, p: 390 };
+  var box = $('#viewFrame'), win = $('#viewWin'), view = 'win';
+  function fit() {
+    if (view === 'win' || !box) return;
+    var W = WIDTH[view], avail = Math.max(280, box.parentNode.clientWidth - 32), s = Math.min(1, avail / (W + 20)), H = Math.max(560, innerHeight - 130);
+    var wrap = $('.devwrap', box), fr = $('#fr');
+    wrap.style.width = Math.round((W + 20) * s) + 'px'; wrap.style.height = Math.round(H * s) + 'px';
+    var f = $('.devframe', box); f.style.width = (W + 20) + 'px'; f.style.height = H + 'px'; f.style.transform = 'scale(' + s + ')';
+    $('#scalehint').textContent = s < 1 ? ('Auf ' + Math.round(s * 100) + ' % verkleinert, damit es in den Browser-Bereich passt') : '';
+  }
+  function setView(v) {
+    view = v; $$('.vbtn').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === v); });
+    if (v === 'win') { win.hidden = false; box.hidden = true; return; }
+    win.hidden = true; box.hidden = false;
+    var fr = $('#fr'); if (!fr.getAttribute('src')) fr.setAttribute('src', '?embed=1&pal=' + document.body.getAttribute('data-pal') + '&flip=' + document.body.getAttribute('data-flip') + '&warm=' + document.body.getAttribute('data-warm'));
+    else { tell({ pal: document.body.getAttribute('data-pal') }); tell({ flip: document.body.getAttribute('data-flip') }); tell({ warm: document.body.getAttribute('data-warm') }); }
+    fit(); window.scrollTo(0, 0);
+  }
+  if (box) {
+    $$('.vbtn').forEach(function (b) { b.addEventListener('click', function () { setView(b.getAttribute('data-v')); }); });
+    addEventListener('resize', fit);
+    if (qs.get('view')) setView(qs.get('view'));
+  }
+})();
+</script></body></html>

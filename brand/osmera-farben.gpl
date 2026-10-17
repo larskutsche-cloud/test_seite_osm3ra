@@ -1,0 +1,38 @@
+GIMP Palette
+Name: osmera Brand 1.0
+Columns: 6
+#
+# Quelle: osmera-tokens.json (Website-Stand 17.10.2026). Für Inkscape, GIMP, Krita, Affinity importierbar.
+  2 132 199	osmera-Blau #0284C7
+  3 105 161	Blau dunkel #0369A1
+ 56 189 248	Himmelblau #38BDF8
+224 242 254	Blau hell #E0F2FE
+239 246 255	Blau-Ton #EFF6FF
+219 234 254	Blau-Rand #DBEAFE
+ 15  23  42	Navy #0F172A
+  2   6  23	Nacht #020617
+ 30  41  59	Text #1E293B
+ 71  85 105	Text sekundär #475569
+100 116 139	Text gedämpft #64748B
+226 232 240	Linie #E2E8F0
+241 245 249	Fläche #F1F5F9
+248 250 252	Grund #F8FAFC
+255 255 255	Weiß #FFFFFF
+203 213 225	Text auf Dunkel #CBD5E1
+148 163 184	Text auf Dunkel gedämpft #94A3B8
+ 34 197  94	Haken-Grün #22C55E
+239  68  68	Meldung-Rot #EF4444
+254 226 226	Meldung-Ton #FEE2E2
+255 101  49	Orange #FF6531
+255 152 146	Koralle #FF9892
+255 153 137	Pfirsich #FF9989
+  2 132 199	Rolle Planende #0284C7
+224 242 254	Rolle Planende Tönung #E0F2FE
+147  51 234	Rolle Das Team #9333EA
+243 232 255	Rolle Das Team Tönung #F3E8FF
+  5 150 105	Rolle PR / MAV #059669
+209 250 229	Rolle PR / MAV Tönung #D1FAE5
+ 71  85 105	Rolle HR & IT #475569
+226 232 240	Rolle HR & IT Tönung #E2E8F0
+217 119   6	Rolle Leitung & DSB #D97706
+254 243 199	Rolle Leitung & DSB Tönung #FEF3C7
