@@ -5,7 +5,7 @@ Erst wenn der Auftraggeber Layout, Hintergrund und Einstellungen gewählt hat.
 ## 1. Staging-Kopie, nie direkt
 
 - Quelle ist der aktuelle Stand der echten Seite (lesen, nicht ändern). Das Ergebnis liegt in einem eigenen Ordner (z.B. `scratchpad/out/site/`) mit allem, was die Seite braucht (Bilder, Unterseiten).
-- Der Einbau läuft als **Skript** (`build_site.py`), das die Quelle liest, den Abschnitt ersetzt und die Kopie schreibt. Vorteile: jeder Fehler ist wiederholbar behebbar, die Basis kann nach Änderungen neu gebaut werden, es entsteht ein sauberer Diff. Das Skript prüft per `assert`, dass jede Ersetzung genau einmal trifft.
+- Der Einbau läuft als **Skript** (Vorlage: `assets/einbau-skript-vorlage.py`, mit `--check` und `--diff`), das die Quelle liest, den Abschnitt ersetzt und die Kopie schreibt. Vorteile: jeder Fehler ist wiederholbar behebbar, die Basis kann nach Änderungen neu gebaut werden, es entsteht ein sauberer Diff. Das Skript prüft per `assert`, dass jede Ersetzung genau einmal trifft.
 - Danach das Skript gegen die Quelle laufen lassen und vergleichen („Staging aktuell zur Basis: True“), bevor kopiert wird. Wenn sich die Quelle inzwischen geändert hat, nicht blind überschreiben.
 
 ## 2. Bausteine für den Abschnitt
@@ -33,7 +33,7 @@ Erst wenn der Auftraggeber Layout, Hintergrund und Einstellungen gewählt hat.
 
 ## 5. Deployment verstehen, bevor gepusht wird
 
-- `.github/workflows/*.yml` lesen: Welche Branches lösen eine Auslieferung aus? Welche gehen live, welche als geschützte Vorschau?
+- `.github/workflows/*.yml` lesen: Welche Branches lösen eine Auslieferung aus? Welche gehen live, welche als geschützte Vorschau? Mit `gh run list` prüfen, ob der Workflow tatsächlich durchläuft (er kann scheitern, während die Seite über GitHubs eingebautes Pages-Verfahren trotzdem live geht).
 - **Live-Branch (z.B. `main`)** veröffentlicht den ganzen committeten Ordner. Nur Dateien committen, die öffentlich sein dürfen (keine Originale in voller Auflösung, keine internen Guides, keine Lizenzdateien).
 - Ein Branch mit einem Namen, der nicht zu den Auslöser-Mustern passt, liegt auf GitHub, ohne ausgeliefert zu werden. Das ist der Weg für Arbeitsstände, die mobil erreichbar sein sollen. Ist das Repository öffentlich, ist der Inhalt dort sichtbar, auch wenn er nicht als Website läuft.
 - Nach dem Push im Hintergrund auf die neue Version warten (`curl` in einer Schleife, Suchbegriff aus der neuen Version, Zwischenspeicher mit `?cb=` umgehen) und dann dieselben Prüfungen gegen die echte Adresse fahren (Status, Inhalt, Überlauf bei drei Breiten).

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "optionen-vorschau",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8780", "--bind", "127.0.0.1", "--directory", "/ABSOLUTER/PFAD/zum/Ordner/mit/den/Seiten"],
+      "port": 8780
+    }
+  ]
+}

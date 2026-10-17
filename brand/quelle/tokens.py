@@ -99,7 +99,7 @@ PAIRS = [
 
 def build():
     out = dict(
-        meta=dict(name="osmera Design-Tokens", version="1.0", stand="2026-10-17", quelle="Website index.html (Tailwind-Konfiguration und Klassen)",
+        meta=dict(name="osmera Design-Tokens", version="1.0", stand="2026-10-17", status="verbindlich ab 2026-10-17; löst das Design System vom Juni 2026 ab", quelle="Website index.html (Tailwind-Konfiguration und Klassen)",
                   hinweis="CMYK-Werte sind rechnerische Näherungen aus sRGB. Für den Druck vom Druckdienstleister mit ICC-Profil (zum Beispiel PSO Coated v3) umrechnen und proofen lassen."),
         farben={}, rollen={}, kontrast=[])
     for grp, items in (("kern", CORE), ("neutral", NEUTRAL), ("auf-dunkel", ONDARK), ("funktion", FUNCTION), ("warm", WARM)):

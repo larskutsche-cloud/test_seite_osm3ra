@@ -11,7 +11,8 @@ Stand: 17.10.2026. Dieser Branch (`entwurf/brand-guide-und-skill`) ist **kein We
 5. **Änderungen immer erst zeigen, dann übernehmen.** Erst Diff oder Vorschau, dann OK abwarten, dann schreiben.
 6. **Datenschutztext** (`datenschutz.html`) ist juristisch geprüft. Nur auf ausdrückliche Anweisung ändern.
 7. **Inhaltliche Leitplanken:** Zielgruppe sind deutsche Krankenhäuser. Keine erfundenen Zahlen, Zitate oder Referenzkunden. Telefonate nie als Vorteil darstellen (osmera macht Anrufe überflüssig).
-8. **Schrift:** Alles in Inter. Nur osmera-Begriffe (Wort „osmera“, Produktnamen, Logo) in Urbanist, im Code als Klasse `font-logo`. Hervorgehobene Wörter in Überschriften nutzen `.text-gradient`.
+8. **Verbindliches Design:** Der Brand Guide 1.0 in `brand/` gilt seit 17.10.2026 als maßgeblich für alle neuen Unterlagen und Oberflächen. Er löst das ältere „Osmera Design System“ (Juni 2026: Insignia, Rubik, `#071E3D`, Cyan `#00F0D4`) ab. Nie daraus ableiten. Bei Widerspruch gilt der Guide.
+9. **Schrift:** Alles in Inter. Nur osmera-Begriffe (Wort „osmera“, Produktnamen, Logo) in Urbanist, im Code als Klasse `font-logo`. Hervorgehobene Wörter in Überschriften nutzen `.text-gradient`.
 
 ## Stand der Website
 
@@ -31,6 +32,8 @@ Stand: 17.10.2026. Dieser Branch (`entwurf/brand-guide-und-skill`) ist **kein We
 | `.claude/agents/web-ui-design-lead.md` | Agent für Gestaltungskonzepte, verweist auf den Konfigurator-Skill |
 | `docs/UEBERGABE.md` | diese Datei |
 
+Skill-Version: `design-konfigurator-prozess` 1.0 mit Konfigurator-Vorlage, Einbau-Skript-Vorlage und Anleitung zur Pflege des Guides (`references/marke-und-guide.md`).
+
 ## Brand Guide in einem Absatz
 
 Logo: zwei konzentrische Ringe (außen ⌀28, innen ⌀20, Strich 2) plus „osmera“ in Urbanist Bold, Abstand 10, Laufweite −0,025 em, Ringmitte auf Höhe der Mitte der Kleinbuchstaben. Farben: osmera-Blau `#0284c7`, Blau dunkel `#0369a1`, Himmelblau `#38bdf8`, Navy `#0f172a`, Grund `#f8fafc`, Rollenfarben (Planende Blau, Team Violett `#9333ea`, PR/MAV Grün `#059669`, HR & IT Grau `#475569`, Leitung & DSB Bernstein `#d97706`). Warmes Orange `#ff6531` nur als Hintergrund-Schimmer unter 10 % Deckkraft, nie für Text oder Buttons. Werte sind entweder „Bestand“ (so auf der Website) oder „Empfehlung“ (neu festgelegt, etwa für Print und Folien).
@@ -39,12 +42,13 @@ Logo: zwei konzentrische Ringe (außen ⌀28, innen ⌀20, Strich 2) plus „osm
 
 1. **Kontrast:** osmera-Blau auf Weiß hat 4,10:1 und verfehlt WCAG AA für kleine Schrift. Für kleinen Text und Buttons Blau dunkel `#0369a1` (5,93:1) verwenden. Auf der Website noch nicht angepasst.
 2. **Favicon fehlt.** Vorschlag liegt als `brand/logos/osmera-app-icon.svg`.
-3. **Zwei Markenwelten:** Das ältere „Osmera Design System“ (Juni 2026, Produkt-Oberfläche: Insignia/Rubik, `#071E3D`, Cyan `#00F0D4`) nutzt dasselbe Präfix `--osm-`, aber andere Schrift, Farben und Wortmarke. Entscheidung offen, welche Welt für Print, Folien und App gilt. Bis dahin nicht mischen.
+3. **Altes Design System:** ist abgelöst (entschieden 17.10.2026). Bestehende Unterlagen im alten Stil, vor allem das Pitch Deck 09/2026, bei der nächsten Überarbeitung auf den Brand Guide umstellen. Das alte System nutzt dasselbe Präfix `--osm-`, deshalb nie Dateien mischen.
 4. **Logo-Ringfarbe:** auf der Website `#1E293B`, Wortmarke `#0F172A`. Vereinheitlichen?
 5. **Font „Outfit“** wird geladen, aber nirgends benutzt.
 6. **Tailwind per CDN** (Play-CDN, nicht für Produktion gedacht). Langfristig Build-Schritt erwägen.
 7. **CMYK-Werte** im Guide sind rechnerische Näherungen. Für den Druck Profil (zum Beispiel PSO Coated v3) und Proof bei der Druckerei einplanen. Keine Pantone-Zuordnung vorhanden.
-8. **Sitemap:** `lastmod` für `index.html` und `impressum.html` steht noch auf 2026-10-10.
+8. **Deploy-Workflow:** „Deploy to GitHub Pages“ scheitert seit mindestens 14.10.2026 im Schritt „Clean up old staging directories“ (Git-Identität fehlt, Exit 128). Die Seite geht trotzdem über GitHubs „pages build and deployment“ aus `main` live. Staging-Kopien der Branches `101026_*` und `101028_*` entstehen vermutlich nicht. Nicht behoben.
+9. **Sitemap:** `lastmod` für `index.html` und `impressum.html` steht noch auf 2026-10-10.
 
 ## Guide neu erzeugen
 
@@ -57,10 +61,10 @@ python3 make_logos.py    # nur bei Logo-Änderung, braucht die Schrift (siehe ob
 python3 build_guide.py   # schreibt ../osmera-brand-guide.html und ../osmera-tokens.json
 ```
 
-`osmera-brand.css` liegt direkt in `brand/` und wird dort von Hand gepflegt. Das PDF entsteht aus der HTML-Datei per Headless-Chrome. Dazu die Datei über einen lokalen Server öffnen (zum Beispiel `python3 -m http.server 8780` im Ordner `brand/`) und dann:
+`osmera-brand.css` liegt direkt in `brand/` und wird dort von Hand gepflegt. Das PDF entsteht aus der HTML-Datei per Headless-Chrome. Dazu den **Repo-Stamm** (nicht `brand/`) über einen lokalen Server bereitstellen, damit die Fotos unter `../img/` gefunden werden (zum Beispiel `python3 -m http.server 8780` im Repo-Stamm) und dann:
 
 ```bash
-node .claude/skills/design-konfigurator-prozess/scripts/pdf.mjs http://localhost:8780/osmera-brand-guide.html brand/osmera-brand-guide.pdf
+node .claude/skills/design-konfigurator-prozess/scripts/pdf.mjs http://localhost:8780/brand/osmera-brand-guide.html brand/osmera-brand-guide.pdf
 ```
 
-Danach kurz prüfen, dass es 22 Seiten sind und nichts über den Rand läuft.
+Danach prüfen: 22 Seiten, nichts läuft über den Rand, und **alle Seiten als Bild ansehen** (Fotos, Logos, Bildmarke, App-Icon müssen da sein; fehlende Bilder erscheinen als Alt-Text mit Platzhalter-Symbol).

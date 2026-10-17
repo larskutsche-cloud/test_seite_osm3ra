@@ -45,7 +45,7 @@ def title(k, h, p=""):
 # ------------------------------------------------------------------ 1 Titel
 def p_titel(n):
     return f'''<section class="pg osm-aurora osm-aurora--leicht" id="s{n}" style="display:flex;flex-direction:column;justify-content:space-between;min-height:794px">
-  <div class="pg-head" style="margin:0"><span></span><span>Version 1.0 · 17. Oktober 2026</span></div>
+  <div class="pg-head" style="margin:0"><span></span><span>Version 1.0 · verbindlich ab 17. Oktober 2026</span></div>
   <div>
     <img src="logos/osmera-logo-navy.svg" alt="osmera" style="height:92px;display:block;margin-bottom:56px">
     <span class="osm-eyebrow">Brand Guide</span>
@@ -76,8 +76,8 @@ def p_inhalt(n, toc):
         <tr><td>{mono("logos/")}</td><td>8 Vektor-Dateien (SVG, Schrift in Pfade umgewandelt)</td></tr>
         <tr><td>{mono("…guide.html / .pdf")}</td><td>Dieser Guide (Browser, PDF A4 quer)</td></tr>
       </table>
-      <h3 style="margin-top:16px">Abgrenzung zu anderen osmera-Unterlagen</h3>
-      <p>Dieser Guide beschreibt die Marke der <b>Website</b> (Inter, Urbanist, osmera-Blau). Das ältere „Osmera Design System“ (Juni 2026) für die Produkt-Oberfläche nutzt andere Werte (Insignia und Rubik, Deep Membrane #071E3D, Cyan #00F0D4) und dasselbe Variablen-Präfix <code>--osm-</code>. Beide nicht in einem Dokument mischen. Ein gemeinsamer Standard steht noch aus.</p>
+      <h3 style="margin-top:16px">Geltung</h3>
+      <p>Dieser Guide ist ab dem 17.10.2026 die <b>verbindliche Grundlage</b> für alle neuen osmera-Unterlagen und Oberflächen (Website, Print, PDF, Präsentationen, Dokumente). Er löst das ältere „Osmera Design System“ (Juni 2026: Insignia, Rubik, #071E3D, Cyan #00F0D4) ab. Bei Widerspruch gilt dieser Guide. Bestehende Unterlagen im alten Stil (zum Beispiel das Pitch Deck 09/2026) bei der nächsten Überarbeitung auf diesen Guide umstellen.</p>
       <h3 style="margin-top:16px">Wichtig vor dem Druck</h3>
       <p>CMYK-Werte in diesem Guide sind <b>rechnerische Näherungen</b> aus den Bildschirmfarben. Die Druckerei konvertiert mit ICC-Profil (zum Beispiel PSO Coated v3) und liefert einen Proof. Sonderfarben (Pantone) sind nicht festgelegt.</p>
     </div>

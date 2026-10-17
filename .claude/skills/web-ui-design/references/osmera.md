@@ -1,6 +1,6 @@
 # osmera (nur für dieses Projekt)
 
-Stand: 17.10.2026. Dieses Dokument gehört zum Projekt osmera und wird nur bei osmera-Aufgaben gelesen.
+Stand: 17.10.2026 (Brand Guide verbindlich). Dieses Dokument gehört zum Projekt osmera und wird nur bei osmera-Aufgaben gelesen.
 
 ## Projekt
 
@@ -12,6 +12,8 @@ Stand: 17.10.2026. Dieses Dokument gehört zum Projekt osmera und wird nur bei o
 
 ## Marke und Design
 
+- **Verbindlich ist der Brand Guide 1.0 (seit 17.10.2026).** Er löst das „Osmera Design System“ vom Juni 2026 (Insignia/Rubik, #071E3D, Cyan #00F0D4) und die KI-Markenboards vom 17.10. ab. Bei Widerspruch gilt der Guide. Quelle: Branch `entwurf/brand-guide-und-skill`, Ordner `brand/` (`osmera-brand.css`, `osmera-tokens.json`, `logos/`, PDF, Bauskripte in `quelle/`). Kopie im iCloud-Ordner `Osmera/01_Marke-und-Design/Brand Guide Website v1.0 (2026-10-17)/`. Das alte Design System liegt unverändert unter `Osmera/Osmera Design System/` (die Bauskripte des Pitch Decks lesen dort), weiteres Abgelöstes unter `Osmera/99_Archiv-abgeloest/`. Nicht als Vorlage verwenden.
+- Kleine Schrift und Schalter in `#0369a1`, weil `#0284c7` auf Weiß nur 4,10:1 hat. Warme Töne nur als Hintergrund-Schimmer.
 - Stack: HTML, Tailwind Play CDN (cdn.tailwindcss.com), Font Awesome (cdnjs), Google Fonts (Inter, Urbanist). Referenzseite für das Design ist `index.html`.
 - Farben: `osmera.blue #0284c7`, `accent #38bdf8`, `dark #0f172a`, `light #f8fafc`, `bluelight #e0f2fe`.
 - Logo: zwei konzentrische Ringe plus Wortmarke "osmera" in Urbanist. Die Ringe sind ein verwendbares Motiv.
@@ -36,7 +38,8 @@ Stand: 17.10.2026. Dieses Dokument gehört zum Projekt osmera und wird nur bei o
 - Live auf osmera.de: Hero mit Zwei-Personen-Foto und zwei Kacheln, Foto-Band mit Footer, Pilotprojekt-Schritte, neue Sektion "Ihr Mehrwert" (Titel und Rollen-Liste kleben links, Karten laufen vorbei; Tablet Rollen-Chips; Handy Akkordeon; sehr leichter Orange-Schimmer links, Blau rechts), ausklappbare Karten für osmera flow und sync. Letzter Commit auf `main`: `602bef7`.
 - Die iStock-Originale liegen außerhalb des Repos in `/Volumes/Scico/osmera_website_gh/originale/` (nicht committen, Lizenz).
 - Deployment: Pushes auf `main` gehen live. Die Branches `101026_NewVersion`, `101027_*`, `101028_VersionTwo` erzeugen eine geschützte Staging-Vorschau (dabei werden nur `index.html` und `impressum.html` kopiert). Alle anderen Branch-Namen werden nicht ausgeliefert.
-- Brand Guide (Version 1.0) mit Logos als SVG, Stylesheet `osmera-brand.css`, Tokens und PDF: Ordner `brand/` (liegt auf dem Branch `entwurf/brand-guide-und-skill`, nicht auf `main`).
+- Brand Guide (Version 1.0, verbindlich) mit Logos als SVG, Stylesheet `osmera-brand.css`, Tokens und PDF: Ordner `brand/` (liegt auf dem Branch `entwurf/brand-guide-und-skill`, nicht auf `main`, nie dorthin mergen). Übergabe für Mobil- und Cloud-Sitzungen: `docs/UEBERGABE.md` auf demselben Branch.
+- Offen: Der eigene Workflow „Deploy to GitHub Pages“ scheitert seit mindestens 14.10.2026 im Schritt „Clean up old staging directories“ (Git-Identität fehlt). Live geht die Seite trotzdem über GitHubs „pages build and deployment“ aus `main`. Staging-Kopien der Branches `101026_*`/`101028_*` entstehen vermutlich nicht.
 
 ## Typografie-Regel (vom User festgelegt)
 

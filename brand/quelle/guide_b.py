@@ -291,14 +291,15 @@ def p_anhang(n):
         ("Favicon", "Die Website hat kein Favicon. Vorschlag: <code>logos/osmera-app-icon.svg</code>."),
         ("Schrift", "„Outfit“ wird geladen, aber nirgends genutzt. Entfernen spart eine Anfrage."),
         ("Logo-Farbe", "Der Ring erbt auf der Website die Seitenfarbe #1E293B, die Wortmarke ist #0F172A. Einheitlich Navy #0F172A setzen."),
-        ("Zwei Markenwelten", "Das Design System von Juni 2026 (Produkt-Oberfläche) nutzt Insignia/Rubik, #071E3D und Cyan #00F0D4 und dasselbe Präfix <code>--osm-</code>. Vor dem Einsatz auf Folien, Print oder in der App festlegen, welche Welt gilt, und das Präfix trennen."),
+        ("Altes Design System", "Das Design System von Juni 2026 (Insignia/Rubik, #071E3D, Cyan #00F0D4) ist abgelöst. Es nutzt dasselbe Präfix <code>--osm-</code>: neue Dateien nie aus ihm ableiten, Bestehendes bei Gelegenheit auf diesen Guide umstellen."),
+
         ("Tailwind", "Tailwind kommt per CDN-Skript. Für den Dauerbetrieb ein gebautes CSS verwenden."),
     ]
     fl = "".join(f'<tr><td><b>{a}</b></td><td>{b}</td></tr>' for a, b in findings)
     return f'''<section class="pg" id="s{n}">{head(n)}{title("Anhang", "Beobachtungen, Tokens, Verlauf")}
   <div class="g2" style="grid-template-columns:1fr 1.25fr;align-items:start">
     <div><div class="box"><h3>Beobachtungen an der Website (17.10.2026)</h3><table class="t">{fl}</table></div>
-      <div class="box mt-s"><h3>Änderungsverlauf</h3><table class="t"><tr><td><b>1.0</b></td><td>17.10.2026</td><td>Erste Fassung aus dem Stand der Website (Commit 602bef7).</td></tr></table>
+      <div class="box mt-s"><h3>Änderungsverlauf</h3><table class="t"><tr><td><b>1.0</b></td><td>17.10.2026</td><td>Erste Fassung aus dem Stand der Website (Commit 602bef7). Verbindlich ab diesem Datum, löst das Design System von Juni 2026 ab.</td></tr></table>
       <p class="small mt-s" style="margin:6px 0 0">Neue Versionen: Nummer erhöhen, Datum und Änderungen eintragen, <code>osmera-tokens.json</code> mitführen.</p></div></div>
     <div class="box"><h3>Farb-Tokens</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">{tok(cells[:half])}{tok(cells[half:])}</div></div>
   </div>
