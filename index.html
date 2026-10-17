@@ -117,62 +117,132 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .slide-content {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .slide-content.active {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .slide-content.prev {
-            opacity: 0;
-            transform: translateY(-40px);
-        }
-
         .font-logo {
             font-size: 1.09rem;
             font-weight: 550;
         }
 
-        /* Unsichtbare Slides werfen keinen Schatten */
-        /*.slide-content.prev, .slide-content.next {
-            box-shadow: none !important;
-            border-color: transparent !important;
-        }*/
+        /* ===== Ihr Mehrwert (#vorteile): Desktop = Titel klebt links, Karten laufen rechts vorbei; Tablet = Rollen-Chips + Karte; Handy = Akkordeon ===== */
+        #vorteile {
+            isolation: isolate;
+            --mw-line: rgba(15, 23, 42, .09);
+            /* Hintergrund: sehr leichter Schimmer, Blau rechts, warmes Orange links */
+            --mw-b1: rgba(56, 189, 248, .11); --mw-b2: rgba(2, 132, 199, .06);
+            --mw-w1: rgba(255, 101, 49, .075); --mw-w2: rgba(255, 101, 49, .05);
+            --mw-m1: rgba(255, 205, 190, .09);
+        }
+        #vorteile .mw-bg { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); }
+        #vorteile .mw-bg i { position: absolute; border-radius: 9999px; transform: translate(-50%, -50%);
+            background: radial-gradient(closest-side, var(--col) 0%, transparent 100%); }
+        .mw-r0 { --c: #0284c7; --t: #e0f2fe; --rgb: 2, 132, 199; }
+        .mw-r1 { --c: #9333ea; --t: #f3e8ff; --rgb: 147, 51, 234; }
+        .mw-r2 { --c: #059669; --t: #d1fae5; --rgb: 5, 150, 105; }
+        .mw-r3 { --c: #475569; --t: #e2e8f0; --rgb: 71, 85, 105; }
+        .mw-r4 { --c: #d97706; --t: #fef3c7; --rgb: 217, 119, 6; }
+
+        .mw-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 3rem; align-items: stretch; }
+        .mw-st { position: sticky; top: 6rem; }
+        .mw-al { position: relative; margin-top: .4rem; }
+        .mw-al::before { content: ""; position: absolute; left: 0; top: .2rem; bottom: .2rem; width: 2px; background: rgba(15, 23, 42, .14); border-radius: 2px; }
+        .mw-al-i { display: block; width: 100%; text-align: left; position: relative; padding: .6rem 0 .6rem 1.3rem; cursor: pointer; opacity: .5; transition: opacity .3s; }
+        .mw-al-i::before { content: ""; position: absolute; left: 0; top: .35rem; bottom: .35rem; width: 2px; background: transparent; border-radius: 2px; transition: background .3s; }
+        .mw-al-i b { display: flex; align-items: center; gap: .6rem; font-size: 1.08rem; font-weight: 700; color: #0f172a; }
+        .mw-al-i b i { font-size: .85rem; color: var(--c); }
+        .mw-al-i span { display: block; font-size: .82rem; color: #475569; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .4s ease, opacity .3s ease; line-height: 1.45; }
+        .mw-al-i.on { opacity: 1; }
+        .mw-al-i.on::before { background: var(--c); }
+        .mw-al-i.on span { max-height: 5rem; opacity: 1; margin-top: .25rem; }
+
+        .mw-cards { display: flex; flex-direction: column; gap: 3.5rem; }
+        .mw-item { opacity: .8; transition: opacity .45s, transform .45s; scroll-margin-top: 6rem; }
+        .mw-item.on { opacity: 1; transform: translateY(-2px); }
+        .mw-acc-h, .mw-chips { display: none; }
+
+        /* Karte (Inhalt wie bisher auf der Seite: Symbol, Titel, Text, zwei Stichpunkte) */
+        .mw-card { position: relative; background: #fff; border-radius: 1.6rem; padding: 1.8rem 1.9rem 1.7rem; border: 1px solid rgba(255, 255, 255, .9);
+            box-shadow: 0 34px 60px -34px rgba(15, 23, 42, .42), 0 2px 8px rgba(15, 23, 42, .05); overflow: hidden; color: #0f172a; }
+        .mw-card::before { content: ""; position: absolute; right: 0; top: 0; width: 62%; height: 55%; pointer-events: none;
+            background: radial-gradient(80% 90% at 100% 0, rgba(var(--rgb), .16), transparent 72%); }
+        .mw-card > * { position: relative; z-index: 1; }
+        .mw-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .mw-ic { width: 3.7rem; height: 3.7rem; border-radius: 1.1rem; background: var(--t); color: var(--c); display: grid; place-items: center; font-size: 1.45rem; flex: none;
+            box-shadow: 0 10px 18px -12px rgba(var(--rgb), .8); }
+        .mw-card h3 { font-size: 1.85rem; font-weight: 800; line-height: 1.15; letter-spacing: -.01em; }
+        .mw-para { color: #475569; font-size: 1.02rem; line-height: 1.65; margin-bottom: 1.1rem; }
+        .mw-chk { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+        .mw-chk li { display: flex; gap: .7rem; align-items: flex-start; color: #334155; font-weight: 500; font-size: .95rem; line-height: 1.45; }
+        .mw-chk i { color: #22c55e; margin-top: .28rem; font-size: .8rem; }
+
+        /* Tablet: Rollen-Chips + eine Karte */
+        .mw-chips-row { display: flex; gap: .55rem; overflow-x: auto; scroll-snap-type: x proximity; padding: .35rem .25rem .7rem; margin: 0 -.25rem; scrollbar-width: none; }
+        .mw-chips-row::-webkit-scrollbar { display: none; }
+        .mw-chp { flex: none; display: flex; align-items: center; gap: .55rem; padding: .55rem .85rem; border-radius: 1rem; background: rgba(255, 255, 255, .72);
+            border: 1px solid rgba(255, 255, 255, .85); font-weight: 700; font-size: .88rem; position: relative; overflow: hidden; scroll-snap-align: center; white-space: nowrap; transition: all .3s; color: #0f172a; }
+        .mw-chp .mw-ib { width: 2rem; height: 2rem; border-radius: .65rem; display: grid; place-items: center; background: var(--t); color: var(--c); font-size: .85rem; }
+        .mw-chp.on { background: #fff; box-shadow: 0 14px 26px -14px rgba(15, 23, 42, .5); transform: translateY(-1px); }
+        .mw-chp .mw-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 0; background: var(--c); }
+        @keyframes mw-fill { from { width: 0; } to { width: 100%; } }
+        .mw-chp.on.auto .mw-bar { animation: mw-fill 7s linear forwards; }
+        .mw-lbl { font-size: .64rem; font-weight: 800; letter-spacing: .12em; color: #64748b; text-transform: uppercase; margin: .4rem 0 .4rem; }
 
         @media (max-width: 1023px) {
-            #vorteile {
-                height: auto !important;
-            }
-            .slide-content {
-                opacity: 1 !important;
-                transform: none !important;
-                position: relative !important;
-                pointer-events: auto !important;
-                margin-bottom: 1.5rem;
-                /* Schatten für ALLE Kacheln auf Mobile erzwingen, da JS Klassen überschreibt */
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important; 
-                border-color: rgba(255, 255, 255, 0.8) !important;
-            }
+            .mw-grid { grid-template-columns: minmax(0, 1fr); gap: .4rem; }
+            .mw-st { position: static; }
+            .mw-al { display: none; }
+            .mw-chips { display: block; }
+            .mw-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+            /* Überblendung ohne Überlappung: die alte Karte blendet zuerst aus, dann die neue ein */
+            .mw-item { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .18s, transform .18s, visibility 0s .18s; }
+            .mw-item.on { opacity: 1; visibility: visible; transform: none; transition: opacity .35s .2s, transform .35s .2s, visibility 0s .2s; }
         }
-        
+        /* Handy: Akkordeon */
+        @media (max-width: 639px) {
+            .mw-chips { display: none; }
+            .mw-cards { display: flex; flex-direction: column; gap: .7rem; }
+            .mw-item { grid-area: auto; opacity: 1; visibility: visible; transform: none; transition: box-shadow .3s, background .3s;
+                background: rgba(255, 255, 255, .74); border: 1px solid rgba(255, 255, 255, .88); border-radius: 1.3rem; overflow: hidden; box-shadow: 0 12px 26px -20px rgba(15, 23, 42, .4); }
+            .mw-item.on { transform: none; }
+            .mw-item.open { background: #fff; box-shadow: 0 26px 44px -26px rgba(15, 23, 42, .5); }
+            .mw-acc-h { display: flex; gap: .8rem; align-items: center; width: 100%; text-align: left; padding: .85rem .95rem; cursor: pointer; }
+            .mw-acc-h .mw-ib { width: 2.7rem; height: 2.7rem; border-radius: .85rem; display: grid; place-items: center; background: var(--t); color: var(--c); flex: none; }
+            .mw-acc-h .mw-tx { flex: 1; min-width: 0; }
+            .mw-acc-h b { display: block; font-size: 1.05rem; line-height: 1.25; font-weight: 700; color: #0f172a; }
+            .mw-acc-h .mw-s { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: .76rem; color: #475569; line-height: 1.4; margin-top: .1rem; }
+            .mw-acc-h .mw-chev { transition: transform .35s; color: #64748b; font-size: .8rem; }
+            .mw-item.open .mw-chev { transform: rotate(180deg); }
+            .mw-acc-b { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.22, 1, .36, 1); }
+            .mw-item.open .mw-acc-b { grid-template-rows: 1fr; }
+            .mw-acc-b > div { min-height: 0; overflow: hidden; }
+            .mw-card { border: 0; box-shadow: none; border-radius: 0; border-top: 1px solid var(--mw-line); padding: 1.1rem 1.1rem 1.2rem; }
+            .mw-card::before { display: none; }
+            .mw-head { display: none; }
+            .mw-para { font-size: .95rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .mw-item, .mw-al-i, .mw-al-i span, .mw-chp, .mw-acc-b, .mw-chev { transition: none !important; }
+            .mw-chp.on.auto .mw-bar { animation: none; }
+        }
+
         .scroll-anim-element {
             transition: transform 0.1s ease-out, opacity 0.2s ease-out;
             will-change: transform, opacity;
+        }
+
+        /* Ausklappbare Modul-Kacheln (osmera flow, osmera sync): Text erscheint bei Hover bzw. Tippen/Klick */
+        .expand-card .expand-body { display: grid; grid-template-rows: 0fr; opacity: 0; visibility: hidden;
+            transition: grid-template-rows .45s cubic-bezier(.22,1,.36,1), opacity .3s ease, visibility 0s linear .45s; }
+        .expand-card .expand-body > div { min-height: 0; overflow: hidden; }
+        .expand-card.is-open .expand-body { grid-template-rows: 1fr; opacity: 1; visibility: visible;
+            transition: grid-template-rows .45s cubic-bezier(.22,1,.36,1), opacity .3s ease .05s, visibility 0s; }
+        .expand-card .expand-chevron { transition: transform .35s ease; }
+        .expand-card.is-open .expand-chevron { transform: rotate(180deg); }
+        .expand-card .lbl-open { display: none; }
+        .expand-card.is-open .lbl-closed { display: none; }
+        .expand-card.is-open .lbl-open { display: inline; }
+        @media (prefers-reduced-motion: reduce) {
+            .expand-card .expand-body, .expand-card .expand-chevron { transition: none; }
         }
     </style>
 </head>
@@ -357,108 +427,74 @@
         </div>
     </section>
 
-    <section id="vorteile" class="relative z-10 lg:h-[400vh] lg:-mb-12">
-        <div class="lg:sticky lg:top-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-auto lg:h-[80vh] flex flex-col lg:flex-row items-start lg:items-center gap-12 pt-12 pb-0 lg:py-12">
-
-            <div class="w-full lg:w-1/3 z-20">
-                <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Ihr Mehrwert</span>
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-4 leading-tight">Ein Werkzeug, vielfacher Nutzen.</h2>
-                <p class="text-lg text-slate-600 mb-6 font-medium">
-                    Eine intelligente Dienstplanung entlastet nicht nur eine Abteilung, sondern verbessert die Prozesse und Transparenz im gesamten Haus.
-                </p>
-
-                <div class="hidden lg:flex gap-3">
-                    <div class="slide-indicator w-6 h-2 rounded-full bg-osmera-blue transition-all duration-300"></div>
-                    <div class="slide-indicator w-2 h-2 rounded-full bg-slate-300 transition-all duration-300"></div>
-                    <div class="slide-indicator w-2 h-2 rounded-full bg-slate-300 transition-all duration-300"></div>
-                    <div class="slide-indicator w-2 h-2 rounded-full bg-slate-300 transition-all duration-300"></div>
-                    <div class="slide-indicator w-2 h-2 rounded-full bg-slate-300 transition-all duration-300"></div>
-                </div>
-            </div>
-
-            <!-- KEIN overflow-hidden hier! Damit der Schatten der Kacheln intakt bleibt -->
-            <div class="w-full lg:w-2/3 h-auto lg:h-full relative flex flex-col lg:block">
-
-                <div class="slide-content active glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 bg-blue-100 text-osmera-blue rounded-2xl flex items-center justify-center text-2xl shadow-sm">
-                            <i class="fa-solid fa-users-gear"></i>
-                        </div>
-                        <h3 class="text-3xl font-bold text-slate-900 mb-0">Planende</h3>
+    <section id="vorteile" class="relative z-10 py-16 lg:pt-24 lg:pb-20 lg:-mt-4 -scroll-mt-12 lg:-scroll-mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mw-grid">
+                <div class="mw-left">
+                    <div class="mw-st">
+                        <span class="text-osmera-blue font-bold tracking-wider uppercase text-lg mb-2 block">Ihr Mehrwert</span>
+                        <h2 class="text-4xl font-extrabold text-slate-900 mb-4 leading-tight">Ein Werkzeug, vielfacher Nutzen.</h2>
+                        <p class="text-lg text-slate-600 mb-6 font-medium">
+                            Eine intelligente Dienstplanung entlastet nicht nur eine Abteilung, sondern verbessert die Prozesse und Transparenz im gesamten Haus.
+                        </p>
+                        <div class="mw-al" role="group" aria-label="Rollen"><button type="button" class="mw-al-i mw-r0" data-i="0"><b><i class="fa-solid fa-users-gear"></i>Planende</b><span>Kontaktaufnahme über verschiedene Kanäle</span></button><button type="button" class="mw-al-i mw-r1" data-i="1"><b><i class="fa-solid fa-user-nurse"></i>Das Team</b><span>Entlastung durch partizipative Dienstplanung</span></button><button type="button" class="mw-al-i mw-r2" data-i="2"><b><i class="fa-solid fa-handshake-angle"></i>PR / MAV</b><span>Regeln werden nach Ihren Vorgaben im Algorithmus berücksichtigt</span></button><button type="button" class="mw-al-i mw-r3" data-i="3"><b><i class="fa-solid fa-server"></i>HR &amp; IT</b><span>Das Altsystem bleibt unabhängig und voll funktionsfähig</span></button><button type="button" class="mw-al-i mw-r4" data-i="4"><b><i class="fa-regular fa-building"></i>Leitung &amp; DSB</b><span>Datenschutz durch Zero-Knowledge-Architektur: Sensible Mitarbeitendendaten bleiben für Dritte unzugänglich</span></button></div>
                     </div>
-                    <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
-                        Personalwünsche und rechtliche Vorgaben müssen Sie nicht mehr mühsam von Hand abgleichen. So gewinnen Sie Kapazitäten für die echten Konfliktfälle auf Ihrer Station. Bei einem kurzfristigen Ausfall unterstützt Sie osmera gezielt: Passende Kolleginnen und Kollegen werden identifiziert und auf Ihren Wunsch hin angefragt – Sie behalten die Kontrolle, osmera übernimmt die administrative Fleißarbeit.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Kontaktaufnahme über verschiedene Kanäle</li>
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Sie behalten die volle Kontrolle</li>
-                    </ul>
                 </div>
-
-                <div class="slide-content next glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-2xl shadow-sm">
-                            <i class="fa-solid fa-user-nurse"></i>
+                <div class="mw-right">
+                    <div class="mw-chips"><p class="mw-lbl">Wählen Sie Ihre Rolle</p><div class="mw-chips-row" role="tablist"><button type="button" class="mw-chp mw-r0" data-i="0" role="tab" aria-selected="false"><span class="mw-ib"><i class="fa-solid fa-users-gear"></i></span><span>Planende</span><span class="mw-bar"></span></button><button type="button" class="mw-chp mw-r1" data-i="1" role="tab" aria-selected="false"><span class="mw-ib"><i class="fa-solid fa-user-nurse"></i></span><span>Das Team</span><span class="mw-bar"></span></button><button type="button" class="mw-chp mw-r2" data-i="2" role="tab" aria-selected="false"><span class="mw-ib"><i class="fa-solid fa-handshake-angle"></i></span><span>PR / MAV</span><span class="mw-bar"></span></button><button type="button" class="mw-chp mw-r3" data-i="3" role="tab" aria-selected="false"><span class="mw-ib"><i class="fa-solid fa-server"></i></span><span>HR &amp; IT</span><span class="mw-bar"></span></button><button type="button" class="mw-chp mw-r4" data-i="4" role="tab" aria-selected="false"><span class="mw-ib"><i class="fa-regular fa-building"></i></span><span>Leitung &amp; DSB</span><span class="mw-bar"></span></button></div></div>
+                    <div class="mw-cards">
+                        <div class="mw-item mw-r0" data-i="0">
+                            <button type="button" class="mw-acc-h" id="mw-h0" aria-expanded="false" aria-controls="mw-p0"><span class="mw-ib"><i class="fa-solid fa-users-gear"></i></span><span class="mw-tx"><b>Planende</b><span class="mw-s">Kontaktaufnahme über verschiedene Kanäle</span></span><i class="fa-solid fa-chevron-down mw-chev" aria-hidden="true"></i></button>
+                            <div class="mw-acc-b" id="mw-p0"><div>
+                                <article class="mw-card">
+                                    <div class="mw-head"><span class="mw-ic"><i class="fa-solid fa-users-gear"></i></span><h3>Planende</h3></div>
+                                    <p class="mw-para">Personalwünsche und rechtliche Vorgaben müssen Sie nicht mehr mühsam von Hand abgleichen. So gewinnen Sie Kapazitäten für die echten Konfliktfälle auf Ihrer Station. Bei einem kurzfristigen Ausfall unterstützt Sie <span class="font-logo">osmera</span> gezielt: Passende Kolleginnen und Kollegen werden identifiziert und auf Ihren Wunsch hin angefragt – Sie behalten die Kontrolle, <span class="font-logo">osmera</span> übernimmt die administrative Fleißarbeit.</p>
+                                    <ul class="mw-chk"><li><i class="fa-solid fa-check"></i><span>Kontaktaufnahme über verschiedene Kanäle</span></li><li><i class="fa-solid fa-check"></i><span>Sie behalten die volle Kontrolle</span></li></ul>
+                                </article>
+                            </div></div>
                         </div>
-                        <h3 class="text-3xl font-bold text-slate-900 mb-0">Das Team</h3>
-                    </div>
-                    <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
-                        Den Dienstplan haben Sie auf Ihrem Smartphone jederzeit im Blick – einfach und übersichtlich per Mitarbeitenden-App. Persönliche Wunschdienste und Ihre Einspringbereitschaft übermitteln Sie völlig flexibel mit nur wenigen Klicks. Auf Anfragen antworten Sie entspannt über Ihren gewählten Lieblingskanal – per App, Messenger oder SMS. Ein einfaches „Ja“ oder „Nein“ reicht aus, ganz ohne Rechtfertigungsdruck in der Freizeit.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Entlastung durch partizipative Dienstplanung</li>
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Keine ungeplanten Anrufe in der Freizeit</li>
-                    </ul>
-                </div>
-
-                <div class="slide-content next glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-2xl flex items-center justify-center text-2xl shadow-sm border border-emerald-200">
-                            <i class="fa-solid fa-handshake-angle"></i>
+                        <div class="mw-item mw-r1" data-i="1">
+                            <button type="button" class="mw-acc-h" id="mw-h1" aria-expanded="false" aria-controls="mw-p1"><span class="mw-ib"><i class="fa-solid fa-user-nurse"></i></span><span class="mw-tx"><b>Das Team</b><span class="mw-s">Entlastung durch partizipative Dienstplanung</span></span><i class="fa-solid fa-chevron-down mw-chev" aria-hidden="true"></i></button>
+                            <div class="mw-acc-b" id="mw-p1"><div>
+                                <article class="mw-card">
+                                    <div class="mw-head"><span class="mw-ic"><i class="fa-solid fa-user-nurse"></i></span><h3>Das Team</h3></div>
+                                    <p class="mw-para">Den Dienstplan haben Sie auf Ihrem Smartphone jederzeit im Blick – einfach und übersichtlich per Mitarbeitenden-App. Persönliche Wunschdienste und Ihre Einspringbereitschaft übermitteln Sie völlig flexibel mit nur wenigen Klicks. Auf Anfragen antworten Sie entspannt über Ihren gewählten Lieblingskanal – per App, Messenger oder SMS. Ein einfaches „Ja“ oder „Nein“ reicht aus, ganz ohne Rechtfertigungsdruck in der Freizeit.</p>
+                                    <ul class="mw-chk"><li><i class="fa-solid fa-check"></i><span>Entlastung durch partizipative Dienstplanung</span></li><li><i class="fa-solid fa-check"></i><span>Keine ungeplanten Anrufe in der Freizeit</span></li></ul>
+                                </article>
+                            </div></div>
                         </div>
-                        <h3 class="text-3xl font-bold text-slate-900 mb-0">PR / MAV</h3>
-                    </div>
-                    <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
-                        Transparenz und algorithmische Einhaltung von Schutzgesetzen und Hausregeln. Die osmera engine plant innerhalb der eingestellten tarif- &amp; vertragsrechtlichen Regeln unter Einhaltung des ArbZG. Die Mitbestimmung wird durch osmera nicht umgangen sondern aktiv gefördert.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Regeln werden nach Ihren Vorgaben im Algorithmus berücksichtigt</li>
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Automatisierte Benachrichtigungen bei Änderungen</li>
-                    </ul>
-                </div>
-
-                <div class="slide-content next glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 bg-slate-200 text-slate-700 rounded-2xl flex items-center justify-center text-2xl shadow-sm">
-                            <i class="fa-solid fa-server"></i>
+                        <div class="mw-item mw-r2" data-i="2">
+                            <button type="button" class="mw-acc-h" id="mw-h2" aria-expanded="false" aria-controls="mw-p2"><span class="mw-ib"><i class="fa-solid fa-handshake-angle"></i></span><span class="mw-tx"><b>PR / MAV</b><span class="mw-s">Regeln werden nach Ihren Vorgaben im Algorithmus berücksichtigt</span></span><i class="fa-solid fa-chevron-down mw-chev" aria-hidden="true"></i></button>
+                            <div class="mw-acc-b" id="mw-p2"><div>
+                                <article class="mw-card">
+                                    <div class="mw-head"><span class="mw-ic"><i class="fa-solid fa-handshake-angle"></i></span><h3>PR / MAV</h3></div>
+                                    <p class="mw-para">Transparenz und algorithmische Einhaltung von Schutzgesetzen und Hausregeln. Die <span class="font-logo">osmera</span> engine plant innerhalb der eingestellten tarif- &amp; vertragsrechtlichen Regeln unter Einhaltung des ArbZG. Die Mitbestimmung wird durch <span class="font-logo">osmera</span> nicht umgangen sondern aktiv gefördert.</p>
+                                    <ul class="mw-chk"><li><i class="fa-solid fa-check"></i><span>Regeln werden nach Ihren Vorgaben im Algorithmus berücksichtigt</span></li><li><i class="fa-solid fa-check"></i><span>Automatisierte Benachrichtigungen bei Änderungen</span></li></ul>
+                                </article>
+                            </div></div>
                         </div>
-                        <h3 class="text-3xl font-bold text-slate-900 mb-0">HR &amp; IT</h3>
-                    </div>
-                        <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
-                        Sie erhalten ein System, das sich nahtlos in Ihre bestehende Programm-Landschaft einfügt. Das bestehende System muss nicht ersetzt werden und aufwändige manuelle Datentransfers im Tagesgeschäft entfallen. Innovative Mapping-Tools, intelligente Schnittstellen-Tools und No-Code-Konnektoren halten den Onboarding-Aufwand auf einem Minimum.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Das Altsystem bleibt unabhängig und voll funktionsfähig</li>
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Keine gefährlichen Firewall-Öffnungen nach innen: Ihre Sicherheitsarchitektur bleibt unangetastet</li>
-                    </ul>
-                </div>
-
-                <div class="slide-content next glass-card rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl border-white/80">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center text-2xl shadow-sm">
-                            <i class="fa-regular fa-building"></i>
+                        <div class="mw-item mw-r3" data-i="3">
+                            <button type="button" class="mw-acc-h" id="mw-h3" aria-expanded="false" aria-controls="mw-p3"><span class="mw-ib"><i class="fa-solid fa-server"></i></span><span class="mw-tx"><b>HR &amp; IT</b><span class="mw-s">Das Altsystem bleibt unabhängig und voll funktionsfähig</span></span><i class="fa-solid fa-chevron-down mw-chev" aria-hidden="true"></i></button>
+                            <div class="mw-acc-b" id="mw-p3"><div>
+                                <article class="mw-card">
+                                    <div class="mw-head"><span class="mw-ic"><i class="fa-solid fa-server"></i></span><h3>HR &amp; IT</h3></div>
+                                    <p class="mw-para">Sie erhalten ein System, das sich nahtlos in Ihre bestehende Programm-Landschaft einfügt. Das bestehende System muss nicht ersetzt werden und aufwändige manuelle Datentransfers im Tagesgeschäft entfallen. Innovative Mapping-Tools, intelligente Schnittstellen-Tools und No-Code-Konnektoren halten den Onboarding-Aufwand auf einem Minimum.</p>
+                                    <ul class="mw-chk"><li><i class="fa-solid fa-check"></i><span>Das Altsystem bleibt unabhängig und voll funktionsfähig</span></li><li><i class="fa-solid fa-check"></i><span>Keine gefährlichen Firewall-Öffnungen nach innen: Ihre Sicherheitsarchitektur bleibt unangetastet</span></li></ul>
+                                </article>
+                            </div></div>
                         </div>
-                        <h3 class="text-3xl font-bold text-slate-900 mb-0">Leitung &amp; DSB</h3>
+                        <div class="mw-item mw-r4" data-i="4">
+                            <button type="button" class="mw-acc-h" id="mw-h4" aria-expanded="false" aria-controls="mw-p4"><span class="mw-ib"><i class="fa-regular fa-building"></i></span><span class="mw-tx"><b>Leitung &amp; DSB</b><span class="mw-s">Datenschutz durch Zero-Knowledge-Architektur: Sensible Mitarbeitendendaten bleiben für Dritte unzugänglich</span></span><i class="fa-solid fa-chevron-down mw-chev" aria-hidden="true"></i></button>
+                            <div class="mw-acc-b" id="mw-p4"><div>
+                                <article class="mw-card">
+                                    <div class="mw-head"><span class="mw-ic"><i class="fa-regular fa-building"></i></span><h3>Leitung &amp; DSB</h3></div>
+                                    <p class="mw-para">Sie sichern Planbarkeit und Regelkonformität für Ihr Haus. Dank der komplementären Architektur wird Ihr Bestandssystem intelligent angebunden und erweitert, statt es teuer zu ersetzen. So steigern Sie die Personaleffizienz, während die Mitarbeitenden jederzeit geschützt bleiben.</p>
+                                    <ul class="mw-chk"><li><i class="fa-solid fa-check"></i><span>Datenschutz durch Zero-Knowledge-Architektur: Sensible Mitarbeitendendaten bleiben für Dritte unzugänglich</span></li><li><i class="fa-solid fa-check"></i><span>Kein riskanter Datenumzug notwendig: Ihre sensiblen Daten verbleiben dort, wo sie heute sind</span></li></ul>
+                                </article>
+                            </div></div>
+                        </div>
                     </div>
-                        <p class="text-lg text-slate-600 leading-relaxed font-medium mb-6">
-                        Sie sichern Planbarkeit und Regelkonformität für Ihr Haus. Dank der komplementären Architektur wird Ihr Bestandssystem intelligent angebunden und erweitert, statt es teuer zu ersetzen. So steigern Sie die Personaleffizienz, während die Mitarbeitenden jederzeit geschützt bleiben.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Datenschutz durch Zero-Knowledge-Architektur: Sensible Mitarbeitendendaten bleiben für Dritte unzugänglich</li>
-                        <li class="flex items-center gap-3 text-slate-700 font-medium"><i class="fa-solid fa-check text-green-500"></i> Kein riskanter Datenumzug notwendig: Ihre sensiblen Daten verbleiben dort, wo sie heute sind</li>
-                    </ul>
                 </div>
-
             </div>
         </div>
     </section>
@@ -474,31 +510,41 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="glass-card rounded-2xl p-8 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border-t-4 border-osmera-blue shadow-lg">
-                    <div class="flex items-center gap-4 mb-4">
+                <div class="expand-card self-start cursor-pointer glass-card rounded-2xl p-6 lg:p-8 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border-t-4 border-osmera-blue shadow-lg">
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-3 mb-4">
                         <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-osmera-blue shadow-sm">
                             <i class="fa-solid fa-mobile-screen-button text-3xl"></i>
                         </div>
-                        <h3 class="font-logo text-3xl font-bold text-slate-900">osmera flow</h3>
+                        <h3 class="font-logo text-2xl sm:text-3xl font-bold text-slate-900">osmera flow</h3>
+                        <button type="button" class="expand-toggle ml-auto inline-flex items-center justify-center gap-1.5 lg:min-w-[6.5rem] rounded-full bg-blue-50 border border-blue-100 text-osmera-blue text-sm font-semibold px-2.5 lg:px-3 py-1.5 hover:bg-blue-100 transition-colors" aria-expanded="false" aria-controls="expand-flow"><span class="max-lg:sr-only"><span class="sr-only">Details zu osmera flow: </span><span class="lbl-closed">Mehr</span><span class="lbl-open">Weniger</span></span><i class="fa-solid fa-chevron-down expand-chevron text-xs" aria-hidden="true"></i></button>
                     </div>
-                    <p class="font-bold text-slate-800 mb-3 text-lg">Ausfallmanagement mit Co-Pilot.</p>
-                    <p class="text-slate-600 leading-relaxed font-medium">
+                    <p class="font-bold text-slate-800 text-lg md:min-h-[3.5rem] lg:min-h-0">Ausfallmanagement mit Co-Pilot.</p>
+                    <div id="expand-flow" class="expand-body">
+                        <div>
+                            <p class="text-slate-600 leading-relaxed font-medium pt-3">
                         Bei einer Krankmeldung zeigt <span class="font-logo font- text-osmera-blue">flow</span> Ihnen auf Ihre Anfrage hin direkt, wer einspringen kann, darf und am besten geeignet ist. Sortiert werden sie nach rechtlicher und persönlicher Verfügbarkeit sowie nach passender Qualifikation. Die Anfragen gehen direkt auf das Handy der angefragten Person, wahlweise per App, Messenger-Dienst oder SMS. Die Mitarbeitenden antworten sofort auf die Anfrage und flow trägt sie ein.
                     </p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="glass-card rounded-2xl p-8 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border-t-4 border-osmera-blue shadow-lg">
-                    <div class="flex items-center gap-4 mb-4">
+                <div class="expand-card self-start cursor-pointer glass-card rounded-2xl p-6 lg:p-8 hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden border-t-4 border-osmera-blue shadow-lg">
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-3 mb-4">
                         <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-osmera-blue shadow-sm">
                             <i class="fa-regular fa-calendar-check text-3xl"></i>
                         </div>
-                        <h3 class="font-logo text-3xl font-bold text-slate-900">osmera sync</h3>
+                        <h3 class="font-logo text-2xl sm:text-3xl font-bold text-slate-900">osmera sync</h3>
+                        <button type="button" class="expand-toggle ml-auto inline-flex items-center justify-center gap-1.5 lg:min-w-[6.5rem] rounded-full bg-blue-50 border border-blue-100 text-osmera-blue text-sm font-semibold px-2.5 lg:px-3 py-1.5 hover:bg-blue-100 transition-colors" aria-expanded="false" aria-controls="expand-sync"><span class="max-lg:sr-only"><span class="sr-only">Details zu osmera sync: </span><span class="lbl-closed">Mehr</span><span class="lbl-open">Weniger</span></span><i class="fa-solid fa-chevron-down expand-chevron text-xs" aria-hidden="true"></i></button>
                         <!--<span class="ml-auto text-[10px] font-bold text-osmera-blue bg-blue-50 px-2 py-1 rounded-full uppercase">Funktions-Modul</span>-->
                     </div>
-                    <p class="font-bold text-slate-800 mb-3 text-lg">Die intelligente Dienstplan-Berechnung.</p>
-                    <p class="text-slate-600 leading-relaxed font-medium">
+                    <p class="font-bold text-slate-800 text-lg md:min-h-[3.5rem] lg:min-h-0">Die intelligente Dienstplan-Berechnung.</p>
+                    <div id="expand-sync" class="expand-body">
+                        <div>
+                            <p class="text-slate-600 leading-relaxed font-medium pt-3">
                         <span class="font-logo text-osmera-blue">Sync</span> erstellt Ihren Dienstplan für den gesamten Planungszeitraum, abgestimmt auf Bedarf und die Wünsche der Mitarbeitenden. Bei Konflikten werden Sie gezielt bei dem Finden einer Lösung unterstützt. Das Ergebnis fließt nach Ihrer Freigabe automatisch im Originalformat Ihres Dienstplanprogramms zurück in Ihr System. Das Herzstück dieses Moduls bildet der <span class="font-logo">osmera</span> <span class="font-logo text-osmera-blue">core</span> – unser selbst entwickelter und innovativer Zuteilungsalgorithmus.
                     </p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="bg-white/40 backdrop-blur-md border border-slate-200/60 rounded-2xl p-6 hover:-translate-y-1 transition-transform duration-300">
@@ -762,9 +808,6 @@
         });
 
         // --- Sticky Slideshow Logic ---
-        const scrollContainer = document.getElementById('vorteile');
-        const slides = document.querySelectorAll('.slide-content');
-        const indicators = document.querySelectorAll('.slide-indicator');
         let isTicking = false;
 
         window.addEventListener('scroll', () => {
@@ -861,45 +904,6 @@
                         }
                     }
 
-                    // --- Sticky Slideshow Logic ---
-                    if (scrollContainer && window.innerWidth >= 1024) {
-                        const containerTop = scrollContainer.offsetTop;
-                        const containerHeight = scrollContainer.offsetHeight;
-                        
-                        let progress = 0;
-                        if (scrollY > containerTop) {
-                            const scrollableDistance = containerHeight - windowHeight;
-                            progress = (scrollY - containerTop) / scrollableDistance;
-                        }
-
-                        let safeProgress = Math.min(Math.max(progress, 0), 0.999);
-                        let slideIndex = Math.floor(safeProgress * slides.length);
-
-                        slides.forEach((slide, idx) => {
-                            slide.style.transform = '';
-                            slide.style.opacity = '';
-                            
-                            slide.classList.remove('active', 'prev', 'next');
-                            
-                            if (idx === slideIndex) {
-                                slide.classList.add('active');
-                                indicators[idx].classList.replace('bg-slate-300', 'bg-osmera-blue');
-                                indicators[idx].classList.add('w-6');
-                                indicators[idx].classList.remove('w-2');
-                            } else if (idx < slideIndex) {
-                                slide.classList.add('prev');
-                                indicators[idx].classList.replace('bg-osmera-blue', 'bg-slate-300');
-                                indicators[idx].classList.remove('w-6');
-                                indicators[idx].classList.add('w-2');
-                            } else {
-                                slide.classList.add('next');
-                                indicators[idx].classList.replace('bg-osmera-blue', 'bg-slate-300');
-                                indicators[idx].classList.remove('w-6');
-                                indicators[idx].classList.add('w-2');
-                            }
-                        });
-                    }
-                    
                     isTicking = false;
                 });
                 isTicking = true;
@@ -1020,6 +1024,127 @@
                 }
             });
         });
+    </script>
+    <script>
+        // Ausklappbare Modul-Kacheln: Hover (Maus) öffnet, Klick/Tippen oder Knopf hält offen bzw. schließt
+        (function () {
+            var cards = document.querySelectorAll('.expand-card');
+            if (!cards.length) return;
+            var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+            function render(card) {
+                var open = card._hover || card._pinned;
+                card.classList.toggle('is-open', open);
+                var b = card.querySelector('.expand-toggle');
+                if (b) b.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
+            cards.forEach(function (card) {
+                card._hover = false; card._pinned = false;
+                card.addEventListener('mouseenter', function () { if (fine.matches) { card._hover = true; render(card); } });
+                card.addEventListener('mouseleave', function () { card._hover = false; render(card); });
+                card.addEventListener('click', function () {
+                    var sel = window.getSelection && window.getSelection().toString();
+                    if (sel) return; // Textmarkierung nicht als Klick werten
+                    card._pinned = !card._pinned; render(card);
+                });
+            });
+        })();
+    </script>
+    <script>
+        // --- Ihr Mehrwert (#vorteile): Rollen-Auswahl, Hintergrund-Schimmer ---
+        (function () {
+            const root = document.getElementById('vorteile');
+            if (!root) return;
+            const $$ = (s) => Array.from(root.querySelectorAll(s));
+            const items = $$('.mw-item'), list = $$('.mw-al-i'), chips = $$('.mw-chp');
+            const N = items.length;
+            const mqD = window.matchMedia('(min-width:1024px)'), mqT = window.matchMedia('(min-width:640px)');
+            const mode = () => (mqD.matches ? 'd' : (mqT.matches ? 't' : 'p'));
+            let cur = 0, stopAuto = null;
+
+            // Hintergrund: weiche Farbflächen gleichmäßig über die ganze Höhe, Blau rechts, warmer Farbspot links
+            const FLIP = true, WARM = -16;
+            function paintBg() {
+                let fx = root.querySelector(':scope > .mw-bg');
+                if (!fx) { fx = document.createElement('div'); fx.className = 'mw-bg'; fx.setAttribute('aria-hidden', 'true'); root.insertBefore(fx, root.firstChild); }
+                const H = root.offsetHeight, W = root.offsetWidth; if (!H) return;
+                const R = Math.max(2, Math.round(H / 620)), size = Math.max(520, Math.min(W * .62, 920)), step = H / R;
+                let html = '';
+                const blob = (x, y, s, col) => {
+                    if (FLIP) x = 100 - x;
+                    if (col === '--mw-w1' || col === '--mw-w2') x += WARM;
+                    html += '<i style="left:' + x.toFixed(1) + '%;top:' + Math.round(y) + 'px;width:' + Math.round(s) + 'px;height:' + Math.round(s) + 'px;--col:var(' + col + ')"></i>';
+                };
+                for (let j = 0; j < R; j++) {
+                    const y = (j + .5) * step, odd = j % 2;
+                    blob(odd ? 6 : 14, y, size, '--mw-b1'); blob(odd ? 90 : 82, y + step * .5, size * .95, '--mw-w1');
+                    blob(odd ? 30 : 22, y + step * .78, size * .78, '--mw-b2'); blob(odd ? 74 : 80, y + step * .12, size * .72, '--mw-w2'); blob(50, y + step * .42, size * .9, '--mw-m1');
+                }
+                fx.innerHTML = html;
+            }
+            paintBg();
+            if ('ResizeObserver' in window) { let t; new ResizeObserver(() => { clearTimeout(t); t = setTimeout(paintBg, 120); }).observe(root); }
+
+            function setChips(i, auto) {
+                chips.forEach((c, k) => { c.classList.toggle('on', k === i); c.classList.remove('auto'); c.setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+                const on = chips[i];
+                if (auto && on) { void on.offsetWidth; on.classList.add('auto'); }
+                const box = on && on.parentNode;
+                if (box && box.scrollWidth > box.clientWidth) box.scrollTo({ left: on.offsetLeft - (box.clientWidth - on.offsetWidth) / 2, behavior: 'smooth' });
+            }
+            function openAcc(i) {
+                items.forEach((it, k) => { const o = k === i; it.classList.toggle('open', o); it.querySelector('.mw-acc-h').setAttribute('aria-expanded', o ? 'true' : 'false'); });
+            }
+            function apply(i, auto) {
+                cur = i;
+                items.forEach((it, k) => it.classList.toggle('on', k === i));
+                list.forEach((it, k) => it.classList.toggle('on', k === i));
+                setChips(i, auto && mode() === 't');
+            }
+
+            // Desktop: die Karte, die der Bildschirmmitte am nächsten ist, ist aktiv
+            let tick = false;
+            function upd() {
+                if (mode() !== 'd') return;
+                const vh = innerHeight; let best = 0, bd = 1e9;
+                items.forEach((c, i) => { const r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - vh * .5); if (r.bottom > vh * .2 && r.top < vh * .85 && d < bd) { bd = d; best = i; } });
+                const f = items[0].getBoundingClientRect(), l = items[N - 1].getBoundingClientRect();
+                if (f.top > vh * .55) best = 0;
+                if (l.bottom < vh * .5) best = N - 1;
+                apply(best);
+            }
+            addEventListener('scroll', () => { if (!tick) { tick = true; requestAnimationFrame(() => { upd(); tick = false; }); } }, { passive: true });
+            list.forEach((it, i) => it.addEventListener('click', () => { const r = items[i].getBoundingClientRect(); scrollTo({ top: scrollY + r.top - (innerHeight - r.height) / 2, behavior: 'smooth' }); }));
+
+            // Tablet: Chips wählen die Karte, Wischen wechselt, zunächst alle 7 Sekunden
+            chips.forEach((c, k) => c.addEventListener('click', () => { apply(k); if (stopAuto) stopAuto(); }));
+            const cardsBox = root.querySelector('.mw-cards');
+            let x0 = 0, y0 = 0;
+            cardsBox.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+            cardsBox.addEventListener('touchend', (e) => {
+                if (mode() !== 't') return;
+                const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) { apply((cur + (dx < 0 ? 1 : N - 1)) % N); if (stopAuto) stopAuto(); }
+            }, { passive: true });
+            (function () {
+                let timer = null, stopped = false;
+                const start = () => { if (stopped || timer) return; timer = setInterval(() => { if (mode() === 't') apply((cur + 1) % N, true); }, 7000); };
+                stopAuto = () => { stopped = true; clearInterval(timer); timer = null; };
+                const box = root.querySelector('.mw-chips');
+                if (box && 'IntersectionObserver' in window) new IntersectionObserver((en) => { if (en[0].isIntersecting) start(); else { clearInterval(timer); timer = null; } }, { threshold: .35 }).observe(box);
+            })();
+
+            // Handy: Akkordeon, immer nur eine Rolle offen
+            items.forEach((it, k) => it.querySelector('.mw-acc-h').addEventListener('click', () => {
+                if (it.classList.contains('open')) { openAcc(-1); return; }
+                apply(k); openAcc(k);
+                setTimeout(() => it.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 480);
+            }));
+
+            const sync = () => { const m = mode(); if (m === 'd') upd(); else if (m === 't') apply(cur, true); else openAcc(cur); };
+            [mqD, mqT].forEach((mq) => mq.addEventListener('change', sync));
+            addEventListener('resize', () => { if (mode() === 'd') upd(); });
+            apply(0, true); openAcc(0); sync();
+        })();
     </script>
 </body>
 </html>
