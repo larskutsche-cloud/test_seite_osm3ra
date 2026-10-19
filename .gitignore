@@ -21,3 +21,6 @@ dev_macbook/
 # Build artifacts
 *.log
 ./dev_macbook/index.html
+
+#claude
+./.claude
